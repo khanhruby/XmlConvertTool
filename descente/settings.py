@@ -85,6 +85,8 @@ DATABASES = {
         'PASSWORD': 'secret',
         'HOST': 'localhost',
         'PORT': '3306',
+        'CHARSET': 'utf8',
+        'COLLATION': 'utf8_general_ci',
     },
     'sqlite3': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -210,6 +212,8 @@ if DEBUG:
         'SHOW_TOOLBAR_CALLBACK' : show_toolbar,
     }
 
+
+# MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 # Internationalization
 # https://docs.djangoproject.com/en/dev/topics/i18n/
