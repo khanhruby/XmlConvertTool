@@ -8,3 +8,12 @@ class UploadFileForm(forms.Form):
 	to_col = forms.CharField(max_length=2, label='To Column (Ex: R)', widget=w_character, initial='C')
 	to_row = forms.IntegerField(min_value=0, max_value=1048576, label='To Row (0 : import all)', initial=0)
 	header_row = forms.IntegerField(min_value=0, max_value=1048576, label='Header Row (Ex: 31)', initial=14)
+
+
+class ExportForm(forms.Form):
+	CHOICES = (
+		(1, 'Catalogs Export',), 
+		(2, 'Price Books Export',),
+		(3, 'Inventory Lists Export',),
+	)
+	data_type = forms.ChoiceField(widget=forms.Select, choices=CHOICES, label='Choise Data Type')

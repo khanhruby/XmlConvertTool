@@ -16,10 +16,12 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
+from demandware.admin import export_view
 
 urlpatterns = [
 	# url(r'^demandware/', include('demandware.urls')),
-	url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+	url(r'^admin/export/', admin.site.admin_view(export_view)),
     url(r'^admin/', admin.site.urls),
 ]
 

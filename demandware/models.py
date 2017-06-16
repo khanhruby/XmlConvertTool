@@ -30,6 +30,18 @@ class ProductMaster(models.Model):
 	class Meta:
 		db_table = 'dtb_product_master'
 
+	def get_variants(self):
+		return Variant.objects.filter(product=self.product_id)
+
+	def get_category(self):
+		try:
+			obj = ProductCategory.objects.get(product=self.product_id)
+			if obj != None:
+				return obj.category.category_name
+			return ''
+		except Exception as e:
+			return ''
+
 
 class ProductMeta(models.Model):
 	product = models.ForeignKey(ProductMaster, on_delete=models.PROTECT, related_name='ProductMeta_ProductMaster', null=True, to_field='product_id')
@@ -56,7 +68,7 @@ class RelatedProduct(models.Model):
 
 
 class Category(models.Model):
-	category_id = models.CharField(max_length=100, default='')
+	category_id = models.CharField(max_length=100, unique=True, default='')
 	category_parent = models.ForeignKey('self', on_delete=models.PROTECT, related_name='Category_CategoryParent', blank=True, null=True)
 	category_name = models.CharField(max_length=100, default='')
 	category_name_fr = models.CharField(max_length=100, null=True)
@@ -76,7 +88,7 @@ class Category(models.Model):
 
 
 class CategoryMeta(models.Model):
-	category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='CategoryMeta_Category', null=True)
+	category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='CategoryMeta_Category', null=True, to_field='category_id')
 	key = models.CharField(max_length=100, default='')
 	value = models.TextField(null=True)
 
@@ -90,7 +102,7 @@ class CategoryMeta(models.Model):
 
 class ProductCategory(models.Model):
 	product = models.ForeignKey(ProductMaster, on_delete=models.PROTECT, related_name='ProductCategory_ProductMaster', null=True, to_field='product_id')
-	category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='ProductCategory_Category', null=True)
+	category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='ProductCategory_Category', null=True, to_field='category_id')
 
 	def __str__(self):
 		return str(self.product)

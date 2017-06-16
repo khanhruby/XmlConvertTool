@@ -62,3 +62,12 @@ def insert_product_image(data=None):
 	except Exception as e:
 		print(str(e))
 		return str(e)
+
+def get_product_master():
+	products = ProductMaster.objects.all()
+	return products
+
+def get_product_variants():
+	from demandware.models import Variant
+	variants = Variant.objects.all().select_related("product")
+	return variants

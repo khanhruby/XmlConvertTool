@@ -105,13 +105,47 @@ def product_image_process(data=None):
 
 def category_process(data=None, header=None):
 	from demandware.models_handler.header_handler import insert_bulk as header_insert_all
-	from demandware.models_handler.category_handler import insert_bulk
+	from demandware.models_handler.category_handler import insert_category
 
 	### Insert header data
 	result = header_insert_all(header_list=header, header_type=HeaderMgr.CATEGORY)
 
 	### Insert data
-	result = insert_bulk(data=data)
+	for item in data:
+		datalv1 = dict(
+			category_id=item['category_level_1_id'],
+			category_name=item['category_level_1_name'],
+			category_level=1,
+			category_parent=None,
+		)
+		result1 = insert_category(data=datalv1)
+		if result1['error']:
+			return result1['error']
+		if item['category_level_2_id'] == None or item['category_level_2_id'] == '':
+			continue
+
+		datalv2 = dict(
+			category_id="%s-%s" % (result1['obj'].category_id, item['category_level_2_id']),
+			category_name=item['category_level_2_name'],
+			category_level=2,
+			category_parent=result1['obj'],
+		)
+		result2 = insert_category(data=datalv2)
+		if result2['error']:
+			return result2['error']
+		if item['category_level_3_id'] == None or item['category_level_3_id'] == '':
+			continue
+
+		datalv3 = dict(
+			category_id="%s-%s" % (result2['obj'].category_id, item['category_level_3_id']),
+			category_name=item['category_level_3_name'],
+			category_level=3,
+			category_parent=result2['obj'],
+		)
+		result3 = insert_category(data=datalv3)
+		if result3['error']:
+			return result3['error']
+
 	return result
 
 def product_category_process(data=None):

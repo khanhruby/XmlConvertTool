@@ -1,14 +1,27 @@
 from django.db import models
 from demandware.models import Category, ProductCategory, HeaderMgr
 from django.core.exceptions import ValidationError
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger('django')
 
 def insert_category(data=None, metadata=None):
+	result = dict(
+		error=None,
+		obj=None
+	)
 	try:
-		prd = Category(**data)
-		pid = prd.save()
-		return pid
+		# prd = Category(**data)
+		# pid = prd.save()
+		obj, created = Category.objects.get_or_create(**data)
+		result['obj'] = obj
+		return result
 	except ValidationError as e:
-		return None
+		print(str(e))
+		logger.info(str(e))
+		result['error'] = str(e)
+		return result
 
 def get_cagetory(params=None):
 	try:
@@ -16,6 +29,7 @@ def get_cagetory(params=None):
 	except Category.DoesNotExist as e:
 		return None
 	except Exception as e:
+		logger.info(str(e))
 		raise e
 
 def insert_bulk(data=None):
@@ -33,6 +47,7 @@ def insert_bulk(data=None):
 		return None
 	except Exception as e:
 		print(str(e))
+		logger.info(str(e))
 		return str(e)
 
 def insert_product_category(data=None):
@@ -47,4 +62,9 @@ def insert_product_category(data=None):
 		return None
 	except Exception as e:
 		print(str(e))
+		logger.info(str(e))
 		return str(e)
+
+def get_categories(_category_parent_=None):
+	categories = Category.objects.all().select_related("category_parent")
+	return categories

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+{% now "YmdHi" as default_catalog_id %}
+<catalog xmlns="http://www.demandware.com/xml/impex/catalog/2006-10-31" catalog-id="{{ catalog_id|default:default_catalog_id }}">
+	
+	{% include "xmltemplate/catalog/header.xml" %}
+	<category category-id="root">
+	    <online-flag>true</online-flag>
+	    <template/>
+	    <page-attributes/>
+	</category>
+	{% include "xmltemplate/catalog/category.xml" with dataset=categories %}
+	{% include "xmltemplate/catalog/product.xml" %}
+
+</catalog>

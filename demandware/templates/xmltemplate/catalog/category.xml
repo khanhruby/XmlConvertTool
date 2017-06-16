@@ -1,0 +1,12 @@
+{% for category in dataset %}
+<category category-id="{{ category.category_id|default:now }}">
+    <display-name xml:lang="x-default">{{ category.category_name|default:now }}</display-name>
+    <display-name xml:lang="ja">{{ category.category_name|default:now }}</display-name>
+    <online-flag>true</online-flag>
+    <online-from>{{ category.from|default:now }}</online-from>
+    <online-to>{{ category.to|default:now }}</online-to>
+    <parent>{{ category.category_parent|default:'root' }}</parent>
+    <template/>
+    <page-attributes/>
+</category>
+{% endfor %}
