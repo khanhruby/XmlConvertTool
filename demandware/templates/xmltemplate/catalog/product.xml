@@ -1,3 +1,4 @@
+{% load app_filters %}
 {% for prd in productMaster %}
 <product product-id="{{ prd.product_id }}">
     <ean/>
@@ -27,6 +28,17 @@
             {% endfor %}
         </variants>
     </variations>
+    <images>
+        {% with prd.get_images|filterImageGroups as groupImage %}
+        {% for group, imgs in groupImage.items %}
+        <image-group view-type="{{ group }}">
+            {% for img in imgs %}
+            <image path="{{ group }}/{{ img.product_image }}"/>
+            {% endfor %}
+        </image-group>
+        {% endfor %}
+        {% endwith %}
+    </images>
     <classification-category>{{ prd.get_category }}</classification-category>
 </product>
 {% endfor %}

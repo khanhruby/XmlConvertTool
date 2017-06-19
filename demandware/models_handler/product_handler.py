@@ -1,5 +1,5 @@
 from django.db import models
-from demandware.models import ProductMaster, ProductMeta, ProductCategory, HeaderMgr
+from demandware.models import ProductMaster, ProductMeta, ProductCategory, HeaderMgr, Variant
 from django.core.exceptions import ValidationError
 
 def insert_product_master(data=None, metadata=None):
@@ -36,7 +36,6 @@ def insert_related_product(data=None):
 		return str(e)
 
 def insert_variant(data=None):
-	from demandware.models import Variant
 	try:
 		instances = []
 		for item in data:
@@ -64,10 +63,19 @@ def insert_product_image(data=None):
 		return str(e)
 
 def get_product_master():
-	products = ProductMaster.objects.all()
+	# products = ProductMaster.objects.all()
+	products = ProductMaster.objects.filter(product_id='DSP-1700')
 	return products
 
 def get_product_variants():
-	from demandware.models import Variant
 	variants = Variant.objects.all().select_related("product")
 	return variants
+
+def get_list_currency():
+	from django.db.models.aggregates import Count
+	cur = Variant.objects.values('currency').annotate(counter=Count('currency')).all()
+	# cur = Variant.objects.all().group_by('currency')
+	return cur
+
+def get_variants_by_currency(currency=None):
+	return Variant.objects.filter(currency=currency)

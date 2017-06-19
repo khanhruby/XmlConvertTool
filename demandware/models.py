@@ -42,6 +42,9 @@ class ProductMaster(models.Model):
 		except Exception as e:
 			return ''
 
+	def get_images(self):
+		return ProductImage.objects.filter(product=self.product_id)
+
 
 class ProductMeta(models.Model):
 	product = models.ForeignKey(ProductMaster, on_delete=models.PROTECT, related_name='ProductMeta_ProductMaster', null=True, to_field='product_id')
@@ -147,6 +150,7 @@ class Variant(models.Model):
 
 	class Meta:
 		db_table = 'dtb_variant'
+
 
 class HeaderMgr(models.Model):
 	PRODUCT = 1
