@@ -57,5 +57,4 @@ def handle_export_inventory():
 			variants=variants,
 		)
 	except Exception as e:
-		# return str(e)
-		raise e
+		return str(e)

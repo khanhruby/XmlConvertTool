@@ -11,11 +11,11 @@
         <records>
             {% for prd in variants %}
             <record product-id="{{ prd.variation_jan }}">
-                <allocation>{{ prd.stock_quantiry }}</allocation>
+                <allocation>{{ prd.stock_quantity }}</allocation>
                 <allocation-timestamp>{{ now }}</allocation-timestamp>
                 <perpetual>true</perpetual>
                 <preorder-backorder-handling>none</preorder-backorder-handling>
-                <ats>{{ prd.stock_quantiry }}</ats>
+                <ats>{{ prd.stock_quantity }}</ats>
                 <on-order>0</on-order>
                 <turnover>0</turnover>
             </record>

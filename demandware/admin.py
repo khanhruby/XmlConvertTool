@@ -105,7 +105,7 @@ def export_view(request):
 				_time = datetime.datetime.utcnow().isoformat() + "Z"
 				response = None
 				if int(data_type) == 1:
-					return TemplateResponse(request, "xmltemplate/catalog/main.xml", result, content_type='text/xml')
+					response = TemplateResponse(request, "xmltemplate/catalog/main.xml", result, content_type='text/xml')
 					response['Content-Disposition'] = 'attachment; filename=%s_%s.xml' % ('catalog', str(_time))
 				if int(data_type) == 2:
 					response =  TemplateResponse(request, "xmltemplate/pricebook/main.xml", result, content_type='text/xml')

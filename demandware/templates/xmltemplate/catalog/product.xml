@@ -1,71 +1,72 @@
 {% load app_filters %}
 {% for prd in productMaster %}
-<product product-id="{{ prd.product_id }}">
-    <ean/>
-    <upc/>
-    <unit/>
-    <min-order-quantity>1</min-order-quantity>
-    <step-quantity>1</step-quantity>
-    <display-name xml:lang="x-default">{{ prd.display_name }}</display-name>
-    <display-name xml:lang="ja">{{ prd.display_name }}</display-name>
-    <display-name xml:lang="ja-JP">{{ prd.display_name }}</display-name>
-    <short-description xml:lang="x-default">{{ prd.description }}</short-description>
-    <long-description xml:lang="x-default">{{ prd.description }}</long-description>
-    <store-force-price-flag>false</store-force-price-flag>
-    <store-non-inventory-flag>false</store-non-inventory-flag>
-    <store-non-revenue-flag>false</store-non-revenue-flag>
-    <store-non-discountable-flag>false</store-non-discountable-flag>
-    <online-flag>true</online-flag>
-    <online-from>{{ now }}</online-from>
-    <available-flag>false</available-flag>
-    <searchable-flag>false</searchable-flag>
-    <page-attributes/>
-    <custom-attributes/>
-    <variations>
-        <variants>
-            {% for variant in prd.get_variants %}
-            <variant product-id="{{ variant.variation_jan }}"/>
+    <product product-id="{{ prd.product_id|cut:" " }}">
+        <ean/>
+        <upc/>
+        <unit/>
+        <min-order-quantity>1</min-order-quantity>
+        <step-quantity>1</step-quantity>
+        <display-name xml:lang="x-default">{{ prd.display_name }}</display-name>
+        <short-description xml:lang="x-default">{{ prd.description }}</short-description>
+        <long-description xml:lang="x-default">{{ prd.description }}</long-description>
+        <store-force-price-flag>false</store-force-price-flag>
+        <store-non-inventory-flag>false</store-non-inventory-flag>
+        <store-non-revenue-flag>false</store-non-revenue-flag>
+        <store-non-discountable-flag>false</store-non-discountable-flag>
+        <online-flag>true</online-flag>
+        <online-from>{{ now }}</online-from>
+        <available-flag>false</available-flag>
+        <searchable-flag>false</searchable-flag>
+        {% if prd.get_images %}
+        <images>
+            {% with prd.get_images|filterImageGroups as groupImage %}
+            {% for group, imgs in groupImage.items %}
+            <image-group view-type="{{ group }}">
+                {% for img in imgs %}
+                <image path="{{ group }}/{{ img.product_image }}"/>
+                {% endfor %}
+            </image-group>
             {% endfor %}
-        </variants>
-    </variations>
-    <images>
-        {% with prd.get_images|filterImageGroups as groupImage %}
-        {% for group, imgs in groupImage.items %}
-        <image-group view-type="{{ group }}">
-            {% for img in imgs %}
-            <image path="{{ group }}/{{ img.product_image }}"/>
-            {% endfor %}
-        </image-group>
-        {% endfor %}
-        {% endwith %}
-    </images>
-    <classification-category>{{ prd.get_category }}</classification-category>
-</product>
+            {% endwith %}
+        </images>
+        {% endif %}
+
+        {% if prd.get_variants %}
+        <variations>
+            <variants>
+                {% for variant in prd.get_variants %}
+                <variant product-id="{{ variant.variation_jan }}"/>
+                {% endfor %}
+            </variants>
+        </variations>
+        {% endif %}
+        <classification-category>{{ prd.get_category }}</classification-category>
+    </product>
 {% endfor %}
 
 
 {% for prd in productVariants %}
-<product product-id="{{ prd.variation_jan }}">
-    <ean/>
-    <upc>{{ prd.variation_jan }}</upc>
-    <unit/>
-    <min-order-quantity>1</min-order-quantity>
-    <step-quantity>1</step-quantity>
-    <store-force-price-flag>false</store-force-price-flag>
-    <store-non-inventory-flag>false</store-non-inventory-flag>
-    <store-non-revenue-flag>false</store-non-revenue-flag>
-    <store-non-discountable-flag>false</store-non-discountable-flag>
-    <online-flag>true</online-flag>
-    <online-from>{{ now }}</online-from>
-    <available-flag>true</available-flag>
-    <searchable-flag>true</searchable-flag>
-    <page-attributes/>
-    <custom-attributes>
-        <custom-attribute attribute-id="color">{{ prd.color_code }}</custom-attribute>
-        <custom-attribute attribute-id="refinementColor">{{ prd.color_code }}</custom-attribute>
-        <custom-attribute attribute-id="size">{{ prd.size_code }}</custom-attribute>
-        <custom-attribute attribute-id="width">{{ prd.size_display_name }}</custom-attribute>
-    </custom-attributes>
-</product>
+    <product product-id="{{ prd.variation_jan|cut:" " }}">
+        <ean/>
+        <upc>{{ prd.variation_jan }}</upc>
+        <unit/>
+        <min-order-quantity>1</min-order-quantity>
+        <step-quantity>1</step-quantity>
+        <store-force-price-flag>false</store-force-price-flag>
+        <store-non-inventory-flag>false</store-non-inventory-flag>
+        <store-non-revenue-flag>false</store-non-revenue-flag>
+        <store-non-discountable-flag>false</store-non-discountable-flag>
+        <online-flag>true</online-flag>
+        <online-from>{{ now }}</online-from>
+        <available-flag>true</available-flag>
+        <searchable-flag>true</searchable-flag>
+        <page-attributes/>
+        <custom-attributes>
+            <custom-attribute attribute-id="color">{{ prd.color_code }}</custom-attribute>
+            <custom-attribute attribute-id="refinementColor">{{ prd.color_code }}</custom-attribute>
+            <custom-attribute attribute-id="size">{{ prd.size_code }}</custom-attribute>
+            <custom-attribute attribute-id="width">{{ prd.size_display_name }}</custom-attribute>
+        </custom-attributes>
+    </product>
 
 {% endfor %}
