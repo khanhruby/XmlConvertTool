@@ -2,24 +2,143 @@
 <metadata xmlns="http://www.demandware.com/xml/impex/metadata/2006-10-31">
     <type-extension type-id="Product">
         <custom-attribute-definitions>
-            <attribute-definition attribute-id="test_new_attr1">
-                <display-name xml:lang="x-default">Test New Custom Attribute - Name 1</display-name>
-                <description xml:lang="x-default">Test New Custom Attribute - Description 1</description>
-                <type>text</type>
-                <localizable-flag>true</localizable-flag>
-                <site-specific-flag>false</site-specific-flag>
-            </attribute-definition>
-            <attribute-definition attribute-id="test_new_attr2">
-                <display-name xml:lang="x-default">Test New Custom Attribute - Name 2</display-name>
-                <description xml:lang="x-default">Test New Custom Attribute - Description 2</description>
+            <attribute-definition attribute-id="product_commentary_01_description">
+                <display-name xml:lang="x-default">Product Commentary Description 01</display-name>
+                <description xml:lang="x-default">Product Commentary Description 01</description>
                 <type>string</type>
                 <localizable-flag>true</localizable-flag>
                 <site-specific-flag>false</site-specific-flag>
             </attribute-definition>
-            <attribute-definition attribute-id="test_new_attr3">
-                <display-name xml:lang="x-default">Test New Custom Attribute - Name 3</display-name>
-                <description xml:lang="x-default">Test New Custom Attribute - Description 3</description>
-                <type>int</type>
+            <attribute-definition attribute-id="product_commentary_01_image">
+                <display-name xml:lang="x-default">Product Commentary Image 01</display-name>
+                <description xml:lang="x-default">Product Commentary Image 01</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_02_description">
+                <display-name xml:lang="x-default">Product Commentary Description 02</display-name>
+                <description xml:lang="x-default">Product Commentary Description 02</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_02_image">
+                <display-name xml:lang="x-default">Product Commentary Image 02</display-name>
+                <description xml:lang="x-default">Product Commentary Image 02</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_03_description">
+                <display-name xml:lang="x-default">Product Commentary Description 03</display-name>
+                <description xml:lang="x-default">Product Commentary Description 03</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_03_image">
+                <display-name xml:lang="x-default">Product Commentary Image 03</display-name>
+                <description xml:lang="x-default">Product Commentary Image 03</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_04_description">
+                <display-name xml:lang="x-default">Product Commentary Description 04</display-name>
+                <description xml:lang="x-default">Product Commentary Description 04</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_04_image">
+                <display-name xml:lang="x-default">Product Commentary Image 04</display-name>
+                <description xml:lang="x-default">Product Commentary Image 04</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_05_description">
+                <display-name xml:lang="x-default">Product Commentary Description 05</display-name>
+                <description xml:lang="x-default">Product Commentary Description 05</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_05_image">
+                <display-name xml:lang="x-default">Product Commentary Image 05</display-name>
+                <description xml:lang="x-default">Product Commentary Image 05</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_06_description">
+                <display-name xml:lang="x-default">Product Commentary Description 06</display-name>
+                <description xml:lang="x-default">Product Commentary Description 06</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_06_image">
+                <display-name xml:lang="x-default">Product Commentary Image 06</display-name>
+                <description xml:lang="x-default">Product Commentary Image 06</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_07_description">
+                <display-name xml:lang="x-default">Product Commentary Description 07</display-name>
+                <description xml:lang="x-default">Product Commentary Description 07</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_07_image">
+                <display-name xml:lang="x-default">Product Commentary Image 07</display-name>
+                <description xml:lang="x-default">Product Commentary Image 07</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_08_description">
+                <display-name xml:lang="x-default">Product Commentary Description 08</display-name>
+                <description xml:lang="x-default">Product Commentary Description 08</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_08_image">
+                <display-name xml:lang="x-default">Product Commentary Image 08</display-name>
+                <description xml:lang="x-default">Product Commentary Image 08</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_09_description">
+                <display-name xml:lang="x-default">Product Commentary Description 09</display-name>
+                <description xml:lang="x-default">Product Commentary Description 09</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_09_image">
+                <display-name xml:lang="x-default">Product Commentary Image 09</display-name>
+                <description xml:lang="x-default">Product Commentary Image 09</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_10_description">
+                <display-name xml:lang="x-default">Product Commentary Description 10</display-name>
+                <description xml:lang="x-default">Product Commentary Description 10</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_10_image">
+                <display-name xml:lang="x-default">Product Commentary Image 10</display-name>
+                <description xml:lang="x-default">Product Commentary Image 10</description>
+                <type>string</type>
                 <localizable-flag>true</localizable-flag>
                 <site-specific-flag>false</site-specific-flag>
             </attribute-definition>

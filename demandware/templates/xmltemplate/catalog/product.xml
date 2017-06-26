@@ -31,7 +31,7 @@
             <custom-attribute xml:lang="x-default" attribute-id="display_name">{{ prd.display_name|cut:" " }}</custom-attribute>
             <custom-attribute xml:lang="x-default" attribute-id="description">{{ prd.description|cut:" " }}</custom-attribute>
             <custom-attribute xml:lang="x-default" attribute-id="functions">{{ prd.functions|cut:" " }}</custom-attribute>
-            <custom-attribute xml:lang="x-default" attribute-id="online_shop_url">{{ prd.online_shop_url|cut:" " }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="online_shop_url">{{ prd.online_shop_url|urlencode }}</custom-attribute>
             <custom-attribute xml:lang="x-default" attribute-id="product_all_size_info">{{ prd.product_all_size_info|cut:" " }}</custom-attribute>
             <custom-attribute xml:lang="x-default" attribute-id="product_commentary_image_title">{{ prd.product_commentary_image_title|cut:" " }}</custom-attribute>
             <custom-attribute xml:lang="x-default" attribute-id="main_image">{{ prd.main_image|cut:" " }}</custom-attribute>
@@ -39,7 +39,9 @@
             {% for row in prd.product_commentary|parseJSON %}{% for key, value in row.items %}
             <custom-attribute xml:lang="x-default" attribute-id="{{ key }}">{{ value|cut:" " }}</custom-attribute>
             {% endfor %}{% endfor %}
+            {% autoescape off %}
             <custom-attribute xml:lang="x-default" attribute-id="product_all_color">{{ prd.product_all_color }}</custom-attribute>
+            {% endautoescape %}
         </custom-attributes>
 
         {% if prd.get_variants %}
@@ -82,3 +84,4 @@
     </product>
 
 {% endfor %}
+

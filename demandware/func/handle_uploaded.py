@@ -107,7 +107,7 @@ def product_master_process(data=None, header=None, extData=None):
 				commentary[_search_commentary.group(1)] = commentary[_search_commentary.group(1)] if _search_commentary.group(1) in commentary else {}
 				commentary[_search_commentary.group(1)][_search_commentary.group(0)] = value
 
-			_re_all_color = re.compile("product_all_color_(.*)_(\d)")
+			_re_all_color = re.compile("product_all_color_(.*)_(\d+)")
 			_search_all_color = _re_all_color.search(key)
 			if _search_all_color != None:
 				all_color[_search_all_color.group(2)] = all_color[_search_all_color.group(2)] if _search_all_color.group(2) in all_color else {}
@@ -117,8 +117,8 @@ def product_master_process(data=None, header=None, extData=None):
 		commentary = [item[1] for item in commentary]
 		all_color = sorted(all_color.items(), key=lambda t: int(t[0]))
 		all_color = [item[1] for item in all_color]
-		data[idx]['product_commentary'] = json.dumps(commentary)
-		data[idx]['product_all_color'] = json.dumps(all_color)
+		data[idx]['product_commentary'] = json.dumps(commentary, ensure_ascii=False)
+		data[idx]['product_all_color'] = json.dumps(all_color, ensure_ascii=False)
 
 	result = insert_bulk_product_master(data=data)
 	return result
