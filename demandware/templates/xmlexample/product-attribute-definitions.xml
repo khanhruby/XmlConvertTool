@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://www.demandware.com/xml/impex/metadata/2006-10-31">
+    <type-extension type-id="Product">
+        <custom-attribute-definitions>
+            <attribute-definition attribute-id="test_new_attr1">
+                <display-name xml:lang="x-default">Test New Custom Attribute - Name 1</display-name>
+                <description xml:lang="x-default">Test New Custom Attribute - Description 1</description>
+                <type>text</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="test_new_attr2">
+                <display-name xml:lang="x-default">Test New Custom Attribute - Name 2</display-name>
+                <description xml:lang="x-default">Test New Custom Attribute - Description 2</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="test_new_attr3">
+                <display-name xml:lang="x-default">Test New Custom Attribute - Name 3</display-name>
+                <description xml:lang="x-default">Test New Custom Attribute - Description 3</description>
+                <type>int</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+        </custom-attribute-definitions>
+    </type-extension>
+</metadata>
