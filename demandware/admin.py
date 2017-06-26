@@ -38,7 +38,7 @@ class CustomModelAdminMixin(object):
 		if request.method == 'POST' and 'myfile' in request.FILES:
 			form = UploadFileForm(request.POST, request.FILES)
 			if form.is_valid():
-				res = handle_uploaded_file(form=form, f=request.FILES['myfile'], model_name=opts.model_name)
+				res = handle_uploaded_file(form=form, f=request.FILES['myfile'], model_name=opts.model_name, model=model)
 				if res['message'] != None:
 					messages.error(request, res['message'])
 				else:
@@ -82,9 +82,9 @@ class ProductImageAdmin(CustomModelAdminMixin, admin.ModelAdmin):
 class ProductCategoryAdmin(CustomModelAdminMixin, admin.ModelAdmin):
     pass
 
+# admin.site.register(CategoryMeta, CategoryMetaAdmin)
+# admin.site.register(ProductMeta, ProductMetaAdmin)
 admin.site.register(ProductMaster, ProductMasterAdmin)
-admin.site.register(CategoryMeta, CategoryMetaAdmin)
-admin.site.register(ProductMeta, ProductMetaAdmin)
 admin.site.register(RelatedProduct, RelatedProductAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Variant, VariantAdmin)

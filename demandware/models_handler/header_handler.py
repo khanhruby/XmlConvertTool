@@ -1,7 +1,7 @@
 from django.db import models
 from demandware.models import HeaderMgr
 
-def insert_bulk(header_list=None, header_type=1):
+def insert_bulk_header(header_list=None, header_type=1):
 	try:
 		for item in header_list:
 			values = dict(

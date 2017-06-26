@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+{% now "YmdHi" as inventory_time %}
 <inventory xmlns="http://www.demandware.com/xml/impex/inventory/2007-05-31">
 	<inventory-list>
         <header list-id="inventory_jp_store">
@@ -12,8 +13,6 @@
             {% for prd in variants %}
             <record product-id="{{ prd.variation_jan }}">
                 <allocation>{{ prd.stock_quantity }}</allocation>
-                <allocation-timestamp>{{ now }}</allocation-timestamp>
-                <perpetual>true</perpetual>
                 <preorder-backorder-handling>none</preorder-backorder-handling>
                 <ats>{{ prd.stock_quantity }}</ats>
                 <on-order>0</on-order>

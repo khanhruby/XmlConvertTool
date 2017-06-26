@@ -2,8 +2,10 @@
 <category category-id="{{ category.category_id|default:now }}">
     <display-name xml:lang="x-default">{{ category.category_name|default:now }}</display-name>
     <online-flag>true</online-flag>
+    {% comment %} 
     <online-from>{{ category.from|default:now }}</online-from>
     <online-to>{{ category.to|default:now }}</online-to>
+    {% endcomment %} 
     <parent>{{ category.category_parent|default:'root' }}</parent>
     <template/>
     <page-attributes/>

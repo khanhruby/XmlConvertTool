@@ -1,3 +1,4 @@
+import json
 from django.conf import settings
 from openpyxl import load_workbook
 from openpyxl.utils import cell as pycell
@@ -7,7 +8,7 @@ import logging
 # Get an instance of a logger
 logger = logging.getLogger('django')
 
-def handle_uploaded_file(form=None, f=None, model_name=None):
+def handle_uploaded_file(form=None, f=None, model_name=None, model=None):
 	wb = load_workbook(f, data_only=True)
 	ws = wb.active
 	min_row = form.cleaned_data.get('from_row')
@@ -22,7 +23,6 @@ def handle_uploaded_file(form=None, f=None, model_name=None):
 	if max_col == '':
 		max_col = ws.max_column
 
-	logger.info(max_row)
 	min_col_num = pycell.column_index_from_string(min_col)
 	max_col_num = pycell.column_index_from_string(max_col)
 	dataset = ws.iter_rows(min_row=min_row, min_col=min_col_num, max_col=max_col_num, max_row=max_row)
@@ -32,40 +32,45 @@ def handle_uploaded_file(form=None, f=None, model_name=None):
 
 	_count = 0
 	insertDataSet = []
+	extInsertDataSet = []
+	fields = get_model_fields(model)
 	for row in dataset:
 		values = {}
+		extValues = {}
 		for key, _cell in zip(header, row):
-			values[key] = _cell.value if _cell.value else ''
+			if key in fields:
+				values[key] = _cell.value if _cell.value else ''
+			else:
+				extValues[key] = _cell.value if _cell.value else ''
 		_count = _count + 1
 		insertDataSet.append(values)
-	
-	message = detect_service(model_name=model_name, data=insertDataSet, header=header)
+		extInsertDataSet.append(extValues)
+
+	message = detect_service(model_name=model_name, data=insertDataSet, extData=extInsertDataSet, header=header)
 	result = dict(
 		message=message,
 		count=_count
 	)
 	return result
 
-
-def detect_service(model_name=None, data=None, header=None):
-	print(model_name)
+def detect_service(model_name=None, data=None, extData=None, header=None):
 	if model_name == 'productmaster':
-		return product_master_process(data=data, header=header)
+		return product_master_process(data=data, extData=extData, header=header)
 
 	if model_name == 'relatedproduct':
-		return related_product_process(data=data)
+		return related_product_process(data=data, extData=extData)
 
 	if model_name == 'variant':
-		return variant_process(data=data)
+		return variant_process(data=data, extData=extData)
 
 	if model_name == 'productimage':
-		return product_image_process(data=data)
+		return product_image_process(data=data, extData=extData)
 
 	if model_name == 'category':
-		return category_process(data=data, header=header)
+		return category_process(data=data, header=header, extData=extData)
 
 	if model_name == 'productcategory':
-		return product_category_process(data=data)
+		return product_category_process(data=data, extData=extData)
 
 	return None
 
@@ -74,44 +79,71 @@ def get_model_fields(model):
     return [f.name for f in model._meta.fields]
 
 
-def product_master_process(data=None, header=None):
+def product_master_process(data=None, header=None, extData=None):
+	import re
+	from collections import OrderedDict
 	"""
 	1. Insert header to header_mgr db
 	2. If header name is existing in table, then insert to table
 		Else insert or update to metadata
 	"""
-	from demandware.models_handler.header_handler import insert_bulk as header_insert_all
-	from demandware.models_handler.product_handler import insert_product_master, insert_bulk
+	from demandware.models_handler.header_handler import insert_bulk_header
+	from demandware.models_handler.product_handler import insert_product_master, insert_bulk_product_master
 	result = None
 
 	### Insert header data
-	result = header_insert_all(header_list=header, header_type=HeaderMgr.PRODUCT)
+	result = insert_bulk_header(header_list=header, header_type=HeaderMgr.PRODUCT)
 
 	### Insert data
-	result = insert_bulk(data=data)
+	### 前処理
+	# product_commentaryを処理する | product_all_colorを処理する
+	for idx, items in zip(range(len(extData)), extData):
+		commentary = {}
+		all_color = {}
+		for key, value in items.items():
+			_re_commentary = re.compile("product_commentary_(.*)_(.*)")
+			_search_commentary = _re_commentary.search(key)
+			if _search_commentary != None:
+				commentary[_search_commentary.group(1)] = commentary[_search_commentary.group(1)] if _search_commentary.group(1) in commentary else {}
+				commentary[_search_commentary.group(1)][_search_commentary.group(0)] = value
+
+			_re_all_color = re.compile("product_all_color_(.*)_(\d)")
+			_search_all_color = _re_all_color.search(key)
+			if _search_all_color != None:
+				all_color[_search_all_color.group(2)] = all_color[_search_all_color.group(2)] if _search_all_color.group(2) in all_color else {}
+				all_color[_search_all_color.group(2)][_search_all_color.group(0)] = value
+
+		commentary = sorted(commentary.items(), key=lambda t: int(t[0]))
+		commentary = [item[1] for item in commentary]
+		all_color = sorted(all_color.items(), key=lambda t: int(t[0]))
+		all_color = [item[1] for item in all_color]
+		data[idx]['product_commentary'] = json.dumps(commentary)
+		data[idx]['product_all_color'] = json.dumps(all_color)
+
+	result = insert_bulk_product_master(data=data)
 	return result
 
-def related_product_process(data=None):
+def related_product_process(data=None, extData=None):
 	from demandware.models_handler.product_handler import insert_related_product
 	return insert_related_product(data)
 
-def variant_process(data=None):
+def variant_process(data=None, extData=None):
 	from demandware.models_handler.product_handler import insert_variant
 	return insert_variant(data)
 
-def product_image_process(data=None):
+def product_image_process(data=None, extData=None):
 	from demandware.models_handler.product_handler import insert_product_image
 	return insert_product_image(data)
 
-def category_process(data=None, header=None):
-	from demandware.models_handler.header_handler import insert_bulk as header_insert_all
+def category_process(data=None, header=None, extData=None):
+	from demandware.models_handler.header_handler import insert_bulk_header
 	from demandware.models_handler.category_handler import insert_category
 
 	### Insert header data
-	result = header_insert_all(header_list=header, header_type=HeaderMgr.CATEGORY)
+	result = insert_bulk_header(header_list=header, header_type=HeaderMgr.CATEGORY)
 
 	### Insert data
-	for item in data:
+	for item in extData:
 		datalv1 = dict(
 			category_id=item['category_level_1_id'],
 			category_name=item['category_level_1_name'],
@@ -148,6 +180,6 @@ def category_process(data=None, header=None):
 
 	return result
 
-def product_category_process(data=None):
+def product_category_process(data=None, extData=None):
 	from demandware.models_handler.category_handler import insert_product_category
 	return insert_product_category(data)

@@ -15,3 +15,9 @@ def filterImageGroups(imageGroupe):
 			result[ig.image_size] = []
 		result[ig.image_size].append(ig)
 	return result
+
+@register.filter(name='parseJSON')
+def parseJSON(str):
+	import json
+	obj = json.loads(str)
+	return obj

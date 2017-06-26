@@ -11,12 +11,20 @@ def insert_product_master(data=None, metadata=None):
 		return None
 
 
-def insert_bulk(data=None):
+def insert_bulk_product_master(data=None):
 	try:
 		instances = []
 		for item in data:
-			instances.append(ProductMaster(**item))
-		ProductMaster.objects.bulk_create(instances, batch_size=None)
+			try:
+				ProductMaster.objects.get(product_id=item['product_id'])
+				obj = ProductMaster.objects.filter(product_id=item['product_id']).update(**item)
+			except ProductMaster.DoesNotExist:
+				obj = ProductMaster(**item)
+				obj.save()
+			# instances.append(ProductMaster(**item))
+			# objPrd = ProductMaster.objects.get_or_create(product_id=item['product_id'])
+			# objPrd.update_or_create(**item)
+		# ProductMaster.objects.bulk_create(instances, batch_size=None)
 		return None
 	except Exception as e:
 		return str(e)
@@ -26,8 +34,8 @@ def insert_related_product(data=None):
 	try:
 		for item in data:
 			values = dict(
-				product=ProductMaster.objects.get(product_id=item['product_id']),
-				related_product=ProductMaster.objects.get(product_id=item['related_product_id']),
+				product_id=ProductMaster.objects.get(product_id=item['product_id']),
+				related_product_id=ProductMaster.objects.get(product_id=item['related_product_id']),
 			)
 			RelatedProduct.objects.update_or_create(**values)
 		return None
@@ -39,8 +47,7 @@ def insert_variant(data=None):
 	try:
 		instances = []
 		for item in data:
-			item['product'] = ProductMaster.objects.get(product_id=item['product_id'])
-			del item['product_id']
+			item['product_id'] = ProductMaster.objects.get(product_id=item['product_id'])
 			instances.append(Variant(**item))
 		Variant.objects.bulk_create(instances, batch_size=None)
 		return None
@@ -53,8 +60,7 @@ def insert_product_image(data=None):
 	try:
 		instances = []
 		for item in data:
-			item['product'] = ProductMaster.objects.get(product_id=item['product_id'])
-			del item['product_id']
+			item['product_id'] = ProductMaster.objects.get(product_id=item['product_id'])
 			instances.append(ProductImage(**item))
 		ProductImage.objects.bulk_create(instances, batch_size=None)
 		return None
@@ -68,7 +74,7 @@ def get_product_master():
 	return products
 
 def get_product_variants():
-	variants = Variant.objects.all().select_related("product")
+	variants = Variant.objects.all().select_related("product_id")
 	return variants
 
 def get_list_currency():

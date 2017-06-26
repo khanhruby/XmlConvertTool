@@ -55,8 +55,8 @@ def insert_product_category(data=None):
 	try:
 		for item in data:
 			values = dict(
-				product=ProductMaster.objects.get(product_id=item['product_id']),
-				category=Category.objects.get(category_id=item['category_id']),
+				product_id=ProductMaster.objects.get(product_id=item['product_id']),
+				category_id=Category.objects.get(category_id=item['category_id']),
 			)
 			ProductCategory.objects.update_or_create(**values)
 		return None

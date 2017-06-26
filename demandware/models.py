@@ -12,14 +12,12 @@ class ProductMaster(models.Model):
 	description = models.TextField(default='')
 	functions = models.TextField(default='')
 	online_shop_url = models.CharField(max_length=255, default='')
-	product_commentary_1_image = models.CharField(max_length=255, default='')
-	product_commentary_1_description = models.TextField(null=True)
-	product_commentary_2_image = models.CharField(max_length=255, default='')
-	product_commentary_2_description = models.TextField(null=True)
-	product_commentary_3_image = models.CharField(max_length=255, default='')
-	product_commentary_3_description = models.TextField(null=True)
+	product_commentary = models.TextField(null=True)
+	product_all_color = models.TextField(null=True)
 	product_commentary_image_title = models.CharField(max_length=255, null=True)
 	main_image = models.CharField(max_length=255, default='')
+	country = models.CharField(max_length=100, default='JP')
+	product_all_size_info = models.TextField(null=True)
 	del_flg = models.BooleanField(default=False)
 	create_date = models.DateField(default=now, blank=True)
 	update_date = models.DateField(auto_now=True, blank=True)
@@ -31,40 +29,40 @@ class ProductMaster(models.Model):
 		db_table = 'dtb_product_master'
 
 	def get_variants(self):
-		return Variant.objects.filter(product=self.product_id)
+		return Variant.objects.filter(product_id=self.product_id)
 
 	def get_category(self):
 		try:
-			obj = ProductCategory.objects.get(product=self.product_id)
+			obj = ProductCategory.objects.get(product_id=self.product_id)
 			if obj != None:
-				return obj.category.category_name
+				return obj.category_id
 			return ''
 		except Exception as e:
 			return ''
 
 	def get_images(self):
-		return ProductImage.objects.filter(product=self.product_id)
+		return ProductImage.objects.filter(product_id=self.product_id)
 
 
 class ProductMeta(models.Model):
-	product = models.ForeignKey(ProductMaster, on_delete=models.PROTECT, related_name='ProductMeta_ProductMaster', null=True, to_field='product_id')
+	product_id = models.ForeignKey(ProductMaster, on_delete=models.PROTECT, related_name='ProductMeta_ProductMaster', null=True, to_field='product_id', db_column='product_id')
 	key = models.CharField(max_length=100, default='')
 	value = models.TextField(null=True)
 
 	def __str__(self):
-		return str(self.product)
+		return str(self.product_id)
 
 	class Meta:
 		db_table = 'dtb_product_metadata'
-		unique_together = ('product', 'key',)
+		unique_together = ('product_id', 'key',)
 
 
 class RelatedProduct(models.Model):
-	product = models.ForeignKey(ProductMaster, on_delete=models.PROTECT, related_name='RelatedProduct_product_id', default='', to_field='product_id')
-	related_product = models.ForeignKey(ProductMaster, on_delete=models.PROTECT, related_name='RelatedProduct_related_product_id', to_field='product_id')
+	product_id = models.ForeignKey(ProductMaster, on_delete=models.PROTECT, related_name='RelatedProduct_product_id', default='', to_field='product_id', db_column='product_id')
+	related_product_id = models.ForeignKey(ProductMaster, on_delete=models.PROTECT, related_name='RelatedProduct_related_product_id', to_field='product_id', db_column='related_product_id')
 
 	def __str__(self):
-		return str(self.product)
+		return str(self.product_id)
 
 	class Meta:
 		db_table = 'dtb_related_product'
@@ -91,53 +89,53 @@ class Category(models.Model):
 
 
 class CategoryMeta(models.Model):
-	category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='CategoryMeta_Category', null=True, to_field='category_id')
+	category_id = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='CategoryMeta_Category', null=True, to_field='category_id', db_column='category_id')
 	key = models.CharField(max_length=100, default='')
 	value = models.TextField(null=True)
 
 	def __str__(self):
-		return str(self.category)
+		return str(self.category_id)
 
 	class Meta:
 		db_table = 'dtb_category_metadata'
-		unique_together = ('category', 'key',)
+		unique_together = ('category_id', 'key',)
 
 
 class ProductCategory(models.Model):
-	product = models.ForeignKey(ProductMaster, on_delete=models.PROTECT, related_name='ProductCategory_ProductMaster', null=True, to_field='product_id')
-	category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='ProductCategory_Category', null=True, to_field='category_id')
+	product_id = models.ForeignKey(ProductMaster, on_delete=models.PROTECT, related_name='ProductCategory_ProductMaster', null=True, to_field='product_id', db_column='product_id')
+	category_id = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='ProductCategory_Category', null=True, to_field='category_id', db_column='category_id')
 
 	def __str__(self):
-		return str(self.product)
+		return str(self.product_id)
 
 	class Meta:
 		db_table = 'dtb_product_category'
-		unique_together = ('product', 'category',)
+		unique_together = ('product_id', 'category_id',)
 
 
 class ProductImage(models.Model):
-	product = models.ForeignKey(ProductMaster, on_delete=models.PROTECT, related_name='ProductImage_ProductMaster', null=True, to_field='product_id')
+	product_id = models.ForeignKey(ProductMaster, on_delete=models.PROTECT, related_name='ProductImage_ProductMaster', null=True, to_field='product_id', db_column='product_id')
 	color_code = models.CharField(max_length=10, default='')
 	image_size = models.CharField(max_length=10, default='')
 	product_image = models.CharField(max_length=255, default='')
 	product_image_description = models.TextField(null=True)
 
 	def __str__(self):
-		return str(self.product)
+		return str(self.product_id)
 
 	class Meta:
 		db_table = 'dtb_product_image'
 
 
 class Variant(models.Model):
-	product = models.ForeignKey(ProductMaster, on_delete=models.PROTECT, related_name='Variant_ProductMaster', null=True, to_field='product_id')
+	product_id = models.ForeignKey(ProductMaster, on_delete=models.PROTECT, related_name='Variant_ProductMaster', null=True, to_field='product_id', db_column='product_id')
 	variation_jan = models.CharField(max_length=100, default='')
 	country = models.CharField(max_length=50, default='')
 	size_code = models.CharField(max_length=10, default='')
 	size_display_name = models.CharField(max_length=100, default='')
 	color_code = models.CharField(max_length=10, default='')
 	color_display_name = models.CharField(max_length=100, default='')
-	color_hexa_code = models.CharField(max_length=10, default='')
+	# color_hexa_code = models.CharField(max_length=10, default='')
 	price_amount = models.IntegerField(default=0)
 	currency = models.CharField(max_length=10, default='')
 	stock_quantity = models.IntegerField(default=1)
@@ -146,7 +144,7 @@ class Variant(models.Model):
 	update_date = models.DateField(blank=True, auto_now=True)
 
 	def __str__(self):
-		return str(self.product)
+		return str(self.product_id)
 
 	class Meta:
 		db_table = 'dtb_variant'
