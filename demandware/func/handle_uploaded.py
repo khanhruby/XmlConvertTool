@@ -10,12 +10,18 @@ logger = logging.getLogger('django')
 
 def handle_uploaded_file(form=None, f=None, model_name=None, model=None):
 	wb = load_workbook(f, data_only=True)
-	ws = wb.active
+	print(wb.sheetnames)
+	# ws = wb.active
+	# ws=wb.get_sheet_by_name("data")
+	sheet_name = form.cleaned_data.get('sheet_name')
 	min_row = form.cleaned_data.get('from_row')
 	max_row = form.cleaned_data.get('to_row')
 	min_col = form.cleaned_data.get('from_col')
 	max_col = form.cleaned_data.get('to_col')
 	header_row = form.cleaned_data.get('header_row')
+	if sheet_name == None or sheet_name == '':
+		sheet_name = 'data'
+	ws = wb[sheet_name]
 
 	if max_row == 0:
 		max_row = ws.max_row
@@ -88,11 +94,11 @@ def product_master_process(data=None, header=None, extData=None):
 		Else insert or update to metadata
 	"""
 	from demandware.models_handler.header_handler import insert_bulk_header
-	from demandware.models_handler.product_handler import insert_product_master, insert_bulk_product_master
+	from demandware.models_handler.product_handler import insert_product_master, insert_bulk_product_master, insert_product_metadata
 	result = None
 
 	### Insert header data
-	result = insert_bulk_header(header_list=header, header_type=HeaderMgr.PRODUCT)
+	# result = insert_bulk_header(header_list=header, header_type=HeaderMgr.PRODUCT)
 
 	### Insert data
 	### 前処理
@@ -100,18 +106,21 @@ def product_master_process(data=None, header=None, extData=None):
 	for idx, items in zip(range(len(extData)), extData):
 		commentary = {}
 		all_color = {}
-		for key, value in items.items():
+		_items = list(items.items())
+		for key, value in _items:
 			_re_commentary = re.compile("product_commentary_(.*)_(.*)")
 			_search_commentary = _re_commentary.search(key)
 			if _search_commentary != None:
 				commentary[_search_commentary.group(1)] = commentary[_search_commentary.group(1)] if _search_commentary.group(1) in commentary else {}
 				commentary[_search_commentary.group(1)][_search_commentary.group(0)] = value
+				del extData[idx][key]
 
 			_re_all_color = re.compile("product_all_color_(.*)_(\d+)")
 			_search_all_color = _re_all_color.search(key)
 			if _search_all_color != None:
 				all_color[_search_all_color.group(2)] = all_color[_search_all_color.group(2)] if _search_all_color.group(2) in all_color else {}
 				all_color[_search_all_color.group(2)][_search_all_color.group(0)] = value
+				del extData[idx][key]
 
 		commentary = sorted(commentary.items(), key=lambda t: int(t[0]))
 		commentary = [item[1] for item in commentary]
@@ -121,6 +130,7 @@ def product_master_process(data=None, header=None, extData=None):
 		data[idx]['product_all_color'] = json.dumps(all_color, ensure_ascii=False)
 
 	result = insert_bulk_product_master(data=data)
+	result = insert_product_metadata(data=data, extData=extData)
 	return result
 
 def related_product_process(data=None, extData=None):

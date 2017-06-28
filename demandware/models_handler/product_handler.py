@@ -16,15 +16,12 @@ def insert_bulk_product_master(data=None):
 		instances = []
 		for item in data:
 			try:
-				ProductMaster.objects.get(product_id=item['product_id'])
-				obj = ProductMaster.objects.filter(product_id=item['product_id']).update(**item)
+				obj = ProductMaster.objects.get(product_id=item['product_id'])
+				obj = update_multiple_fields(obj, item)
+				obj.save()
 			except ProductMaster.DoesNotExist:
 				obj = ProductMaster(**item)
 				obj.save()
-			# instances.append(ProductMaster(**item))
-			# objPrd = ProductMaster.objects.get_or_create(product_id=item['product_id'])
-			# objPrd.update_or_create(**item)
-		# ProductMaster.objects.bulk_create(instances, batch_size=None)
 		return None
 	except Exception as e:
 		return str(e)
@@ -70,8 +67,7 @@ def insert_product_image(data=None):
 
 def get_product_master():
 	products = ProductMaster.objects.all()
-	# products = ProductMaster.objects.filter(product_id='DSP-1700')
-	# products = ProductMaster.objects.filter(product_id='DAC-8700')
+	# products = ProductMaster.objects.filter(product_id='DAT-2722')
 	return products
 
 def get_product_variants():
@@ -86,3 +82,32 @@ def get_list_currency():
 
 def get_variants_by_currency(currency=None):
 	return Variant.objects.filter(currency=currency)
+
+def insert_product_metadata(data=None, extData=None):
+	from demandware.models import ProductMeta
+	try:
+		for idx, items in zip(range(len(extData)), extData):
+			_items = list(items.items())
+			for key, value in _items:
+				values = dict(
+					product_id=ProductMaster.objects.get(product_id=data[idx]['product_id']),
+					key=key,
+					value=value,
+				)
+				try:
+					obj = ProductMeta.objects.get(product_id=values['product_id'], key=key)
+					obj.value = value
+					obj.save()
+				except ProductMeta.DoesNotExist:
+					obj = ProductMeta(**values)
+					obj.save()
+	except Exception as e:
+		raise e
+
+def update_multiple_fields(obj, data=None):
+	try:
+		for (key, value) in data.items():
+			setattr(obj, key, value)
+		return obj
+	except Exception as e:
+		raise e

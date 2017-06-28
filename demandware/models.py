@@ -34,14 +34,18 @@ class ProductMaster(models.Model):
 	def get_category(self):
 		try:
 			obj = ProductCategory.objects.get(product_id=self.product_id)
-			if obj != None:
-				return obj.category_id
-			return ''
-		except Exception as e:
-			return ''
+			return obj.category_id
+		except ProductCategory.DoesNotExist:
+			return None
 
 	def get_images(self):
 		return ProductImage.objects.filter(product_id=self.product_id)
+
+	def get_variant_colors(self):
+		return Variant.objects.filter(product_id=self.product_id).values('product_id', 'color_code', 'color_display_name').distinct()
+
+	def get_variant_sizes(self):
+		return Variant.objects.filter(product_id=self.product_id).values('product_id', 'size_code', 'size_display_name').distinct()
 
 
 class ProductMeta(models.Model):
