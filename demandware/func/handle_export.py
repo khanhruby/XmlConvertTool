@@ -23,6 +23,10 @@ def handle_export(form=None):
 		return handle_export_pricebook()
 	if int(data_type) == 3:
 		return handle_export_inventory()
+	if int(data_type) == 4:
+		return handle_export_category()
+	if int(data_type) == 5:
+		return handle_export_product()
 	return None
 
 def handle_export_catalogs():
@@ -55,6 +59,28 @@ def handle_export_inventory():
 		return dict(
 			now=datetime.datetime.utcnow().isoformat() + "Z",
 			variants=variants,
+		)
+	except Exception as e:
+		return str(e)
+
+def handle_export_category():
+	try:
+		categories = get_categories()
+		return dict(
+			now=datetime.datetime.utcnow().isoformat() + "Z",
+			categories=categories,
+		)
+	except Exception as e:
+		return str(e)
+
+def handle_export_product():
+	try:
+		products = get_product_master()
+		variants = get_product_variants()
+		return dict(
+			now=datetime.datetime.utcnow().isoformat() + "Z",
+			productMaster=products,
+			productVariants=variants,
 		)
 	except Exception as e:
 		return str(e)

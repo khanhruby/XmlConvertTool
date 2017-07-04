@@ -3,12 +3,11 @@
 <catalog xmlns="http://www.demandware.com/xml/impex/catalog/2006-10-31" catalog-id="storefront-catalog-jp">
 	
 	{% include "xmltemplate/catalog/header.xml" %}
-	<category category-id="root">
-	    <online-flag>true</online-flag>
-	    <template/>
-	    <page-attributes/>
-	</category>
+	{% if categories %}
 	{% include "xmltemplate/catalog/category.xml" with dataset=categories %}
+	{% endif %}
+	{% if productMaster or productVariants %}
 	{% include "xmltemplate/catalog/product.xml" %}
+	{% endif %}
 
 </catalog>

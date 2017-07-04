@@ -12,7 +12,7 @@
         <online-flag>true</online-flag>
         <online-from>{{ now }}</online-from>
         <available-flag>false</available-flag>
-        <searchable-flag>false</searchable-flag>
+        <searchable-flag>true</searchable-flag>
 
         {% if prd.get_images %}
         <images>{% with prd.get_images|filterImageGroups as groupImage %}{% for group, imgs in groupImage.items %}
@@ -81,7 +81,9 @@
             </variants>
         </variations>
         {% endif %}
+        {% if prd.get_category %}
         <classification-category>{{ prd.get_category }}</classification-category>
+        {% endif %}
     </product>
 {% endfor %}
 

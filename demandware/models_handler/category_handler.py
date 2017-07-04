@@ -12,14 +12,17 @@ def insert_category(data=None, metadata=None):
 		obj=None
 	)
 	try:
-		# prd = Category(**data)
-		# pid = prd.save()
-		obj, created = Category.objects.get_or_create(**data)
+		obj = Category.objects.get(category_id=data['category_id'])
+		obj = update_multiple_fields(obj, data)
+		obj.save()
+		result['obj'] = obj
+		return result
+	except Category.DoesNotExist:
+		obj = Category(**data)
+		obj.save()
 		result['obj'] = obj
 		return result
 	except ValidationError as e:
-		print(str(e))
-		logger.info(str(e))
 		result['error'] = str(e)
 		return result
 
@@ -68,3 +71,11 @@ def insert_product_category(data=None):
 def get_categories(_category_parent_=None):
 	categories = Category.objects.all().select_related("category_parent")
 	return categories
+
+def update_multiple_fields(obj, data=None):
+	try:
+		for (key, value) in data.items():
+			setattr(obj, key, value)
+		return obj
+	except Exception as e:
+		raise e

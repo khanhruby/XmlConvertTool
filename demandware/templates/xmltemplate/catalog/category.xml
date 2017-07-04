@@ -1,3 +1,8 @@
+<category category-id="root">
+    <online-flag>true</online-flag>
+    <template/>
+    <page-attributes/>
+</category>
 {% for category in dataset %}
 <category category-id="{{ category.category_id|default:now }}">
     <display-name xml:lang="x-default">{{ category.category_name|default:now }}</display-name>
