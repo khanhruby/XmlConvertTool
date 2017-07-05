@@ -34,11 +34,13 @@ def handle_export_catalogs():
 		categories = get_categories()
 		products = get_product_master()
 		variants = get_product_variants()
+		product_category = get_product_category()
 		return dict(
 			now=datetime.datetime.utcnow().isoformat() + "Z",
 			categories=categories,
 			productMaster=products,
 			productVariants=variants,
+			productCategory=product_category,
 		)
 	except Exception as e:
 		return str(e)
@@ -77,10 +79,12 @@ def handle_export_product():
 	try:
 		products = get_product_master()
 		variants = get_product_variants()
+		product_category = get_product_category()
 		return dict(
 			now=datetime.datetime.utcnow().isoformat() + "Z",
 			productMaster=products,
 			productVariants=variants,
+			productCategory=product_category,
 		)
 	except Exception as e:
 		return str(e)

@@ -1,0 +1,5 @@
+{% for pCat in productCategory %}
+<category-assignment category-id="{{ pCat.category_id }}" product-id="{{ pCat.product_id }}">
+    <primary-flag>true</primary-flag>
+</category-assignment>
+{% endfor %}

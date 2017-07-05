@@ -33,8 +33,10 @@ class ProductMaster(models.Model):
 
 	def get_category(self):
 		try:
-			obj = ProductCategory.objects.get(product_id=self.product_id)
-			return obj.category_id
+			obj = ProductCategory.objects.filter(product_id=self.product_id)
+			if len(obj) >= 1:
+				return obj[0].category_id
+			return None
 		except ProductCategory.DoesNotExist:
 			return None
 

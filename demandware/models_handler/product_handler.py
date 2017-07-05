@@ -111,3 +111,7 @@ def update_multiple_fields(obj, data=None):
 		return obj
 	except Exception as e:
 		raise e
+
+def get_product_category():
+	products = ProductCategory.objects.all()
+	return products

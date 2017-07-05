@@ -4,10 +4,10 @@
 	
 	{% include "xmltemplate/catalog/header.xml" %}
 	{% if categories %}
-	{% include "xmltemplate/catalog/category.xml" with dataset=categories %}
+		{% include "xmltemplate/catalog/category.xml" with dataset=categories %}
 	{% endif %}
 	{% if productMaster or productVariants %}
-	{% include "xmltemplate/catalog/product.xml" %}
+		{% include "xmltemplate/catalog/product.xml" %}
+		{% include "xmltemplate/catalog/category-assignment.xml" %}
 	{% endif %}
-
 </catalog>
