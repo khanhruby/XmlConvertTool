@@ -27,6 +27,8 @@ def handle_export(form=None):
 		return handle_export_category()
 	if int(data_type) == 5:
 		return handle_export_product()
+	if int(data_type) == 6:
+		return handle_export_recommand()
 	return None
 
 def handle_export_catalogs():
@@ -85,6 +87,16 @@ def handle_export_product():
 			productMaster=products,
 			productVariants=variants,
 			productCategory=product_category,
+		)
+	except Exception as e:
+		return str(e)
+
+def handle_export_recommand():
+	try:
+		related_products = get_related_product()
+		return dict(
+			now=datetime.datetime.utcnow().isoformat() + "Z",
+			relatedProducts=related_products,
 		)
 	except Exception as e:
 		return str(e)

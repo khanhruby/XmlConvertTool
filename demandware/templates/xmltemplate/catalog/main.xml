@@ -10,4 +10,7 @@
 		{% include "xmltemplate/catalog/product.xml" %}
 		{% include "xmltemplate/catalog/category-assignment.xml" %}
 	{% endif %}
+	{% if relatedProducts %}
+		{% include "xmltemplate/catalog/recommendation.xml" %}
+	{% endif %}
 </catalog>

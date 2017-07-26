@@ -119,6 +119,9 @@ def export_view(request):
 				if int(data_type) == 5:
 					response = TemplateResponse(request, "xmltemplate/catalog/main.xml", result, content_type='text/xml')
 					response['Content-Disposition'] = 'attachment; filename=%s_%s.xml' % ('products', str(_time))
+				if int(data_type) == 6:
+					response = TemplateResponse(request, "xmltemplate/catalog/main.xml", result, content_type='text/xml')
+					response['Content-Disposition'] = 'attachment; filename=%s_%s.xml' % ('recommand', str(_time))
 				return response
 			messages.error(request, result)
 		else:

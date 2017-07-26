@@ -18,5 +18,6 @@ class ExportForm(forms.Form):
 		(3, 'Inventory Lists Export',),
 		(4, 'Category Export',), 
 		(5, 'Product Export',), 
+		(6, 'Recommend Export',), 
 	)
 	data_type = forms.ChoiceField(widget=forms.Select, choices=CHOICES, label='Choise Data Type')

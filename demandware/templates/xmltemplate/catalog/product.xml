@@ -17,7 +17,7 @@
         {% if prd.get_images %}
         <images>{% with prd.get_images|filterImageGroups as groupImage %}{% for group, imgs in groupImage.items %}
             <image-group view-type="{{ group }}">
-                {% for img in imgs %}<image path="{{ group }}/{{ img.product_image }}"/>
+                {% for img in imgs %}<image path="images/{{ group }}/{{ img.product_image }}"/>
                 {% endfor %}
             </image-group>{% endfor %}{% endwith %}
         </images>
@@ -41,6 +41,9 @@
             {% endfor %}{% endfor %}
             {% autoescape off %}
             <custom-attribute xml:lang="x-default" attribute-id="product_all_color">{{ prd.product_all_color }}</custom-attribute>
+            {% if prd.get_images %}
+            <custom-attribute xml:lang="x-default" attribute-id="images_descriptions">{{ prd.get_images|imageStringifyJSON }}</custom-attribute>
+            {% endif %}
             {% endautoescape %}
         </custom-attributes>
 

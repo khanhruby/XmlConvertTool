@@ -154,23 +154,21 @@ def category_process(data=None, header=None, extData=None):
 
 	### Insert data
 	for item in extData:
-		if item['category_level_2_id'] == None or item['category_level_2_id'] == '':
-			continue
 		datalv1 = dict(
-			category_id=item['category_level_2_id'],
-			category_name=item['category_level_2_name'],
+			category_id=item['category_level_1_id'],
+			category_name=item['category_level_1_name'],
 			category_level=1,
 			category_parent=None,
 		)
 		result1 = insert_category(data=datalv1)
 		if result1['error']:
 			return result1['error']
-		if item['category_level_1_id'] == None or item['category_level_1_id'] == '':
+		if item['category_level_2_id'] == None or item['category_level_2_id'] == '':
 			continue
 
 		datalv2 = dict(
-			category_id="%s-%s" % (item['category_level_1_id'], item['category_level_2_id']),
-			category_name=item['category_level_1_name'],
+			category_id="%s-%s" % (result1['obj'].category_id, item['category_level_2_id']),
+			category_name=item['category_level_2_name'],
 			category_level=2,
 			category_parent=result1['obj'],
 		)

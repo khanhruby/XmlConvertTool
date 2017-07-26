@@ -34,7 +34,11 @@ def insert_related_product(data=None):
 				product_id=ProductMaster.objects.get(product_id=item['product_id']),
 				related_product_id=ProductMaster.objects.get(product_id=item['related_product_id']),
 			)
-			RelatedProduct.objects.update_or_create(**values)
+			try:
+				obj = RelatedProduct.objects.get(product_id=values['product_id'], related_product_id=values['related_product_id'])
+			except RelatedProduct.DoesNotExist:
+				obj = RelatedProduct(**values)
+				obj.save()
 		return None
 	except Exception as e:
 		print(str(e))
@@ -115,3 +119,8 @@ def update_multiple_fields(obj, data=None):
 def get_product_category():
 	products = ProductCategory.objects.all()
 	return products
+
+def get_related_product():
+	from demandware.models import RelatedProduct
+	related_products = RelatedProduct.objects.all()
+	return related_products
