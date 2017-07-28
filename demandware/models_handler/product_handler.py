@@ -46,11 +46,18 @@ def insert_related_product(data=None):
 
 def insert_variant(data=None):
 	try:
-		instances = []
 		for item in data:
-			item['product_id'] = ProductMaster.objects.get(product_id=item['product_id'])
-			instances.append(Variant(**item))
-		Variant.objects.bulk_create(instances, batch_size=None)
+			try:
+				item['product_id'] = ProductMaster.objects.get(product_id=item['product_id'])
+				try:
+					obj = Variant.objects.get(product_id=item['product_id'], variation_jan=item['variation_jan'])
+					obj = update_multiple_fields(obj, item)
+					obj.save()
+				except Variant.DoesNotExist:
+					obj = Variant(**item)
+					obj.save()
+			except ProductMaster.DoesNotExist:
+				continue
 		return None
 	except Exception as e:
 		print(str(e))

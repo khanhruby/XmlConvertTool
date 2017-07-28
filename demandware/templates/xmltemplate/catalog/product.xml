@@ -1,5 +1,7 @@
 {% load app_filters %}
+{{ "Start! Write productMaster"|zlogger }}
 {% for prd in productMaster %}
+    {{ prd.product_id|zlogger }}
     <product product-id="{{ prd.product_id|cut:" " }}">
         <ean/>
         <upc/>
@@ -88,10 +90,13 @@
         <classification-category>{{ prd.get_category }}</classification-category>
         {% endif %}
     </product>
+    {{ prd.product_id|zlogger }}
+    {{ "Done!"|zlogger }}
 {% endfor %}
-
-
+{{ "Done! Write productMaster"|zlogger }}
+{{ "Start! Write productVariants"|zlogger }}
 {% for prd in productVariants %}
+    {{ prd.variation_jan|zlogger }}
     <product product-id="{{ prd.variation_jan|cut:" " }}">
         <ean/>
         <upc>{{ prd.variation_jan }}</upc>
@@ -104,7 +109,7 @@
         <searchable-flag>true</searchable-flag>
         <page-attributes/>
         <custom-attributes>
-            <custom-attribute attribute-id="variation_jan">{{ prd.variation_jan }}</custom-attribute>
+            <custom-attribute attribute-id="variation_jan">{{ prd.variation_jan|cut:" " }}</custom-attribute>
             <custom-attribute xml:lang="x-default" attribute-id="country">{{ prd.country }}</custom-attribute>
             <custom-attribute attribute-id="size_code">{{ prd.size_code }}</custom-attribute>
             <custom-attribute xml:lang="x-default" attribute-id="size_display_name">{{ prd.size_display_name }}</custom-attribute>
@@ -115,6 +120,8 @@
             <custom-attribute xml:lang="x-default" attribute-id="stock_quantity">{{ prd.stock_quantity }}</custom-attribute>
         </custom-attributes>
     </product>
-
+    {{ prd.variation_jan|zlogger }}
+    {{ "Done!"|zlogger }}
 {% endfor %}
+{{ "Done! Write productVariants"|zlogger }}
 

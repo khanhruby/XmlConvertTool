@@ -1,4 +1,5 @@
 from django import template
+import datetime
 
 register = template.Library()
 
@@ -36,3 +37,8 @@ def imageStringifyJSON(imageGroup):
 		))
 	print(json.dumps(result))
 	return json.dumps(result)
+
+@register.filter(name='zlogger')
+def zlogger(xstr):
+	print(str(xstr) + ' ' + datetime.datetime.utcnow().isoformat() + "Z")
+	return '';
