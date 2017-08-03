@@ -1,7 +1,7 @@
 {% load app_filters %}
 {% for pCat in productCategory %}
 {{ pCat.category_id|zlogger }}
-<category-assignment category-id="{{ pCat.category_id|cut:" " }}" product-id="{{ pCat.product_id|cut:" " }}">
+<category-assignment category-id="{{ pCat.category_id }}" product-id="{{ pCat.product_id }}">
     <primary-flag>true</primary-flag>
 </category-assignment>
 {{ "Done!"|zlogger }}

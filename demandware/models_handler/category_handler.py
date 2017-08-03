@@ -12,6 +12,7 @@ def insert_category(data=None, metadata=None):
 		obj=None
 	)
 	try:
+		print(data['category_id'])
 		obj = Category.objects.get(category_id=data['category_id'])
 		obj = update_multiple_fields(obj, data)
 		obj.save()
@@ -57,6 +58,7 @@ def insert_product_category(data=None):
 	from demandware.models import ProductMaster
 	try:
 		for item in data:
+			print(item['product_id'], item['category_id'])
 			values = dict(
 				product_id=ProductMaster.objects.get(product_id=item['product_id']),
 				category_id=Category.objects.get(category_id=item['category_id']),

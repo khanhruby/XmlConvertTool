@@ -48,6 +48,7 @@ def insert_variant(data=None):
 	try:
 		for item in data:
 			try:
+				print(item['product_id'], item['variation_jan'])
 				item['product_id'] = ProductMaster.objects.get(product_id=item['product_id'])
 				try:
 					obj = Variant.objects.get(product_id=item['product_id'], variation_jan=item['variation_jan'])
@@ -68,6 +69,7 @@ def insert_product_image(data=None):
 	try:
 		instances = []
 		for item in data:
+			print(item['product_id'], item['product_image'])
 			item['product_id'] = ProductMaster.objects.get(product_id=item['product_id'])
 			instances.append(ProductImage(**item))
 		ProductImage.objects.bulk_create(instances, batch_size=None)
