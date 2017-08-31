@@ -1,0 +1,3 @@
+{% for prd in relatedProducts %}
+<recommendation source-id="{{ prd.product_id }}" source-type="product" target-id="{{ prd.related_product_id }}" type="1"/>
+{% endfor %}

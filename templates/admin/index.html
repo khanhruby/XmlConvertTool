@@ -1,0 +1,9 @@
+{% extends "admin/index.html" %}
+{% block content %}
+	<div style="overflow: hidden;">
+		<div class="module">
+			<a href="/admin/export/" class="button default">Export Data</a>
+		</div>
+	</div>
+    {{ block.super }}
+{% endblock %}

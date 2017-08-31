@@ -12,6 +12,15 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 
 import os
 
+# import uwsgi
+# from uwsgidecorators import timer
+# from django.utils import autoreload
+
+# @timer(3)
+# def change_code_gracefull_reload(sig):
+#     if autoreload.code_changed():
+#         uwsgi.reload()
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -27,7 +36,7 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '1.2.3.4']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '1.2.3.4', 'demandware-tool.com']
 
 
 # Application definition
@@ -55,10 +64,13 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'descente.urls'
 
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        # 'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -85,6 +97,8 @@ DATABASES = {
         'PASSWORD': 'secret',
         'HOST': 'localhost',
         'PORT': '3306',
+        'CHARSET': 'utf8',
+        'COLLATION': 'utf8_general_ci',
     },
     'sqlite3': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -210,6 +224,8 @@ if DEBUG:
         'SHOW_TOOLBAR_CALLBACK' : show_toolbar,
     }
 
+
+# MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 # Internationalization
 # https://docs.djangoproject.com/en/dev/topics/i18n/

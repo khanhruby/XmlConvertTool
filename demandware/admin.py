@@ -1,43 +1,34 @@
 from django.contrib import admin
-from .models import ProductMaster, ProductMeta, RelatedProduct, Category, CategoryMeta, Variant, ProductImage
+# from django.contrib.admin.views.decorators import staff_member_required
 from django.conf.urls import include, url
 from django.http import HttpResponseBadRequest
 from django.template.response import TemplateResponse
 from django.shortcuts import render
-from .views import import_action
-from .forms import UploadFileForm
-from .func.handle_uploaded import handle_uploaded_file
+from .forms import UploadFileForm, ExportForm
+from .models import ProductMaster, ProductMeta, RelatedProduct, Category, CategoryMeta, Variant, ProductImage, HeaderMgr, ProductCategory
+from demandware.func.handle_uploaded import handle_uploaded_file
+from django.contrib import messages
 import logging
 
 
 # Get an instance of a logger
 logger = logging.getLogger('django')
 
-# Register your models here.
-class ProductMasterAdmin(admin.ModelAdmin):
-	def import_product(self, request, queryset):
-		pass
+class CustomModelAdminMixin(object):
 
-	def has_add_permission(self, request):
-		return False
+	def __init__(self, model, admin_site):
+		self.list_display = [field.name for field in model._meta.fields if field.name != "id"]
+		super(CustomModelAdminMixin, self).__init__(model, admin_site)
 
-@admin.register(CategoryMeta)
-@admin.register(ProductMeta)
-@admin.register(RelatedProduct)
-@admin.register(Category)
-@admin.register(Variant)
-@admin.register(ProductImage)
-@admin.register(ProductMaster)
-class disableAction(admin.ModelAdmin):
 	def get_urls(self):
-		urls = super(disableAction, self).get_urls()
+		urls = super(CustomModelAdminMixin, self).get_urls()
 		my_urls = [
 			url(r'^add/$', self.import_view),
 		]
 		return my_urls + urls
 
-	def has_change_permission(self, request):
-		return False
+	# def has_change_permission(self, request):
+	# 	return False
 
 	def import_view(self, request):
 		model = self.model
@@ -46,20 +37,12 @@ class disableAction(admin.ModelAdmin):
 
 		if request.method == 'POST' and 'myfile' in request.FILES:
 			form = UploadFileForm(request.POST, request.FILES)
-			# def choice_func(row):
-			# 	q = Question.objects.filter(slug=row[0])[0]
-			# 	row[0] = q
-			# 	return row
-
 			if form.is_valid():
-				# request.FILES['myfile'].save_book_to_database(
-				# 	models=[ProductMaster],
-				# 	initializers=[None],
-				# 	mapdicts=[
-				# 		['product_id', 'season_code', 'season_display_name', 'brand_code', 'brand_display_name', 'display-name', 'description', 'functions', 'online_shop_pdp_url', 'product_commentary_1_image', 'product_commentary_1_description', 'product_commentary_2_image', 'product_commentary_2_description', 'product_commentary_3_image', 'product_commentary_3_description', 'product_commentary_image_title', 'main_image']
-				# 	]
-				# )
-				handle_uploaded_file(form, request.FILES['myfile'])
+				res = handle_uploaded_file(form=form, f=request.FILES['myfile'], model_name=opts.model_name, model=model)
+				if res['message'] != None:
+					messages.error(request, res['message'])
+				else:
+					messages.success(request, 'Import success all! Inserted %d items' % res['count'])
 			else:
 				return HttpResponseBadRequest
 		else:
@@ -74,3 +57,78 @@ class disableAction(admin.ModelAdmin):
 		)
 
 		return TemplateResponse(request, "admin/import.html", context)
+
+class ProductMasterAdmin(CustomModelAdminMixin, admin.ModelAdmin):
+    pass
+
+class CategoryMetaAdmin(CustomModelAdminMixin, admin.ModelAdmin):
+    pass
+
+class ProductMetaAdmin(CustomModelAdminMixin, admin.ModelAdmin):
+    pass
+
+class RelatedProductAdmin(CustomModelAdminMixin, admin.ModelAdmin):
+    pass
+
+class CategoryAdmin(CustomModelAdminMixin, admin.ModelAdmin):
+    pass
+
+class VariantAdmin(CustomModelAdminMixin, admin.ModelAdmin):
+    pass
+
+class ProductImageAdmin(CustomModelAdminMixin, admin.ModelAdmin):
+    pass
+
+class ProductCategoryAdmin(CustomModelAdminMixin, admin.ModelAdmin):
+    pass
+
+# admin.site.register(CategoryMeta, CategoryMetaAdmin)
+# admin.site.register(ProductMeta, ProductMetaAdmin)
+admin.site.register(ProductMaster, ProductMasterAdmin)
+admin.site.register(RelatedProduct, RelatedProductAdmin)
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(Variant, VariantAdmin)
+admin.site.register(ProductImage, ProductImageAdmin)
+admin.site.register(ProductCategory, ProductCategoryAdmin)
+
+# @staff_member_required
+def export_view(request):
+	from .func.handle_export import handle_export
+	import datetime
+
+	if request.method == 'POST':
+		form = ExportForm(request.POST)
+		if form.is_valid():
+			result = handle_export(form=form)
+			if result != None:
+				data_type = form.cleaned_data.get('data_type')
+				_time = datetime.datetime.utcnow().isoformat() + "Z"
+				response = None
+				if int(data_type) == 1:
+					response = TemplateResponse(request, "xmltemplate/catalog/main.xml", result, content_type='text/xml')
+					response['Content-Disposition'] = 'attachment; filename=%s_%s.xml' % ('catalog', str(_time))
+				if int(data_type) == 2:
+					response =  TemplateResponse(request, "xmltemplate/pricebook/main.xml", result, content_type='text/xml')
+					response['Content-Disposition'] = 'attachment; filename=%s_%s.xml' % ('pricebook', str(_time))
+				if int(data_type) == 3:
+					response = TemplateResponse(request, "xmltemplate/inventory/main.xml", result, content_type='text/xml')
+					response['Content-Disposition'] = 'attachment; filename=%s_%s.xml' % ('inventory', str(_time))
+				if int(data_type) == 4:
+					response = TemplateResponse(request, "xmltemplate/catalog/main.xml", result, content_type='text/xml')
+					response['Content-Disposition'] = 'attachment; filename=%s_%s.xml' % ('categories', str(_time))
+				if int(data_type) == 5:
+					response = TemplateResponse(request, "xmltemplate/catalog/main.xml", result, content_type='text/xml')
+					response['Content-Disposition'] = 'attachment; filename=%s_%s.xml' % ('products', str(_time))
+				if int(data_type) == 6:
+					response = TemplateResponse(request, "xmltemplate/catalog/main.xml", result, content_type='text/xml')
+					response['Content-Disposition'] = 'attachment; filename=%s_%s.xml' % ('recommand', str(_time))
+				return response
+			messages.error(request, result)
+		else:
+			return HttpResponseBadRequest
+	else:
+		form = ExportForm()
+	context = dict(
+		form=form,
+	)
+	return TemplateResponse(request, "admin/export.html", context)

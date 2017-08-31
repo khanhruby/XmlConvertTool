@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="http://www.demandware.com/xml/impex/catalog/2006-10-31" catalog-id="sotore-front-jp-catalogue">
+    <header>
+        <image-settings>
+            <internal-location base-path="/"/>
+            <view-types>
+                <view-type>large</view-type>
+                <view-type>medium</view-type>
+                <view-type>small</view-type>
+                <view-type>swatch</view-type>
+            </view-types>
+            <alt-pattern>${productname}</alt-pattern>
+            <title-pattern>${productname}</title-pattern>
+        </image-settings>
+    </header>
+
+    <category category-id="root">
+        <online-flag>true</online-flag>
+        <template/>
+        <page-attributes/>
+    </category>
+
+    <category category-id="MEN">
+        <display-name xml:lang="x-default">MEN</display-name>
+        <display-name xml:lang="ja">MEN</display-name>
+        <online-flag>true</online-flag>
+        <online-from>2016-12-31T15:00:00.000Z</online-from>
+        <online-to>2017-12-30T15:00:00.000Z</online-to>
+        <parent>root</parent>
+        <template/>
+        <page-attributes/>
+    </category>
+
+    <product product-id="JPPROD0001">
+        <ean/>
+        <upc/>
+        <unit>1</unit>
+        <min-order-quantity>1</min-order-quantity>
+        <step-quantity>1</step-quantity>
+        <display-name xml:lang="x-default">JP ITEM 001</display-name>
+        <display-name xml:lang="ja">商品１</display-name>
+        <display-name xml:lang="ja-JP">商品１</display-name>
+        <short-description xml:lang="x-default">JP PRODUCT 001</short-description>
+        <long-description xml:lang="x-default">JP PRODUCT 001 Description</long-description>
+        <store-force-price-flag>false</store-force-price-flag>
+        <store-non-inventory-flag>false</store-non-inventory-flag>
+        <store-non-revenue-flag>false</store-non-revenue-flag>
+        <store-non-discountable-flag>false</store-non-discountable-flag>
+        <online-flag>true</online-flag>
+        <online-from>2016-12-31T15:00:00.000Z</online-from>
+        <online-to>2017-12-31T15:00:00.000Z</online-to>
+        <available-flag>false</available-flag>
+        <searchable-flag>false</searchable-flag>
+        <page-attributes/>
+        <custom-attributes>
+            <custom-attribute attribute-id="isNewtest">true</custom-attribute>
+            <custom-attribute attribute-id="isSale">true</custom-attribute>
+        </custom-attributes>
+        <variations>
+            <attributes>
+                <shared-variation-attribute attribute-id="color" variation-attribute-id="color"/>
+                <shared-variation-attribute attribute-id="size" variation-attribute-id="size"/>
+            </attributes>
+            <variants>
+                <variant product-id="JPPROD0001-1" default="true"/>
+                <variant product-id="JPPROD0001-2"/>
+            </variants>
+        </variations>
+        <classification-category>MEN</classification-category>
+        <pinterest-enabled-flag>false</pinterest-enabled-flag>
+        <facebook-enabled-flag>false</facebook-enabled-flag>
+        <store-attributes>
+            <force-price-flag>false</force-price-flag>
+            <non-inventory-flag>false</non-inventory-flag>
+            <non-revenue-flag>false</non-revenue-flag>
+            <non-discountable-flag>false</non-discountable-flag>
+        </store-attributes>
+    </product>
+
+    <product product-id="JPPROD0001-1">
+        <ean/>
+        <upc/>
+        <unit>100</unit>
+        <min-order-quantity>1</min-order-quantity>
+        <step-quantity>1</step-quantity>
+        <store-force-price-flag>false</store-force-price-flag>
+        <store-non-inventory-flag>false</store-non-inventory-flag>
+        <store-non-revenue-flag>false</store-non-revenue-flag>
+        <store-non-discountable-flag>false</store-non-discountable-flag>
+        <online-flag>true</online-flag>
+        <available-flag>false</available-flag>
+        <searchable-flag>false</searchable-flag>
+        <page-attributes/>
+        <custom-attributes>
+            <custom-attribute attribute-id="color">FFFFFF</custom-attribute>
+            <custom-attribute attribute-id="isSale">true</custom-attribute>
+            <custom-attribute attribute-id="size">10</custom-attribute>
+        </custom-attributes>
+        <pinterest-enabled-flag>false</pinterest-enabled-flag>
+        <facebook-enabled-flag>false</facebook-enabled-flag>
+        <store-attributes>
+            <force-price-flag>false</force-price-flag>
+            <non-inventory-flag>false</non-inventory-flag>
+            <non-revenue-flag>false</non-revenue-flag>
+            <non-discountable-flag>false</non-discountable-flag>
+        </store-attributes>
+    </product>
+
+    <product product-id="JPPROD0001-2">
+        <ean/>
+        <upc/>
+        <unit>100</unit>
+        <min-order-quantity>1</min-order-quantity>
+        <step-quantity>1</step-quantity>
+        <store-force-price-flag>false</store-force-price-flag>
+        <store-non-inventory-flag>false</store-non-inventory-flag>
+        <store-non-revenue-flag>false</store-non-revenue-flag>
+        <store-non-discountable-flag>false</store-non-discountable-flag>
+        <online-flag>true</online-flag>
+        <available-flag>false</available-flag>
+        <searchable-flag>false</searchable-flag>
+        <page-attributes/>
+        <custom-attributes>
+            <custom-attribute attribute-id="color">000000</custom-attribute>
+            <custom-attribute attribute-id="size">10</custom-attribute>
+        </custom-attributes>
+        <pinterest-enabled-flag>false</pinterest-enabled-flag>
+        <facebook-enabled-flag>false</facebook-enabled-flag>
+        <store-attributes>
+            <force-price-flag>false</force-price-flag>
+            <non-inventory-flag>false</non-inventory-flag>
+            <non-revenue-flag>false</non-revenue-flag>
+            <non-discountable-flag>false</non-discountable-flag>
+        </store-attributes>
+    </product>
+
+    <variation-attribute attribute-id="color" variation-attribute-id="color">
+        <variation-attribute-values>
+            <variation-attribute-value value="FFFFFF" default="true">
+                <display-value xml:lang="ja-JP">ホワイト</display-value>
+            </variation-attribute-value>
+            <variation-attribute-value value="000000">
+                <display-value xml:lang="ja-JP">ブラック</display-value>
+            </variation-attribute-value>
+        </variation-attribute-values>
+    </variation-attribute>
+
+    <variation-attribute attribute-id="size" variation-attribute-id="size">
+        <variation-attribute-values>
+            <variation-attribute-value value="10" default="true">
+                <display-value xml:lang="ja-JP">10</display-value>
+            </variation-attribute-value>
+            <variation-attribute-value value="20">
+                <display-value xml:lang="ja-JP">20</display-value>
+            </variation-attribute-value>
+        </variation-attribute-values>
+    </variation-attribute>
+
+    <category-assignment category-id="MEN" product-id="JPPROD0001">
+        <display-name xml:lang="ja-JP">商品１</display-name>
+        <short-description xml:lang="ja-JP">ショート</short-description>
+        <long-description xml:lang="ja-JP">ロング</long-description>
+        <callout-message xml:lang="ja-JP">メッセージ</callout-message>
+        <primary-flag>true</primary-flag>
+    </category-assignment>
+
+</catalog>

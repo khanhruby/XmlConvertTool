@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://www.demandware.com/xml/impex/metadata/2006-10-31">
+    <type-extension type-id="Product">
+        <custom-attribute-definitions>
+            <attribute-definition attribute-id="model_id">
+                <display-name xml:lang="x-default">Season Code</display-name>
+                <description xml:lang="x-default">海外の”品番コード”</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="season_code">
+                <display-name xml:lang="x-default">Season Code</display-name>
+                <description xml:lang="x-default">商品のシーズンコード (内部)</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="season_display_name">
+                <display-name xml:lang="x-default">Season Display Name</display-name>
+                <description xml:lang="x-default">商品のシーズンコード(公的)</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="brand_code">
+                <display-name xml:lang="x-default">Brand Code</display-name>
+                <description xml:lang="x-default">商品のブランドコ－ド</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="brand_display_name">
+                <display-name xml:lang="x-default">Brand Display Name</display-name>
+                <description xml:lang="x-default">Brand Display Name</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="display_name">
+                <display-name xml:lang="x-default">Display Name</display-name>
+                <description xml:lang="x-default">Display Name</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="description">
+                <display-name xml:lang="x-default">Description</display-name>
+                <description xml:lang="x-default">Description</description>
+                <type>text</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="functions">
+                <display-name xml:lang="x-default">Functions</display-name>
+                <description xml:lang="x-default">商品の”機能”。各機能はセミコロンで区切られています</description>
+                <type>text</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="online_shop_url">
+                <display-name xml:lang="x-default">Online Shop Url</display-name>
+                <description xml:lang="x-default">リンク先のオンラインショッピングサイトURL</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="size_code">
+                <display-name xml:lang="x-default">Size Code</display-name>
+                <description xml:lang="x-default">商品バリエーションのサイズコ－ド。</description>
+                <type>string</type>
+                <localizable-flag>false</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="size_display_name">
+                <display-name xml:lang="x-default">Size Display Name</display-name>
+                <description xml:lang="x-default">商品バリエーションのカラー。
+使用可能な値は、商品マスタレベルで一覧表示されます。</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="color_code">
+                <display-name xml:lang="x-default">Color Code</display-name>
+                <description xml:lang="x-default">商品のシーズンコード (内部)</description>
+                <type>string</type>
+                <localizable-flag>false</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="color_display_name">
+                <display-name xml:lang="x-default">Color Display Name</display-name>
+                <description xml:lang="x-default">商品のシーズンコード (内部)</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_all_color">
+                <display-name xml:lang="x-default">Product All Color</display-name>
+                <description xml:lang="x-default">商品のシーズンコード (内部)</description>
+                <type>text</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="main_image">
+                <display-name xml:lang="x-default">Main Image</display-name>
+                <description xml:lang="x-default">商品のシーズンコード (内部)</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_all_size_info">
+                <display-name xml:lang="x-default">Product All Size Info</display-name>
+                <description xml:lang="x-default">商品のシーズンコード (内部)</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="country">
+                <display-name xml:lang="x-default">Country</display-name>
+                <description xml:lang="x-default">商品のシーズンコード (内部)</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="price_amount">
+                <display-name xml:lang="x-default">Price Amount</display-name>
+                <description xml:lang="x-default">商品のシーズンコード (内部)</description>
+                <type>int</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="currency">
+                <display-name xml:lang="x-default">Currency</display-name>
+                <description xml:lang="x-default">商品のシーズンコード (内部)</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="stock_quantity">
+                <display-name xml:lang="x-default">Stock Quantity</display-name>
+                <description xml:lang="x-default">商品のシーズンコード (内部)</description>
+                <type>int</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="variation_jan">
+                <display-name xml:lang="x-default">Variation Jan</display-name>
+                <description xml:lang="x-default">商品のシーズンコード (内部)</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_image_title">
+                <display-name xml:lang="x-default">Product Commentary Image Title</display-name>
+                <description xml:lang="x-default">製品の説明に使用される画像を記述するタイトル</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_01_description">
+                <display-name xml:lang="x-default">Product Commentary Description 01</display-name>
+                <description xml:lang="x-default">Product Commentary Description 01</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_01_image">
+                <display-name xml:lang="x-default">Product Commentary Image 01</display-name>
+                <description xml:lang="x-default">Product Commentary Image 01</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_02_description">
+                <display-name xml:lang="x-default">Product Commentary Description 02</display-name>
+                <description xml:lang="x-default">Product Commentary Description 02</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_02_image">
+                <display-name xml:lang="x-default">Product Commentary Image 02</display-name>
+                <description xml:lang="x-default">Product Commentary Image 02</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_03_description">
+                <display-name xml:lang="x-default">Product Commentary Description 03</display-name>
+                <description xml:lang="x-default">Product Commentary Description 03</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_03_image">
+                <display-name xml:lang="x-default">Product Commentary Image 03</display-name>
+                <description xml:lang="x-default">Product Commentary Image 03</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_04_description">
+                <display-name xml:lang="x-default">Product Commentary Description 04</display-name>
+                <description xml:lang="x-default">Product Commentary Description 04</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_04_image">
+                <display-name xml:lang="x-default">Product Commentary Image 04</display-name>
+                <description xml:lang="x-default">Product Commentary Image 04</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_05_description">
+                <display-name xml:lang="x-default">Product Commentary Description 05</display-name>
+                <description xml:lang="x-default">Product Commentary Description 05</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_05_image">
+                <display-name xml:lang="x-default">Product Commentary Image 05</display-name>
+                <description xml:lang="x-default">Product Commentary Image 05</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_06_description">
+                <display-name xml:lang="x-default">Product Commentary Description 06</display-name>
+                <description xml:lang="x-default">Product Commentary Description 06</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_06_image">
+                <display-name xml:lang="x-default">Product Commentary Image 06</display-name>
+                <description xml:lang="x-default">Product Commentary Image 06</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_07_description">
+                <display-name xml:lang="x-default">Product Commentary Description 07</display-name>
+                <description xml:lang="x-default">Product Commentary Description 07</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_07_image">
+                <display-name xml:lang="x-default">Product Commentary Image 07</display-name>
+                <description xml:lang="x-default">Product Commentary Image 07</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_08_description">
+                <display-name xml:lang="x-default">Product Commentary Description 08</display-name>
+                <description xml:lang="x-default">Product Commentary Description 08</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_08_image">
+                <display-name xml:lang="x-default">Product Commentary Image 08</display-name>
+                <description xml:lang="x-default">Product Commentary Image 08</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_09_description">
+                <display-name xml:lang="x-default">Product Commentary Description 09</display-name>
+                <description xml:lang="x-default">Product Commentary Description 09</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_09_image">
+                <display-name xml:lang="x-default">Product Commentary Image 09</display-name>
+                <description xml:lang="x-default">Product Commentary Image 09</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_10_description">
+                <display-name xml:lang="x-default">Product Commentary Description 10</display-name>
+                <description xml:lang="x-default">Product Commentary Description 10</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_commentary_10_image">
+                <display-name xml:lang="x-default">Product Commentary Image 10</display-name>
+                <description xml:lang="x-default">Product Commentary Image 10</description>
+                <type>string</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="images_descriptions">
+                <display-name xml:lang="x-default">Image Color Data</display-name>
+                <description xml:lang="x-default">Image Color Data</description>
+                <type>text</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="product_orderby">
+                <display-name xml:lang="x-default">Product order</display-name>
+                <description xml:lang="x-default">Product order</description>
+                <type>int</type>
+                <localizable-flag>true</localizable-flag>
+                <site-specific-flag>false</site-specific-flag>
+            </attribute-definition>
+        </custom-attribute-definitions>
+        <group-definitions>
+            <attribute-group group-id="Descente">
+                <display-name xml:lang="x-default">Descente Attributes</display-name>
+                <attribute attribute-id="model_id"/>
+                <attribute attribute-id="season_code"/>
+                <attribute attribute-id="season_display_name"/>
+                <attribute attribute-id="brand_code"/>
+                <attribute attribute-id="brand_display_name"/>
+                <attribute attribute-id="display_name"/>
+                <attribute attribute-id="description"/>
+                <attribute attribute-id="functions"/>
+                <attribute attribute-id="online_shop_url"/>
+                <attribute attribute-id="size_code"/>
+                <attribute attribute-id="size_display_name"/>
+                <attribute attribute-id="color_code"/>
+                <attribute attribute-id="color_display_name"/>
+                <attribute attribute-id="product_all_color"/>
+                <attribute attribute-id="main_image"/>
+                <attribute attribute-id="product_all_size_info"/>
+                <attribute attribute-id="country"/>
+                <attribute attribute-id="price_amount"/>
+                <attribute attribute-id="currency"/>
+                <attribute attribute-id="stock_quantity"/>
+                <attribute attribute-id="variation_jan"/>
+                <attribute attribute-id="product_commentary_01_image"/>
+                <attribute attribute-id="product_commentary_01_description"/>
+                <attribute attribute-id="product_commentary_02_image"/>
+                <attribute attribute-id="product_commentary_02_description"/>
+                <attribute attribute-id="product_commentary_03_image"/>
+                <attribute attribute-id="product_commentary_03_description"/>
+                <attribute attribute-id="product_commentary_04_image"/>
+                <attribute attribute-id="product_commentary_04_description"/>
+                <attribute attribute-id="product_commentary_05_image"/>
+                <attribute attribute-id="product_commentary_05_description"/>
+                <attribute attribute-id="product_commentary_06_image"/>
+                <attribute attribute-id="product_commentary_06_description"/>
+                <attribute attribute-id="product_commentary_07_image"/>
+                <attribute attribute-id="product_commentary_07_description"/>
+                <attribute attribute-id="product_commentary_08_image"/>
+                <attribute attribute-id="product_commentary_08_description"/>
+                <attribute attribute-id="product_commentary_09_image"/>
+                <attribute attribute-id="product_commentary_09_description"/>
+                <attribute attribute-id="product_commentary_10_image"/>
+                <attribute attribute-id="product_commentary_10_description"/>
+                <attribute attribute-id="product_commentary_image_title"/>
+                <attribute attribute-id="images_descriptions"/>
+                <attribute attribute-id="product_orderby"/>
+            </attribute-group>
+        </group-definitions>
+    </type-extension>
+    <type-extension type-id="Category">
+        <custom-attribute-definitions>
+            <attribute-definition attribute-id="alternativeUrl">
+                <display-name xml:lang="x-default">Alternative URL</display-name>
+                <description xml:lang="x-default">Renders an alternative URL in main navigation. Uses Salesforce Commerce Cloud content url notation. For example: $url('Account-Show')$ or normal URL http://xchange.demandware.com</description>
+                <type>html</type>
+                <localizable-flag>false</localizable-flag>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <field-length>0</field-length>
+                <field-height>2</field-height>
+            </attribute-definition>
+            <attribute-definition attribute-id="headerMenuBanner">
+                <display-name xml:lang="x-default">Header Menu Banner</display-name>
+                <type>html</type>
+                <localizable-flag>false</localizable-flag>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="headerMenuOrientation">
+                <display-name xml:lang="x-default">Header Menu Orientation</display-name>
+                <description xml:lang="x-default">Which way to orient the menu and optional header menu HTML. Vertical will list all in one line. Horizontal will list in columns.</description>
+                <type>enum-of-string</type>
+                <localizable-flag>false</localizable-flag>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">Horizontal</display>
+                        <value>Horizontal</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Vertical</display>
+                        <value>Vertical</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+            <attribute-definition attribute-id="showInMenu">
+                <display-name xml:lang="x-default">Show in Menu Navigation</display-name>
+                <description xml:lang="x-default">Used to indicate that a category (such as Mens -&gt; Footwear -&gt; Boots) will display in the roll-over navigation. A sub-category only shows if also the parent category is marked as showInMenu. Up to three category levels are shown in roll-over navigation.</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+        </custom-attribute-definitions>
+        <group-definitions>
+            <attribute-group group-id="customAttributes">
+                <display-name xml:lang="x-default">Custom</display-name>
+                <attribute attribute-id="showInMenu"/>
+                <attribute attribute-id="headerMenuOrientation"/>
+                <attribute attribute-id="headerMenuBanner"/>
+                <attribute attribute-id="alternativeUrl"/>
+            </attribute-group>
+        </group-definitions>
+    </type-extension>
+</metadata>
