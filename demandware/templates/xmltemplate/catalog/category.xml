@@ -12,7 +12,11 @@
     <online-to>{{ category.to|default:now }}</online-to>
     {% endcomment %} 
     <parent>{{ category.category_parent|default:'root' }}</parent>
+    <position>{{ category.category_position|default:0 }}</position>
     <template/>
     <page-attributes/>
+    <custom-attributes>
+        <custom-attribute attribute-id="category_custom_url" xml:lang="x-default">{{ category.category_custom_url }}</custom-attribute>
+    </custom-attributes>
 </category>
 {% endfor %}

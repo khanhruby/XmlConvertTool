@@ -58,12 +58,19 @@ def insert_product_category(data=None):
 	from demandware.models import ProductMaster
 	try:
 		for item in data:
-			print(item['product_id'], item['category_id'])
-			values = dict(
-				product_id=ProductMaster.objects.get(product_id=item['product_id']),
-				category_id=Category.objects.get(category_id=item['category_id']),
-			)
-			ProductCategory.objects.update_or_create(**values)
+			try:
+				print(item['product_id'], item['category_id'])
+				values = dict(
+					product_id=ProductMaster.objects.get(product_id=item['product_id']),
+					category_id=Category.objects.get(category_id=item['category_id']),
+				)
+				ProductCategory.objects.update_or_create(**values)
+			except ProductMaster.DoesNotExist:
+				print("ProductMaster DoesNotExist Skip: ", item['product_id'], item['category_id'])
+				continue
+			except Category.DoesNotExist:
+				print("Category DoesNotExist Skip: ", item['product_id'], item['category_id'])
+				continue
 		return None
 	except Exception as e:
 		print(str(e))

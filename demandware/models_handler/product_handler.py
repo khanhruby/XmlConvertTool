@@ -30,15 +30,23 @@ def insert_related_product(data=None):
 	from demandware.models import RelatedProduct
 	try:
 		for item in data:
-			values = dict(
-				product_id=ProductMaster.objects.get(product_id=item['product_id']),
-				related_product_id=ProductMaster.objects.get(product_id=item['related_product_id']),
-			)
-			try:
-				obj = RelatedProduct.objects.get(product_id=values['product_id'], related_product_id=values['related_product_id'])
-			except RelatedProduct.DoesNotExist:
-				obj = RelatedProduct(**values)
-				obj.save()
+			print(item['product_id'], item['related_product_id'])
+			listRelation = item['related_product_id'].split(",")
+			for productIDRelation in listRelation:
+				try:
+					productID = ProductMaster.objects.get(product_id=item['product_id'])
+					relatedProductID = ProductMaster.objects.get(product_id=productIDRelation.strip())
+					values = dict(
+						product_id=productID,
+						related_product_id=relatedProductID,
+					)
+					try:
+						obj = RelatedProduct.objects.get(product_id=values['product_id'], related_product_id=values['related_product_id'])
+					except RelatedProduct.DoesNotExist:
+						obj = RelatedProduct(**values)
+						obj.save()
+				except ProductMaster.DoesNotExist:
+					continue
 		return None
 	except Exception as e:
 		print(str(e))
@@ -69,10 +77,19 @@ def insert_product_image(data=None):
 	try:
 		instances = []
 		for item in data:
-			print(item['product_id'], item['product_image'])
-			item['product_id'] = ProductMaster.objects.get(product_id=item['product_id'])
-			instances.append(ProductImage(**item))
-		ProductImage.objects.bulk_create(instances, batch_size=None)
+			try:
+				productID = ProductMaster.objects.get(product_id=item['product_id'])
+				# instances.append(ProductImage(**item))
+				obj = ProductImage.objects.get(product_id=productID, color_code=item['color_code'], product_image=item['product_image'], image_size=item['image_size'])
+			except ProductMaster.DoesNotExist:
+				print("ProductMaster DoesNotExist Skip: ", item['product_id'])
+				continue
+			except ProductImage.DoesNotExist:
+				print("Insert Image: ", item['product_id'], item['product_image'])
+				item['product_id'] = ProductMaster.objects.get(product_id=item['product_id'])
+				obj = ProductImage(**item)
+				obj.save()
+		# ProductImage.objects.bulk_create(instances, batch_size=None)
 		return None
 	except Exception as e:
 		print(str(e))

@@ -40,6 +40,7 @@ def handle_uploaded_file(form=None, f=None, model_name=None, model=None):
 	insertDataSet = []
 	extInsertDataSet = []
 	fields = get_model_fields(model)
+	print(fields)
 	for row in dataset:
 		values = {}
 		extValues = {}
@@ -153,12 +154,40 @@ def category_process(data=None, header=None, extData=None):
 	result = insert_bulk_header(header_list=header, header_type=HeaderMgr.CATEGORY)
 
 	### Insert data
+	countLevel1=0
+	countLevel2=0
+	countLevel3=0
+	categoryLevel1ToReset=''
+	categoryLevel2ToReset=''
+	categoryLevel3ToReset=''
 	for item in extData:
+		if item['category_level_3_name'] == 'すべて':
+			continue;
+		if item['category_level_1_id'] == None or item['category_level_1_id'] == '':
+			continue
+		if(categoryLevel1ToReset == item['category_level_1_id']):
+			if(categoryLevel2ToReset == item['category_level_2_id']):
+				countLevel3 = countLevel3 + 1
+			else:
+				countLevel2 = countLevel2 + 1
+				categoryLevel2ToReset = item['category_level_2_id']
+				countLevel3 = 0
+				categoryLevel3ToReset = item['category_level_3_id']
+		else:
+			countLevel3 = 0
+			categoryLevel3ToReset = item['category_level_3_id']
+			countLevel2 = 0
+			categoryLevel2ToReset = item['category_level_2_id']
+			countLevel1 = countLevel1 + 1
+			categoryLevel1ToReset = item['category_level_1_id']
+
 		datalv1 = dict(
 			category_id=item['category_level_1_id'],
 			category_name=item['category_level_1_name'],
 			category_level=1,
 			category_parent=None,
+			category_custom_url=item['category_level_1_id'],
+			category_position=countLevel1,
 		)
 		result1 = insert_category(data=datalv1)
 		if result1['error']:
@@ -171,6 +200,8 @@ def category_process(data=None, header=None, extData=None):
 			category_name=item['category_level_2_name'],
 			category_level=2,
 			category_parent=result1['obj'],
+			category_custom_url=item['category_level_2_id'],
+			category_position=countLevel2,
 		)
 		result2 = insert_category(data=datalv2)
 		if result2['error']:
@@ -183,6 +214,8 @@ def category_process(data=None, header=None, extData=None):
 			category_name=item['category_level_3_name'],
 			category_level=3,
 			category_parent=result2['obj'],
+			category_custom_url=item['category_level_3_id'],
+			category_position=countLevel3,
 		)
 		result3 = insert_category(data=datalv3)
 		if result3['error']:

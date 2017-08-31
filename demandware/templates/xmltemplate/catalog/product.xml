@@ -47,6 +47,7 @@
             <custom-attribute xml:lang="x-default" attribute-id="images_descriptions">{{ prd.get_images|imageStringifyJSON }}</custom-attribute>
             {% endif %}
             {% endautoescape %}
+            <custom-attribute xml:lang="x-default" attribute-id="product_orderby">{{ prd.No }}</custom-attribute>
         </custom-attributes>
 
         {% if prd.get_variants %}
