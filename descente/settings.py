@@ -100,6 +100,16 @@ DATABASES = {
         'CHARSET': 'utf8',
         'COLLATION': 'utf8_general_ci',
     },
+    'eudb': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'dsnt_eu',
+        'USER': 'django',
+        'PASSWORD': 'secret',
+        'HOST': 'localhost',
+        'PORT': '3306',
+        'CHARSET': 'utf8',
+        'COLLATION': 'utf8_general_ci',
+    },
     'sqlite3': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),

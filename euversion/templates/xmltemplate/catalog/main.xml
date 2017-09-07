@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+{% load app_filters %}
+{% now "YmdHi" as default_catalog_id %}
+<catalog xmlns="http://www.demandware.com/xml/impex/catalog/2006-10-31" catalog-id="descente-ja_JP">
+	
+	{% include "xmltemplate/catalog/header.xml" %}
+	{% if categories %}
+	{{ "Start! Write category"|zlogger }}
+		{% include "xmltemplate/catalog/category.xml" with dataset=categories %}
+	{{ "Done! Write category"|zlogger }}
+	{% endif %}
+
+	{% if productMaster or productVariants %}
+
+		{{ "Start! Write product"|zlogger }}
+		{% include "xmltemplate/catalog/product.xml" %}
+		{% include "xmltemplate/catalog/category-assignment.xml" %}
+		{{ "Done! Write product"|zlogger }}
+	{% endif %}
+	
+	{% if relatedProducts %}
+		{{ "Start! Write recommendation"|zlogger }}
+		{% include "xmltemplate/catalog/recommendation.xml" %}
+		{{ "Done! Write recommendation"|zlogger }}
+	{% endif %}
+</catalog>
