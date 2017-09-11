@@ -37,8 +37,7 @@ DEBUG = True
 TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '1.2.3.4', 'demandware-tool.com', 'jp.app', 'eu.app']
-CSRF_COOKIE_NAME = 'localhost_csrf_jp'
-CSRF_COOKIE_DOMAIN = 'jp.app'
+CSRF_COOKIE_DOMAIN = 'eu.app'
 
 
 # Application definition

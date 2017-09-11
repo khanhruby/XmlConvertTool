@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.timezone import now
+from django.db import connections
 
 # Create your models here.
 class ProductMaster(models.Model):

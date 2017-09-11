@@ -1,6 +1,11 @@
 from django.db import models
 from demandware.models import ProductMaster, ProductMeta, ProductCategory, HeaderMgr, Variant
 from django.core.exceptions import ValidationError
+# Imports the Google Cloud client library
+from google.cloud import translate
+from django.conf import settings
+# Instantiates a client
+translate_client = translate.Client()
 
 def insert_product_master(data=None, metadata=None):
 	try:
@@ -14,7 +19,9 @@ def insert_product_master(data=None, metadata=None):
 def insert_bulk_product_master(data=None):
 	try:
 		instances = []
+		data_extra = []
 		for item in data:
+			obj = None
 			try:
 				obj = ProductMaster.objects.get(product_id=item['product_id'])
 				obj = update_multiple_fields(obj, item)
@@ -22,9 +29,67 @@ def insert_bulk_product_master(data=None):
 			except ProductMaster.DoesNotExist:
 				obj = ProductMaster(**item)
 				obj.save()
+			#Insert data extra
+			insert_product_master_extra(obj, item)
 		return None
 	except Exception as e:
 		return str(e)
+
+def insert_product_master_extra(obj, data=None):
+	if data == None: return;
+	languages = settings.LANGEUAGE_MAPPING
+	import json, re
+	try:
+		insert_default = dict(
+			product_id=obj,
+			country=data['country'],
+			main_image=data['main_image'],
+			functions=data['functions'],
+			description=data['description'],
+			display_name=data['display_name'],
+			product_all_size_info=data['product_all_size_info'],
+			product_all_color=data['product_all_color'],
+			product_commentary_image_title=data['product_commentary_image_title'],
+			product_commentary=data['product_commentary'],
+		)
+		insert_product_master_extra_language('jp', insert_default)
+		for lang in languages:
+			product_commentary = json.loads(data['product_commentary'])
+			# print(product_commentary)
+			for i in range(len(product_commentary)):
+				_items = list(product_commentary[i].items())
+				for key, value in _items:
+					_re_commentary = re.compile("product_commentary_(.*)_description")
+					_search_commentary = _re_commentary.search(key)
+					if _search_commentary != None:
+						product_commentary[i][key] = translate_client.translate(product_commentary[i][key], target_language=lang)['translatedText']
+			data['product_commentary'] = json.dumps(product_commentary)
+			item = dict(
+				product_id=obj,
+				country=lang,
+				main_image=data['main_image'],
+				functions=translate_client.translate(data['functions'], target_language=lang)['translatedText'],
+				description=translate_client.translate(data['description'], target_language=lang)['translatedText'],
+				display_name=translate_client.translate(data['display_name'], target_language=lang)['translatedText'],
+				product_all_size_info=data['product_all_size_info'],
+				product_all_color=data['product_all_color'],
+				product_commentary_image_title=translate_client.translate(data['product_commentary_image_title'], target_language=lang)['translatedText'],
+				product_commentary=translate_client.translate(data['product_commentary'], target_language=lang)['translatedText'],
+			)
+			insert_product_master_extra_language(lang, item)
+	except Exception as e:
+		print('Import Product Master Extra Error: ', obj, str(e))
+		return None
+
+def insert_product_master_extra_language(lang, data=None):
+	from demandware.models import ProductMaster_Extra
+	try:
+		prd_ex = ProductMaster_Extra.objects.get(product_id=data['product_id'], country=lang)
+		# prd_ex = update_multiple_fields(prd_ex, data)
+		prd_ex.save(data)
+	except ProductMaster_Extra.DoesNotExist:
+		prd_ex = ProductMaster_Extra(**data)
+		prd_ex.save()
 
 def insert_related_product(data=None):
 	from demandware.models import RelatedProduct

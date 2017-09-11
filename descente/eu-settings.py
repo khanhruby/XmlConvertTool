@@ -29,7 +29,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '*u1(#u5t_9hw(6)l@+7cyvgpqyzw_^g+0!ymn7ss!nn_+$qf5w'
+SECRET_KEY = 'eu447rvbg@obims+vb7bx-4xd_pmgmu0ck35!tare5!ufqprtnukdescente'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,8 +37,8 @@ DEBUG = True
 TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '1.2.3.4', 'demandware-tool.com', 'jp.app', 'eu.app']
-CSRF_COOKIE_NAME = 'localhost_csrf_jp'
-CSRF_COOKIE_DOMAIN = 'jp.app'
+CSRF_COOKIE_NAME = 'localhost_csrf_eu'
+CSRF_COOKIE_DOMAIN = 'eu.app'
 
 
 # Application definition
@@ -93,16 +93,6 @@ WSGI_APPLICATION = 'descente.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dsnt_tool',
-        'USER': 'django',
-        'PASSWORD': 'secret',
-        'HOST': 'localhost',
-        'PORT': '3306',
-        'CHARSET': 'utf8',
-        'COLLATION': 'utf8_general_ci',
-    },
-    'eudb': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'dsnt_eu',
         'USER': 'django',
@@ -257,3 +247,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LANGEUAGE_MAPPING = {
+    'fr':'fr_FR',
+    'en':'en_GB',
+}

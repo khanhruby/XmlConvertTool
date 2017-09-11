@@ -3,7 +3,12 @@ from django.conf import settings
 from openpyxl import load_workbook
 from openpyxl.utils import cell as pycell
 from demandware.models import ProductMaster, ProductMeta, RelatedProduct, Category, CategoryMeta, Variant, ProductImage, HeaderMgr
+# Imports the Google Cloud client library
+from google.cloud import translate
 import logging
+
+# Instantiates a client
+translate_client = translate.Client()
 
 # Get an instance of a logger
 logger = logging.getLogger('django')
@@ -187,6 +192,7 @@ def category_process(data=None, header=None, extData=None):
 		datalv1 = dict(
 			category_id=item['category_level_1_id'],
 			category_name=item['category_level_1_name'],
+			category_name_fr=translate_client.translate(item['category_level_1_name'], target_language='fr')['translatedText'],
 			category_level=1,
 			category_parent=None,
 			category_custom_url=item['category_level_1_id'],
@@ -201,6 +207,7 @@ def category_process(data=None, header=None, extData=None):
 		datalv2 = dict(
 			category_id="%s-%s" % (result1['obj'].category_id, item['category_level_2_id']),
 			category_name=item['category_level_2_name'],
+			category_name_fr=translate_client.translate(item['category_level_2_name'], target_language='fr')['translatedText'],
 			category_level=2,
 			category_parent=result1['obj'],
 			category_custom_url=item['category_level_2_id'],
@@ -215,6 +222,7 @@ def category_process(data=None, header=None, extData=None):
 		datalv3 = dict(
 			category_id="%s-%s" % (result2['obj'].category_id, item['category_level_3_id']),
 			category_name=item['category_level_3_name'],
+			category_name_fr=translate_client.translate(item['category_level_3_name'], target_language='fr')['translatedText'],
 			category_level=3,
 			category_parent=result2['obj'],
 			category_custom_url=item['category_level_3_id'],
