@@ -1,0 +1,32 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+{% load admin_urls %}
+{% load app_filters %}
+{% debug %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}" />{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+<a href="{% url 'admin:app_list' app_label='demandware' %}">Demandware</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+<div class="app-demandware module">
+    <h1>TEST</h1>
+    {% for lang, lang_name in LANGEUAGE_MAPPING.items %}
+        <h2>{{ lang_name }}</h2>
+        {% lang_en|set_var:lang_name %}
+    {% endfor %}
+    <h2>{{ lang_en }}</h2>
+</div>
+{% if result %}
+    <p>Data: {{ result }}</p>
+{% endif %}
+</div>
+{% endblock %}

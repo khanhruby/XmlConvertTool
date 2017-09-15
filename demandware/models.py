@@ -51,6 +51,12 @@ class ProductMaster(models.Model):
 	def get_variant_sizes(self):
 		return Variant.objects.filter(product_id=self.product_id).values('product_id', 'size_code', 'size_display_name').distinct()
 
+	def get_data_by_lang(self, lang):
+		result = ProductMaster_Extra.objects.filter(product_id=self.product_id, country=lang)
+		for item in result:
+			print(item.description)
+		return result
+
 class ProductMaster_Extra(models.Model):
 	product_id = models.ForeignKey(ProductMaster, on_delete=models.PROTECT, related_name='ProductMaster_Extra_ProductMaster', null=True, to_field='product_id', db_column='product_id')
 	country = models.CharField(max_length=100, default='en')
@@ -66,9 +72,9 @@ class ProductMaster_Extra(models.Model):
 	def __str__(self):
 		return str(self.product_id)
 		
-	def save(self, *args, **kwargs):
-		# do_something()
-		super(ProductMaster_Extra, self).save(*args, **kwargs) # Call the "real" save() method.
+	# def save(self, *args, **kwargs):
+	# 	# do_something()
+	# 	super(ProductMaster_Extra, self).save(*args, **kwargs) # Call the "real" save() method.
 		# do_something_else()
 
 	class Meta:
@@ -106,7 +112,7 @@ class Category(models.Model):
 	category_name = models.CharField(max_length=100, default='')
 	category_name_fr = models.CharField(max_length=100, null=True)
 	category_name_jp = models.CharField(max_length=100, null=True)
-	category_name_cn = models.CharField(max_length=100, null=True)
+	category_name_en = models.CharField(max_length=100, null=True)
 	category_level = models.IntegerField(default=0)
 	category_position = models.IntegerField(default=0)
 	category_custom_url = models.CharField(max_length=100, default='')

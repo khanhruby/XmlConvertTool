@@ -161,8 +161,8 @@ def insert_product_image(data=None):
 		return str(e)
 
 def get_product_master():
-	products = ProductMaster.objects.all()
-	# products = ProductMaster.objects.filter(product_id='DAT-2722')
+	# products = ProductMaster.objects.all()
+	products = ProductMaster.objects.filter(product_id='DBX-3602')
 	return products
 
 def get_product_variants():

@@ -139,7 +139,7 @@ def product_master_process(data=None, header=None, extData=None):
 		data[idx]['product_all_color'] = json.dumps(all_color, ensure_ascii=False)
 
 	result = insert_bulk_product_master(data=data)
-	result = insert_product_metadata(data=data, extData=extData)
+	# result = insert_product_metadata(data=data, extData=extData)
 	return result
 
 def related_product_process(data=None, extData=None):
@@ -192,7 +192,8 @@ def category_process(data=None, header=None, extData=None):
 		datalv1 = dict(
 			category_id=item['category_level_1_id'],
 			category_name=item['category_level_1_name'],
-			category_name_fr=translate_client.translate(item['category_level_1_name'], target_language='fr')['translatedText'],
+			category_name_fr=translate_client.translate(item['category_level_1_name'], target_language='fr')['translatedText'].title(),
+			category_name_en=translate_client.translate(item['category_level_1_name'], target_language='en')['translatedText'].title(),
 			category_level=1,
 			category_parent=None,
 			category_custom_url=item['category_level_1_id'],
@@ -207,7 +208,8 @@ def category_process(data=None, header=None, extData=None):
 		datalv2 = dict(
 			category_id="%s-%s" % (result1['obj'].category_id, item['category_level_2_id']),
 			category_name=item['category_level_2_name'],
-			category_name_fr=translate_client.translate(item['category_level_2_name'], target_language='fr')['translatedText'],
+			category_name_fr=translate_client.translate(item['category_level_2_name'], target_language='fr')['translatedText'].title(),
+			category_name_en=translate_client.translate(item['category_level_2_name'], target_language='en')['translatedText'].title(),
 			category_level=2,
 			category_parent=result1['obj'],
 			category_custom_url=item['category_level_2_id'],
@@ -222,7 +224,8 @@ def category_process(data=None, header=None, extData=None):
 		datalv3 = dict(
 			category_id="%s-%s" % (result2['obj'].category_id, item['category_level_3_id']),
 			category_name=item['category_level_3_name'],
-			category_name_fr=translate_client.translate(item['category_level_3_name'], target_language='fr')['translatedText'],
+			category_name_fr=translate_client.translate(item['category_level_3_name'], target_language='fr')['translatedText'].title(),
+			category_name_en=translate_client.translate(item['category_level_3_name'], target_language='en')['translatedText'].title(),
 			category_level=3,
 			category_parent=result2['obj'],
 			category_custom_url=item['category_level_3_id'],

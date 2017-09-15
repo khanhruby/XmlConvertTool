@@ -29,4 +29,9 @@ class ExportForm(forms.Form):
 		(5, 'Product Export',), 
 		(6, 'Recommend Export',), 
 	)
+	BRAND = (
+		(1, 'JP'),
+		(2, 'EU'),
+	)
+	brand_type = forms.ChoiceField(widget=forms.Select, choices=BRAND, label='Choise Brand')
 	data_type = forms.ChoiceField(widget=forms.Select, choices=CHOICES, label='Choise Data Type')
