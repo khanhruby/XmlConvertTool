@@ -51,10 +51,12 @@ class ProductMaster(models.Model):
 	def get_variant_sizes(self):
 		return Variant.objects.filter(product_id=self.product_id).values('product_id', 'size_code', 'size_display_name').distinct()
 
-	def get_data_by_lang(self, lang):
-		result = ProductMaster_Extra.objects.filter(product_id=self.product_id, country=lang)
-		for item in result:
-			print(item.description)
+	def get_data_by_lang(self):
+		result = ProductMaster_Extra.objects.filter(product_id=self.product_id)
+		result = [ {prd.country.lower(): prd} for prd in result]
+		print(result)
+		# for item in result:
+		# 	print(item.description)
 		return result
 
 class ProductMaster_Extra(models.Model):

@@ -1,5 +1,6 @@
 from django import template
 import datetime
+from django.conf import settings
 
 register = template.Library()
 
@@ -58,9 +59,16 @@ def zlogger(xstr):
 	print(str(xstr) + ' ' + datetime.datetime.utcnow().isoformat() + "Z")
 	return ''
 
-@register.filter(name='set_var')
-def set_var(key, value):
-    return value
+@register.tag(name='set')
+def set_var(parser, token):
+	"""
+	{% set some_var = '123' %}
+	"""
+	parts = token.split_contents()
+	if len(parts) < 4:
+		raise template.TemplateSyntaxError("'set' tag must be of the form: {% set <var_name> = <var_value> %}")
+
+	return SetVarNode(parts[1], parts[3])
 
 # @register.filter(name='getProductDataByLang')
 # def getProductDataByLang(lang):
@@ -88,9 +96,19 @@ def args(obj, arg):
 
 	obj.__callArg += [arg]
 	return obj
+
+@register.simple_tag(name='printProductAttr')
+def printProductAttr(_format, data, attr=None):
+	print(_format, data, attr)
+	result = ''
+	for lang in settings.LANGEUAGE_MAPPING:
+		if(type(data) is dict):
+			result += _format.format(settings.LANGEUAGE_MAPPING[lang], data[lang.lower()][attr])
+			print(_format.format(settings.LANGEUAGE_MAPPING[lang], data[lang.lower()][attr]))
+		else:
+			result += _format.format(settings.LANGEUAGE_MAPPING[lang], data)
+			print(_format.format(settings.LANGEUAGE_MAPPING[lang], data))
+	return result
  
 register.filter("call", callMethod)
 register.filter("args", args)
-
-
-# 

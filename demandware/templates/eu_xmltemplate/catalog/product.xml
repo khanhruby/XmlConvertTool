@@ -3,9 +3,11 @@
 {% for prd in productMaster %}
     {{ prd.product_id|zlogger }}
     {% for lang in LANGEUAGE_MAPPING %}
-        
     {% endfor %}
-    {% call_method prd 'get_data_by_lang' 'fr' %}
+    {% set temp = prd.get_data_by_lang %}
+    {% autoescape off %}
+    {% printProductAttr '<display-name xml:lang="{0}">{1}</display-name>\n' 'test2' %}
+    {% endautoescape %}
     <product product-id="{{ prd.product_id }}">
         <ean/>
         <upc/>

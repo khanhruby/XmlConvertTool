@@ -30,7 +30,7 @@ def insert_bulk_product_master(data=None):
 				obj = ProductMaster(**item)
 				obj.save()
 			#Insert data extra
-			insert_product_master_extra(obj, item)
+			#insert_product_master_extra(obj, item)
 		return None
 	except Exception as e:
 		return str(e)
