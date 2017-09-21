@@ -53,8 +53,8 @@ class ProductMaster(models.Model):
 
 	def get_data_by_lang(self):
 		result = ProductMaster_Extra.objects.filter(product_id=self.product_id)
-		result = [ {prd.country.lower(): prd} for prd in result]
-		print(result)
+		result = { prd.country.lower(): prd for prd in result }
+		# print(result)
 		# for item in result:
 		# 	print(item.description)
 		return result
@@ -110,6 +110,7 @@ class RelatedProduct(models.Model):
 
 class Category(models.Model):
 	category_id = models.CharField(max_length=100, unique=True, default='')
+	language = models.CharField(max_length=100, default='')
 	category_parent = models.ForeignKey('self', on_delete=models.PROTECT, related_name='Category_CategoryParent', blank=True, null=True)
 	category_name = models.CharField(max_length=100, default='')
 	category_name_fr = models.CharField(max_length=100, null=True)
@@ -125,9 +126,26 @@ class Category(models.Model):
 	def __str__(self):
 		return str(self.category_id)
 
+	def get_data_by_lang(self):
+		result = Category_Extra.objects.filter(category_id=self.category_id)
+		result = { cat.language.lower(): cat for cat in result }
+		return result
+
 	class Meta:
 		db_table = 'dtb_categories'
 		unique_together = ('category_id', 'category_parent',)
+
+class Category_Extra(models.Model):
+	category_id = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='Category_Extra_Category', null=True, to_field='category_id', db_column='category_id')
+	language = models.CharField(max_length=100, default='en')
+	category_name = models.CharField(max_length=255, default='')
+
+	def __str__(self):
+		return str(self.category_id)
+
+	class Meta:
+		db_table = 'dtb_category_extra'
+		unique_together = ('category_id', 'language',)
 
 
 class CategoryMeta(models.Model):

@@ -168,6 +168,7 @@ def category_process(data=None, header=None, extData=None):
 	categoryLevel1ToReset=''
 	categoryLevel2ToReset=''
 	categoryLevel3ToReset=''
+	index=0
 	for item in extData:
 		if item['category_level_3_name'] == 'すべて':
 			continue;
@@ -191,6 +192,7 @@ def category_process(data=None, header=None, extData=None):
 
 		datalv1 = dict(
 			category_id=item['category_level_1_id'],
+			language=data[index]['language'],
 			category_name=item['category_level_1_name'],
 			category_level=1,
 			category_parent=None,
@@ -205,6 +207,7 @@ def category_process(data=None, header=None, extData=None):
 
 		datalv2 = dict(
 			category_id="%s-%s" % (result1['obj'].category_id, item['category_level_2_id']),
+			language=data[index]['language'],
 			category_name=item['category_level_2_name'],
 			category_level=2,
 			category_parent=result1['obj'],
@@ -219,6 +222,7 @@ def category_process(data=None, header=None, extData=None):
 
 		datalv3 = dict(
 			category_id="%s-%s" % (result2['obj'].category_id, item['category_level_3_id']),
+			language=data[index]['language'],
 			category_name=item['category_level_3_name'],
 			category_level=3,
 			category_parent=result2['obj'],
@@ -228,6 +232,7 @@ def category_process(data=None, header=None, extData=None):
 		result3 = insert_category(data=datalv3)
 		if result3['error']:
 			return result3['error']
+		index=index+1
 
 	return result
 

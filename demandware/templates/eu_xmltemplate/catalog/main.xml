@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 {% load app_filters %}
 {% now "YmdHi" as default_catalog_id %}
-<catalog xmlns="http://www.demandware.com/xml/impex/catalog/2006-10-31" catalog-id="descente-ja_JP">
+<catalog xmlns="http://www.demandware.com/xml/impex/catalog/2006-10-31" catalog-id="descente-eu">
 	
 	{% include "eu_xmltemplate/catalog/header.xml" %}
 	{% if categories %}

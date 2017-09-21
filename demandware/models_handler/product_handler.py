@@ -30,7 +30,8 @@ def insert_bulk_product_master(data=None):
 				obj = ProductMaster(**item)
 				obj.save()
 			#Insert data extra
-			#insert_product_master_extra(obj, item)
+			if settings.MULTIPLE_LANGUAGE:
+				insert_product_master_extra(obj, item)
 		return None
 	except Exception as e:
 		return str(e)
@@ -52,33 +53,34 @@ def insert_product_master_extra(obj, data=None):
 			product_commentary_image_title=data['product_commentary_image_title'],
 			product_commentary=data['product_commentary'],
 		)
-		insert_product_master_extra_language('jp', insert_default)
-		for lang in languages:
-			product_commentary = json.loads(data['product_commentary'])
-			# print(product_commentary)
-			for i in range(len(product_commentary)):
-				_items = list(product_commentary[i].items())
-				for key, value in _items:
-					_re_commentary = re.compile("product_commentary_(.*)_description")
-					_search_commentary = _re_commentary.search(key)
-					if _search_commentary != None:
-						product_commentary[i][key] = translate_client.translate(product_commentary[i][key], target_language=lang)['translatedText']
-			data['product_commentary'] = json.dumps(product_commentary)
-			item = dict(
-				product_id=obj,
-				country=lang,
-				main_image=data['main_image'],
-				functions=translate_client.translate(data['functions'], target_language=lang)['translatedText'],
-				description=translate_client.translate(data['description'], target_language=lang)['translatedText'],
-				display_name=translate_client.translate(data['display_name'], target_language=lang)['translatedText'],
-				product_all_size_info=data['product_all_size_info'],
-				product_all_color=data['product_all_color'],
-				product_commentary_image_title=translate_client.translate(data['product_commentary_image_title'], target_language=lang)['translatedText'],
-				product_commentary=translate_client.translate(data['product_commentary'], target_language=lang)['translatedText'],
-			)
-			insert_product_master_extra_language(lang, item)
+		insert_product_master_extra_language(data['country'].lower(), insert_default)
+		### Insert auto translate
+		# for lang in languages:
+		# 	product_commentary = json.loads(data['product_commentary'])
+		# 	# print(product_commentary)
+		# 	for i in range(len(product_commentary)):
+		# 		_items = list(product_commentary[i].items())
+		# 		for key, value in _items:
+		# 			_re_commentary = re.compile("product_commentary_(.*)_description")
+		# 			_search_commentary = _re_commentary.search(key)
+		# 			if _search_commentary != None:
+		# 				product_commentary[i][key] = translate_client.translate(product_commentary[i][key], target_language=lang)['translatedText']
+		# 	data['product_commentary'] = json.dumps(product_commentary)
+		# 	item = dict(
+		# 		product_id=obj,
+		# 		country=lang,
+		# 		main_image=data['main_image'],
+		# 		functions=translate_client.translate(data['functions'], target_language=lang)['translatedText'],
+		# 		description=translate_client.translate(data['description'], target_language=lang)['translatedText'],
+		# 		display_name=translate_client.translate(data['display_name'], target_language=lang)['translatedText'],
+		# 		product_all_size_info=data['product_all_size_info'],
+		# 		product_all_color=data['product_all_color'],
+		# 		product_commentary_image_title=translate_client.translate(data['product_commentary_image_title'], target_language=lang)['translatedText'],
+		# 		product_commentary=translate_client.translate(data['product_commentary'], target_language=lang)['translatedText'],
+		# 	)
+		# 	insert_product_master_extra_language(lang, item)
 	except Exception as e:
-		print('Import Product Master Extra Error: ', obj, str(e))
+		print('[ERROR] Import Product Master Extra!', obj, str(e))
 		return None
 
 def insert_product_master_extra_language(lang, data=None):
@@ -95,10 +97,13 @@ def insert_related_product(data=None):
 	from demandware.models import RelatedProduct
 	try:
 		for item in data:
-			print(item['product_id'], item['related_product_id'])
+			print("[INSERT] ", item['product_id'], item['related_product_id'])
 			listRelation = item['related_product_id'].split(",")
 			for productIDRelation in listRelation:
 				try:
+					if item['product_id']==productIDRelation.strip():
+						print("[SKIP] Source and target are the same!", item['product_id'], productIDRelation.strip())
+						continue
 					productID = ProductMaster.objects.get(product_id=item['product_id'])
 					relatedProductID = ProductMaster.objects.get(product_id=productIDRelation.strip())
 					values = dict(
@@ -111,6 +116,7 @@ def insert_related_product(data=None):
 						obj = RelatedProduct(**values)
 						obj.save()
 				except ProductMaster.DoesNotExist:
+					print("[SKIP] ProductMaster DoesNotExist!", item['related_product_id'])
 					continue
 		return None
 	except Exception as e:
@@ -121,7 +127,7 @@ def insert_variant(data=None):
 	try:
 		for item in data:
 			try:
-				print(item['product_id'], item['variation_jan'])
+				print("[INSERT] ", item['product_id'], item['variation_jan'])
 				item['product_id'] = ProductMaster.objects.get(product_id=item['product_id'])
 				try:
 					obj = Variant.objects.get(product_id=item['product_id'], variation_jan=item['variation_jan'])
@@ -131,6 +137,7 @@ def insert_variant(data=None):
 					obj = Variant(**item)
 					obj.save()
 			except ProductMaster.DoesNotExist:
+				print("[SKIP] ProductMaster DoesNotExist!", item['product_id'])
 				continue
 		return None
 	except Exception as e:
@@ -147,10 +154,10 @@ def insert_product_image(data=None):
 				# instances.append(ProductImage(**item))
 				obj = ProductImage.objects.get(product_id=productID, color_code=item['color_code'], product_image=item['product_image'], image_size=item['image_size'])
 			except ProductMaster.DoesNotExist:
-				print("ProductMaster DoesNotExist Skip: ", item['product_id'])
+				print("[SKIP] ProductMaster DoesNotExist!", item['product_id'])
 				continue
 			except ProductImage.DoesNotExist:
-				print("Insert Image: ", item['product_id'], item['product_image'])
+				print("[INSERT] Image: ", item['product_id'], item['product_image'])
 				item['product_id'] = ProductMaster.objects.get(product_id=item['product_id'])
 				obj = ProductImage(**item)
 				obj.save()
@@ -161,8 +168,8 @@ def insert_product_image(data=None):
 		return str(e)
 
 def get_product_master():
-	# products = ProductMaster.objects.all()
-	products = ProductMaster.objects.filter(product_id='DBX-3602')
+	products = ProductMaster.objects.all()
+	# products = ProductMaster.objects.filter(product_id='DBX-3602')
 	return products
 
 def get_product_variants():

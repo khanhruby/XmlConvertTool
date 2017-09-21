@@ -1,3 +1,4 @@
+{% load app_filters %}
 <category category-id="root">
     <online-flag>true</online-flag>
     <template/>
@@ -5,7 +6,10 @@
 </category>
 {% for category in dataset %}
 <category category-id="{{ category.category_id|default:now }}">
-    <display-name xml:lang="x-default">{{ category.category_name|default:now }}</display-name>
+    {% set cat_extra = category.get_data_by_lang %}
+    {% autoescape off %}
+    {% printProductAttr 'display-name' cat_extra 'category_name' %}
+    {% endautoescape %}
     <online-flag>true</online-flag>
     {% comment %} 
     <online-from>{{ category.from|default:now }}</online-from>

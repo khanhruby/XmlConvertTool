@@ -93,9 +93,15 @@ admin.site.register(ProductCategory, ProductCategoryAdmin)
 
 # @staff_member_required
 def export_view(request):
-	from .func.handle_export import handle_export
+	from .func.handle_export import handle_export, handle_export_product
 	import datetime
 	from django.conf import settings
+
+	# products = ProductMaster.objects.filter(product_id='DBX-3602')
+	# result = products[0].get_data_by_lang()
+	# print(result['jp'].display_name)
+	# print(getattr(result['jp'],'display_name'))
+	# print(result['jp']['display_name'])
 
 	if request.method == 'POST':
 		form = ExportForm(request.POST)
@@ -106,7 +112,7 @@ def export_view(request):
 				brand_type = form.cleaned_data.get('brand_type')
 				BRAND_PATH = {1:'', 2:'eu_'}
 				LANGEUAGE_MAPPING = dict(LANGEUAGE_MAPPING=settings.LANGEUAGE_MAPPING)
-				if brand_type != 1:
+				if settings.MULTIPLE_LANGUAGE:
 					result = dict(**result, **LANGEUAGE_MAPPING)
 				_time = datetime.datetime.utcnow().isoformat() + "Z"
 				response = None

@@ -36,7 +36,7 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '1.2.3.4', 'demandware-tool.com', 'jp.app', 'eu.app', '172.16.20.4', '172.16.20.50']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '1.2.3.4', 'demandware-tool.com', 'jp.app', 'eu.app', '172.16.20.4', '172.16.20.50', 'eu-local']
 CSRF_COOKIE_NAME = 'localhost_csrf_eu'
 CSRF_COOKIE_DOMAIN = 'eu.app'
 
@@ -156,7 +156,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/django.log'),
+            'filename': os.path.join(BASE_DIR, '../logs/django.log'),
             'maxBytes': 50000,
             # 'backupCount': 2,
             'formatter': 'verbose',
@@ -248,6 +248,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MULTIPLE_LANGUAGE = False
 LANGEUAGE_MAPPING = {
     'jp':'ja_JP',
     'fr':'fr_FR',

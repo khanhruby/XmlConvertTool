@@ -1,5 +1,6 @@
 from django import template
 import datetime
+import cgi
 from django.conf import settings
 
 register = template.Library()
@@ -98,16 +99,19 @@ def args(obj, arg):
 	return obj
 
 @register.simple_tag(name='printProductAttr')
-def printProductAttr(_format, data, attr=None):
-	print(_format, data, attr)
+def printProductAttr(tag_name, data, *args):
+	_format = '<{0} xml:lang="{1}" {3}>{2}</{0}>'
 	result = ''
+	if(type(data) is dict):
+		result += _format.format(tag_name, 'x-default', cgi.escape(str(getattr(data['en'], args[0]))), args[1] if len(args) > 1 else '') + '\n'
+	else:
+		result += _format.format(tag_name, 'x-default', cgi.escape(str(data)), args[0]) + '\n'
+	
 	for lang in settings.LANGEUAGE_MAPPING:
 		if(type(data) is dict):
-			result += _format.format(settings.LANGEUAGE_MAPPING[lang], data[lang.lower()][attr])
-			print(_format.format(settings.LANGEUAGE_MAPPING[lang], data[lang.lower()][attr]))
+			result += _format.format(tag_name, settings.LANGEUAGE_MAPPING[lang], cgi.escape(str(getattr(data[lang.lower()], args[0]))), args[1] if len(args) > 1 else '') + '\n'
 		else:
-			result += _format.format(settings.LANGEUAGE_MAPPING[lang], data)
-			print(_format.format(settings.LANGEUAGE_MAPPING[lang], data))
+			result += _format.format(tag_name, settings.LANGEUAGE_MAPPING[lang], cgi.escape(str(data)), args[0]) + '\n'
 	return result
  
 register.filter("call", callMethod)
