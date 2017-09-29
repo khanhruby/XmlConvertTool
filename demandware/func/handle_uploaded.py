@@ -128,7 +128,14 @@ def product_master_process(data=None, header=None, extData=None):
 			_search_all_color = _re_all_color.search(key)
 			if _search_all_color != None:
 				all_color[_search_all_color.group(2)] = all_color[_search_all_color.group(2)] if _search_all_color.group(2) in all_color else {}
-				all_color[_search_all_color.group(2)][_search_all_color.group(0)] = value
+				color_format = value
+				if _search_all_color.group(1) == 'hexa_code' and value != None and value != "":
+					if len(str(value).split(",")) == 3:
+						color_format = 'rgb(' + str(value) + ')'
+					elif len(str(value).split(",")) > 1:
+						print("[ERROR] FORMAT OF COLOR IS INCORRECT!" + color_format)
+
+				all_color[_search_all_color.group(2)][_search_all_color.group(0)] = color_format
 				del extData[idx][key]
 
 		commentary = sorted(commentary.items(), key=lambda t: int(t[0]))

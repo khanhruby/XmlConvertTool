@@ -87,8 +87,8 @@ def insert_product_master_extra_language(lang, data=None):
 	from demandware.models import ProductMaster_Extra
 	try:
 		prd_ex = ProductMaster_Extra.objects.get(product_id=data['product_id'], country=lang)
-		# prd_ex = update_multiple_fields(prd_ex, data)
-		prd_ex.save(data)
+		prd_ex = update_multiple_fields(prd_ex, data)
+		prd_ex.save()
 	except ProductMaster_Extra.DoesNotExist:
 		prd_ex = ProductMaster_Extra(**data)
 		prd_ex.save()
