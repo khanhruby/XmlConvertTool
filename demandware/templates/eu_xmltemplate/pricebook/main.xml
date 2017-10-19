@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>{% load app_filters %}
+<pricebooks xmlns="http://www.demandware.com/xml/impex/pricebook/2006-10-31">
+	{% for cur in currencies %}
+	<pricebook>
+        <header pricebook-id="usd-list-prices">
+            <currency>{{ cur.currency }}</currency>
+            <display-name xml:lang="x-default">List Prices</display-name>
+            <online-flag>true</online-flag>
+        </header>
+
+        <price-tables>
+    		{% for prd in cur|variantFilterCurrency:cur.currency %}
+            <price-table product-id="{{ prd.variation_jan }}">
+                <amount quantity="1">{{ prd.price_amount }}</amount>
+            </price-table>
+            {% endfor %}
+        </price-tables>
+    </pricebook>
+    {% endfor %}
+</pricebooks>
