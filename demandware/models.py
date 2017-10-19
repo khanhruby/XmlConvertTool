@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.timezone import now
+from django.db import connections
 
 # Create your models here.
 class ProductMaster(models.Model):
@@ -50,6 +51,38 @@ class ProductMaster(models.Model):
 	def get_variant_sizes(self):
 		return Variant.objects.filter(product_id=self.product_id).values('product_id', 'size_code', 'size_display_name').distinct()
 
+	def get_data_by_lang(self):
+		result = ProductMaster_Extra.objects.filter(product_id=self.product_id)
+		result = { prd.country.lower(): prd for prd in result }
+		# print(result)
+		# for item in result:
+		# 	print(item.description)
+		return result
+
+class ProductMaster_Extra(models.Model):
+	product_id = models.ForeignKey(ProductMaster, on_delete=models.PROTECT, related_name='ProductMaster_Extra_ProductMaster', null=True, to_field='product_id', db_column='product_id')
+	country = models.CharField(max_length=100, default='en')
+	main_image = models.CharField(max_length=255, default='')
+	functions = models.TextField(default='')
+	description = models.TextField(default='')
+	display_name = models.CharField(max_length=255, default='')
+	product_all_size_info = models.TextField(null=True)
+	product_all_color = models.TextField(null=True)
+	product_commentary_image_title = models.CharField(max_length=255, null=True)
+	product_commentary = models.TextField(null=True)
+
+	def __str__(self):
+		return str(self.product_id)
+		
+	# def save(self, *args, **kwargs):
+	# 	# do_something()
+	# 	super(ProductMaster_Extra, self).save(*args, **kwargs) # Call the "real" save() method.
+		# do_something_else()
+
+	class Meta:
+		db_table = 'dtb_product_master_extra'
+		unique_together = ('product_id', 'country',)
+
 
 class ProductMeta(models.Model):
 	product_id = models.ForeignKey(ProductMaster, on_delete=models.PROTECT, related_name='ProductMeta_ProductMaster', null=True, to_field='product_id', db_column='product_id')
@@ -77,11 +110,12 @@ class RelatedProduct(models.Model):
 
 class Category(models.Model):
 	category_id = models.CharField(max_length=100, unique=True, default='')
+	language = models.CharField(max_length=100, default='')
 	category_parent = models.ForeignKey('self', on_delete=models.PROTECT, related_name='Category_CategoryParent', blank=True, null=True)
 	category_name = models.CharField(max_length=100, default='')
 	category_name_fr = models.CharField(max_length=100, null=True)
 	category_name_jp = models.CharField(max_length=100, null=True)
-	category_name_cn = models.CharField(max_length=100, null=True)
+	category_name_en = models.CharField(max_length=100, null=True)
 	category_level = models.IntegerField(default=0)
 	category_position = models.IntegerField(default=0)
 	category_custom_url = models.CharField(max_length=100, default='')
@@ -92,9 +126,26 @@ class Category(models.Model):
 	def __str__(self):
 		return str(self.category_id)
 
+	def get_data_by_lang(self):
+		result = Category_Extra.objects.filter(category_id=self.category_id)
+		result = { cat.language.lower(): cat for cat in result }
+		return result
+
 	class Meta:
 		db_table = 'dtb_categories'
 		unique_together = ('category_id', 'category_parent',)
+
+class Category_Extra(models.Model):
+	category_id = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='Category_Extra_Category', null=True, to_field='category_id', db_column='category_id')
+	language = models.CharField(max_length=100, default='en')
+	category_name = models.CharField(max_length=255, default='')
+
+	def __str__(self):
+		return str(self.category_id)
+
+	class Meta:
+		db_table = 'dtb_category_extra'
+		unique_together = ('category_id', 'language',)
 
 
 class CategoryMeta(models.Model):

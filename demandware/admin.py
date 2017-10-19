@@ -93,8 +93,15 @@ admin.site.register(ProductCategory, ProductCategoryAdmin)
 
 # @staff_member_required
 def export_view(request):
-	from .func.handle_export import handle_export
+	from .func.handle_export import handle_export, handle_export_product
 	import datetime
+	from django.conf import settings
+
+	# products = ProductMaster.objects.filter(product_id='DBX-3602')
+	# result = products[0].get_data_by_lang()
+	# print(result['jp'].display_name)
+	# print(getattr(result['jp'],'display_name'))
+	# print(result['jp']['display_name'])
 
 	if request.method == 'POST':
 		form = ExportForm(request.POST)
@@ -102,26 +109,31 @@ def export_view(request):
 			result = handle_export(form=form)
 			if result != None:
 				data_type = form.cleaned_data.get('data_type')
+				brand_type = form.cleaned_data.get('brand_type')
+				BRAND_PATH = {1:'', 2:'eu_'}
+				LANGEUAGE_MAPPING = dict(LANGEUAGE_MAPPING=settings.LANGEUAGE_MAPPING)
+				if settings.MULTIPLE_LANGUAGE:
+					result = dict(**result, **LANGEUAGE_MAPPING)
 				_time = datetime.datetime.utcnow().isoformat() + "Z"
 				response = None
 				if int(data_type) == 1:
-					response = TemplateResponse(request, "xmltemplate/catalog/main.xml", result, content_type='text/xml')
-					response['Content-Disposition'] = 'attachment; filename=%s_%s.xml' % ('catalog', str(_time))
+					response = TemplateResponse(request, BRAND_PATH[int(brand_type)] + "xmltemplate/catalog/main.xml", result, content_type='text/xml')
+					response['Content-Disposition'] = 'attachment; filename=%s_%s.xml' % (BRAND_PATH[int(brand_type)]+'catalog', str(_time))
 				if int(data_type) == 2:
-					response =  TemplateResponse(request, "xmltemplate/pricebook/main.xml", result, content_type='text/xml')
-					response['Content-Disposition'] = 'attachment; filename=%s_%s.xml' % ('pricebook', str(_time))
+					response =  TemplateResponse(request, BRAND_PATH[int(brand_type)] + "xmltemplate/pricebook/main.xml", result, content_type='text/xml')
+					response['Content-Disposition'] = 'attachment; filename=%s_%s.xml' % (BRAND_PATH[int(brand_type)]+'pricebook', str(_time))
 				if int(data_type) == 3:
-					response = TemplateResponse(request, "xmltemplate/inventory/main.xml", result, content_type='text/xml')
-					response['Content-Disposition'] = 'attachment; filename=%s_%s.xml' % ('inventory', str(_time))
+					response = TemplateResponse(request, BRAND_PATH[int(brand_type)] + "xmltemplate/inventory/main.xml", result, content_type='text/xml')
+					response['Content-Disposition'] = 'attachment; filename=%s_%s.xml' % (BRAND_PATH[int(brand_type)]+'inventory', str(_time))
 				if int(data_type) == 4:
-					response = TemplateResponse(request, "xmltemplate/catalog/main.xml", result, content_type='text/xml')
-					response['Content-Disposition'] = 'attachment; filename=%s_%s.xml' % ('categories', str(_time))
+					response = TemplateResponse(request, BRAND_PATH[int(brand_type)] + "xmltemplate/catalog/main.xml", result, content_type='text/xml')
+					response['Content-Disposition'] = 'attachment; filename=%s_%s.xml' % (BRAND_PATH[int(brand_type)]+'categories', str(_time))
 				if int(data_type) == 5:
-					response = TemplateResponse(request, "xmltemplate/catalog/main.xml", result, content_type='text/xml')
-					response['Content-Disposition'] = 'attachment; filename=%s_%s.xml' % ('products', str(_time))
+					response = TemplateResponse(request, BRAND_PATH[int(brand_type)] + "xmltemplate/catalog/main.xml", result, content_type='text/xml')
+					response['Content-Disposition'] = 'attachment; filename=%s_%s.xml' % (BRAND_PATH[int(brand_type)]+'products', str(_time))
 				if int(data_type) == 6:
-					response = TemplateResponse(request, "xmltemplate/catalog/main.xml", result, content_type='text/xml')
-					response['Content-Disposition'] = 'attachment; filename=%s_%s.xml' % ('recommand', str(_time))
+					response = TemplateResponse(request, BRAND_PATH[int(brand_type)] + "xmltemplate/catalog/main.xml", result, content_type='text/xml')
+					response['Content-Disposition'] = 'attachment; filename=%s_%s.xml' % (BRAND_PATH[int(brand_type)]+'recommand', str(_time))
 				return response
 			messages.error(request, result)
 		else:
@@ -132,3 +144,9 @@ def export_view(request):
 		form=form,
 	)
 	return TemplateResponse(request, "admin/export.html", context)
+
+
+def test_view(request):
+	from django.conf import settings
+	context = dict(LANGEUAGE_MAPPING=settings.LANGEUAGE_MAPPING)
+	return TemplateResponse(request, "admin/test.html", context)

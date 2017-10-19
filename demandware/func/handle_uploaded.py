@@ -3,7 +3,12 @@ from django.conf import settings
 from openpyxl import load_workbook
 from openpyxl.utils import cell as pycell
 from demandware.models import ProductMaster, ProductMeta, RelatedProduct, Category, CategoryMeta, Variant, ProductImage, HeaderMgr
+# Imports the Google Cloud client library
+from google.cloud import translate
 import logging
+
+# Instantiates a client
+translate_client = translate.Client()
 
 # Get an instance of a logger
 logger = logging.getLogger('django')
@@ -105,6 +110,9 @@ def product_master_process(data=None, header=None, extData=None):
 	### 前処理
 	# product_commentaryを処理する | product_all_colorを処理する
 	for idx, items in zip(range(len(extData)), extData):
+		if data[idx]['product_id'] == None or data[idx]['product_id'].strip() == '':
+			continue
+		print('ProductID: ', data[idx]['product_id'])
 		commentary = {}
 		all_color = {}
 		_items = list(items.items())
@@ -120,7 +128,14 @@ def product_master_process(data=None, header=None, extData=None):
 			_search_all_color = _re_all_color.search(key)
 			if _search_all_color != None:
 				all_color[_search_all_color.group(2)] = all_color[_search_all_color.group(2)] if _search_all_color.group(2) in all_color else {}
-				all_color[_search_all_color.group(2)][_search_all_color.group(0)] = value
+				color_format = value
+				if _search_all_color.group(1) == 'hexa_code' and value != None and value != "":
+					if len(str(value).split(",")) == 3:
+						color_format = 'rgb(' + str(value) + ')'
+					elif len(str(value).split(",")) > 1:
+						print("[ERROR] FORMAT OF COLOR IS INCORRECT!" + color_format)
+
+				all_color[_search_all_color.group(2)][_search_all_color.group(0)] = color_format
 				del extData[idx][key]
 
 		commentary = sorted(commentary.items(), key=lambda t: int(t[0]))
@@ -131,7 +146,7 @@ def product_master_process(data=None, header=None, extData=None):
 		data[idx]['product_all_color'] = json.dumps(all_color, ensure_ascii=False)
 
 	result = insert_bulk_product_master(data=data)
-	result = insert_product_metadata(data=data, extData=extData)
+	# result = insert_product_metadata(data=data, extData=extData)
 	return result
 
 def related_product_process(data=None, extData=None):
@@ -160,6 +175,7 @@ def category_process(data=None, header=None, extData=None):
 	categoryLevel1ToReset=''
 	categoryLevel2ToReset=''
 	categoryLevel3ToReset=''
+	index=0
 	for item in extData:
 		if item['category_level_3_name'] == 'すべて':
 			continue;
@@ -183,6 +199,7 @@ def category_process(data=None, header=None, extData=None):
 
 		datalv1 = dict(
 			category_id=item['category_level_1_id'],
+			language=data[index]['language'],
 			category_name=item['category_level_1_name'],
 			category_level=1,
 			category_parent=None,
@@ -197,6 +214,7 @@ def category_process(data=None, header=None, extData=None):
 
 		datalv2 = dict(
 			category_id="%s-%s" % (result1['obj'].category_id, item['category_level_2_id']),
+			language=data[index]['language'],
 			category_name=item['category_level_2_name'],
 			category_level=2,
 			category_parent=result1['obj'],
@@ -211,6 +229,7 @@ def category_process(data=None, header=None, extData=None):
 
 		datalv3 = dict(
 			category_id="%s-%s" % (result2['obj'].category_id, item['category_level_3_id']),
+			language=data[index]['language'],
 			category_name=item['category_level_3_name'],
 			category_level=3,
 			category_parent=result2['obj'],
@@ -220,6 +239,7 @@ def category_process(data=None, header=None, extData=None):
 		result3 = insert_category(data=datalv3)
 		if result3['error']:
 			return result3['error']
+		index=index+1
 
 	return result
 
