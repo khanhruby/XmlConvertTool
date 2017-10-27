@@ -100,19 +100,43 @@ def args(obj, arg):
 
 @register.simple_tag(name='printProductAttr')
 def printProductAttr(tag_name, data, *args):
-	_format = '<{0} xml:lang="{1}" {3}>{2}</{0}>'
-	result = ''
-	if(type(data) is dict):
-		result += _format.format(tag_name, 'x-default', cgi.escape(str(getattr(data['en'], args[0]))), args[1] if len(args) > 1 else '') + '\n'
-	else:
-		result += _format.format(tag_name, 'x-default', cgi.escape(str(data)), args[0]) + '\n'
-	
-	for lang in settings.LANGEUAGE_MAPPING:
+	try:
+		_format = '<{0} xml:lang="{1}" {3}>{2}</{0}>'
+		result = ''
 		if(type(data) is dict):
-			result += _format.format(tag_name, settings.LANGEUAGE_MAPPING[lang], cgi.escape(str(getattr(data[lang.lower()], args[0]))), args[1] if len(args) > 1 else '') + '\n'
+			result += _format.format(tag_name, 'x-default', cgi.escape(str(getattr(data['en'], args[0]))), args[1] if len(args) > 1 else '') + '\n'
 		else:
-			result += _format.format(tag_name, settings.LANGEUAGE_MAPPING[lang], cgi.escape(str(data)), args[0]) + '\n'
-	return result
- 
+			result += _format.format(tag_name, 'x-default', cgi.escape(str(data)), args[0]) + '\n'
+		
+		for lang in settings.LANGEUAGE_MAPPING:
+			if(type(data) is dict):
+				result += _format.format(tag_name, settings.LANGEUAGE_MAPPING[lang], cgi.escape(str(getattr(data[lang.lower()], args[0]))), args[1] if len(args) > 1 else '') + '\n'
+			else:
+				result += _format.format(tag_name, settings.LANGEUAGE_MAPPING[lang], cgi.escape(str(data)), args[0]) + '\n'
+		return result
+	except Exception as e:
+		print('Skip Error!')
+
+@register.simple_tag(name='printJSonAttr')
+def printJSonAttr(tag_name, data, *args):
+	try:
+		import json
+		_format = '<{0} xml:lang="{1}" attribute-id="{3}">{2}</{0}>'
+		result = ''
+		default_obj = json.loads(cgi.escape(str(getattr(data['en'], args[0]))))
+		
+		for item in default_obj:
+			for key, value in item.items():
+				result += _format.format(tag_name, settings.LANGEUAGE_MAPPING['en'], cgi.escape(str(value)), key) + '\n'
+
+		for lang in settings.LANGEUAGE_MAPPING:
+			obj = json.loads(cgi.escape(str(getattr(data[lang.lower()], args[0]))))
+			for item in obj:
+				for key, value in item.items():
+					result += _format.format(tag_name, settings.LANGEUAGE_MAPPING[lang], cgi.escape(str(value)), key) + '\n'
+		return result
+	except Exception as e:
+		print('Skip Error!')
+
 register.filter("call", callMethod)
 register.filter("args", args)

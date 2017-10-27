@@ -34,4 +34,8 @@ DATABASES = {
 MULTIPLE_LANGUAGE = True
 LANGEUAGE_MAPPING = {
     'en':'en-GB',
+    'fr':'fr-FR',
+    'it':'it-IT',
+    'ru':'ru-RU',
+    'es':'es-ES',
 }

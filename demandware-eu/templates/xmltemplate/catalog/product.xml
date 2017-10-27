@@ -1,31 +1,16 @@
-{% comment %}
-    // アトリビュートをプリントする方法です。
-    {% autoescape off %}
-        {% printProductAttr 'display-name' 'test2' %}
-        {
-            obj: object with all language
-            display_name: attribute of obj
-        }
-        {% printProductAttr 'display-name' prd_extra 'display_name' %}
-    {% endautoescape %}
-{% endcomment %}
-
 {% load app_filters %}
 {{ "Start! Write productMaster"|zlogger }}
-{% autoescape off %}
 {% for prd in productMaster %}
     {{ prd.product_id|zlogger }}
-    {% set prd_extra = prd.get_data_by_lang %}
     <product product-id="{{ prd.product_id }}">
         <ean/>
         <upc/>
         <unit/>
         <min-order-quantity>1</min-order-quantity>
         <step-quantity>1</step-quantity>
-
-        {% printProductAttr 'display-name' prd_extra 'display_name' %}
-        {% printProductAttr 'short-description' prd_extra 'description' %}
-        {% printProductAttr 'long-description' prd_extra 'description' %}
+        <display-name xml:lang="x-default">{{ prd.display_name }}</display-name>
+        <short-description xml:lang="x-default">{{ prd.description }}</short-description>
+        <long-description xml:lang="x-default">{{ prd.description }}</long-description>
         <online-flag>true</online-flag>
         <online-from>{{ now }}</online-from>
         <available-flag>false</available-flag>
@@ -41,26 +26,28 @@
         {% endif %}
 
         <custom-attributes>
-            {% printProductAttr 'custom-attribute' prd.season_code 'attribute-id="season_code"' %}
-            {% printProductAttr 'custom-attribute' prd.season_display_name 'attribute-id="season_display_name"' %}
-            {% printProductAttr 'custom-attribute' prd.brand_code 'attribute-id="brand_code"' %}
-            {% printProductAttr 'custom-attribute' prd.brand_display_name 'attribute-id="brand_display_name"' %}
-            {% printProductAttr 'custom-attribute' prd_extra 'display_name' 'attribute-id="display_name"' %}
-            {% printProductAttr 'custom-attribute' prd_extra 'description' 'attribute-id="description"' %}
-            {% printProductAttr 'custom-attribute' prd_extra 'functions' 'attribute-id="functions"' %}
-            {% printProductAttr 'custom-attribute' prd.online_shop_url 'attribute-id="online_shop_url"' %}
-            {% printProductAttr 'custom-attribute' prd_extra 'product_all_size_info' 'attribute-id="product_all_size_info"' %}
-            {% printProductAttr 'custom-attribute' prd_extra 'product_commentary_image_title' 'attribute-id="product_commentary_image_title"' %}
-            {% printProductAttr 'custom-attribute' prd_extra 'main_image' 'attribute-id="main_image"' %}
-            {% printProductAttr 'custom-attribute' prd_extra 'country' 'attribute-id="country"' %}
-            {% printJSonAttr 'custom-attribute' prd_extra 'product_commentary' %}
-            {% printProductAttr 'custom-attribute' prd_extra 'product_all_color' 'attribute-id="product_all_color"' %}
+            <custom-attribute xml:lang="x-default" attribute-id="season_code">{{ prd.season_code }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="season_display_name">{{ prd.season_display_name }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="brand_code">{{ prd.brand_code }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="brand_display_name">{{ prd.brand_display_name }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="display_name">{{ prd.display_name }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="description">{{ prd.description }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="functions">{{ prd.functions }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="online_shop_url">{{ prd.online_shop_url|urlencode }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="product_all_size_info">{{ prd.product_all_size_info }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="product_commentary_image_title">{{ prd.product_commentary_image_title }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="main_image">{{ prd.main_image }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="country">{{ prd.country }}</custom-attribute>
+            {% for row in prd.product_commentary|parseJSON %}{% for key, value in row.items %}
+            <custom-attribute xml:lang="x-default" attribute-id="{{ key }}">{{ value }}</custom-attribute>
+            {% endfor %}{% endfor %}
+            {% autoescape off %}
+            <custom-attribute xml:lang="x-default" attribute-id="product_all_color">{{ prd.product_all_color }}</custom-attribute>
             {% if prd.get_images %}
-                {% with prd.get_images|imageStringifyJSON as all_image_info %}
-                {% printProductAttr 'custom-attribute' all_image_info 'attribute-id="images_descriptions"' %}
-                {% endwith %}
+            <custom-attribute xml:lang="x-default" attribute-id="images_descriptions">{{ prd.get_images|imageStringifyJSON }}</custom-attribute>
             {% endif %}
-            {% printProductAttr 'custom-attribute' prd.No 'attribute-id="product_orderby"' %}
+            {% endautoescape %}
+            <custom-attribute xml:lang="x-default" attribute-id="product_orderby">{{ prd.No }}</custom-attribute>
         </custom-attributes>
 
         {% if prd.get_variants %}
@@ -69,11 +56,11 @@
             <attributes>
                 {% if prd.get_variant_colors %}
                 <variation-attribute attribute-id="color_code" variation-attribute-id="color_code">
-                    {% printProductAttr 'display-name' 'Color' %}
+                    <display-name xml:lang="x-default">Color</display-name>
                     <variation-attribute-values>
                         {% for row in prd.get_variant_colors %}
                         <variation-attribute-value value="{{ row.color_code }}">
-                            {% printProductAttr 'display-value' row.color_display_name %}
+                            <display-value xml:lang="x-default">{{ row.color_display_name }}</display-value>
                         </variation-attribute-value>
                         {% endfor %}
                     </variation-attribute-values>
@@ -81,11 +68,11 @@
                 {% endif %}
                 {% if prd.get_variant_sizes %}
                 <variation-attribute attribute-id="size_code" variation-attribute-id="size_code">
-                    {% printProductAttr 'display-name' 'Size' %}
+                    <display-name xml:lang="x-default">Size</display-name>
                     <variation-attribute-values>
                         {% for row in prd.get_variant_sizes %}
                         <variation-attribute-value value="{{ row.size_code }}">
-                            {% printProductAttr 'display-value' row.size_display_name %}
+                            <display-value xml:lang="x-default">{{ row.size_display_name }}</display-value>
                         </variation-attribute-value>
                         {% endfor %}
                     </variation-attribute-values>
@@ -107,9 +94,7 @@
     {{ prd.product_id|zlogger }}
     {{ "Done!"|zlogger }}
 {% endfor %}
-{% endautoescape %}
 {{ "Done! Write productMaster"|zlogger }}
-
 {{ "Start! Write productVariants"|zlogger }}
 {% for prd in productVariants %}
     {{ prd.variation_jan|zlogger }}
@@ -126,14 +111,14 @@
         <page-attributes/>
         <custom-attributes>
             <custom-attribute attribute-id="variation_jan">{{ prd.variation_jan }}</custom-attribute>
-            {% printProductAttr 'custom-attribute' prd.country 'attribute-id="country"' %}
+            <custom-attribute xml:lang="x-default" attribute-id="country">{{ prd.country }}</custom-attribute>
             <custom-attribute attribute-id="size_code">{{ prd.size_code }}</custom-attribute>
-            {% printProductAttr 'custom-attribute' prd.size_display_name 'attribute-id="size_display_name"' %}
+            <custom-attribute xml:lang="x-default" attribute-id="size_display_name">{{ prd.size_display_name }}</custom-attribute>
             <custom-attribute attribute-id="color_code">{{ prd.color_code }}</custom-attribute>
-            {% printProductAttr 'custom-attribute' prd.color_display_name 'attribute-id="color_display_name"' %}
-            {% printProductAttr 'custom-attribute' prd.price_amount 'attribute-id="price_amount"' %}
-            {% printProductAttr 'custom-attribute' prd.currency 'attribute-id="currency"' %}
-            {% printProductAttr 'custom-attribute' prd.stock_quantity 'attribute-id="stock_quantity"' %}
+            <custom-attribute xml:lang="x-default" attribute-id="color_display_name">{{ prd.color_display_name }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="price_amount">{{ prd.price_amount }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="currency">{{ prd.currency }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="stock_quantity">{{ prd.stock_quantity }}</custom-attribute>
         </custom-attributes>
     </product>
     {{ prd.variation_jan|zlogger }}

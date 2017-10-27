@@ -1,0 +1,79 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+{% load admin_urls %}
+{% debug %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}" />{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+&rsaquo; <a href="{% url 'admin:app_list' app_label='demandware' %}">Demandware</a>
+&rsaquo; {% if has_change_permission %}<a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>{% else %}{{ opts.verbose_name_plural|capfirst }}{% endif %}
+&rsaquo; {% if add %}{% blocktrans with name=opts.verbose_name %}Add {{ name }}{% endblocktrans %}{% else %}{{ original|truncatewords:"18" }}{% endif %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+<div class="app-demandware module">
+    {% if form.errors %}
+        <p style="color: red;">
+            Please correct the error{{ form.errors|pluralize }} below.
+        </p>
+    {% endif %}
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% block form_top %}{% endblock %}
+        <table>
+            <caption>
+                <a class="section" title="Import ">{{ title }}</a>
+            </caption>
+            {{ form.as_table }}
+            <tr>
+                <th></th>
+                <td><button type="submit" class="save btn btn-default">Import</button></td>
+            </tr>
+        </table>
+    </form>
+</div>
+{% if result %}
+    <p>Data: {{ result }}</p>
+{% endif %}
+</div>
+{% endblock %}
+
+{% block footer %}
+{{ block.super }}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script type="text/javascript">
+
+var data = {
+    'product_master' : { 'header_row':4, 'from_row':5, 'from_col':'A', 'to_col':'BV', 'to_row':0, },
+    'variant' : { 'header_row':3, 'from_row':4, 'from_col':'B', 'to_col':'K', 'to_row':0, },
+    'image' : { 'header_row':4, 'from_row':5, 'from_col':'B', 'to_col':'F', 'to_row':0, },
+    'category':{ 'header_row':4, 'from_row':5, 'from_col':'B', 'to_col':'G', 'to_row':0, },
+    'link':{ 'header_row':1, 'from_row':2, 'from_col':'B', 'to_col':'C', 'to_row':0, },
+    'related':{ 'header_row':3, 'from_row':4, 'from_col':'B', 'to_col':'C', 'to_row':0, },
+}
+
+updateField = function(data_type){
+    $("input[name=header_row]").val(data[data_type]['header_row']);
+    $("input[name=from_row]").val(data[data_type]['from_row']);
+    $("input[name=from_col]").val(data[data_type]['from_col']);
+    $("input[name=to_col]").val(data[data_type]['to_col']);
+    $("input[name=to_row]").val(data[data_type]['to_row']);
+}
+
+updateField($('select[name=data_type] option:selected').val());
+
+$("select[name=data_type]").on('change', function(){
+    var data_type = $(this).val();
+    updateField(data_type);
+});
+
+</script>
+
+{% endblock %}
