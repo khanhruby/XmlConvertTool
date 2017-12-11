@@ -1,0 +1,143 @@
+{% comment %}
+    // アトリビュートをプリントする方法です。
+    {% autoescape off %}
+        {% printProductAttr 'display-name' 'test2' %}
+        {
+            obj: object with all language
+            display_name: attribute of obj
+        }
+        {% printProductAttr 'display-name' prd_extra 'display_name' %}
+    {% endautoescape %}
+{% endcomment %}
+
+{% load app_filters %}
+{{ "Start! Write productMaster"|zlogger }}
+{% autoescape off %}
+{% for prd in productMaster %}
+    {{ prd.product_id|zlogger }}
+    {% set prd_extra = prd.get_data_by_lang %}
+    <product product-id="{{ prd.product_id }}">
+        <ean/>
+        <upc/>
+        <unit/>
+        <min-order-quantity>1</min-order-quantity>
+        <step-quantity>1</step-quantity>
+
+        {% printProductAttr 'display-name' prd_extra 'display_name' %}
+        {% printProductAttr 'short-description' prd_extra 'description' %}
+        {% printProductAttr 'long-description' prd_extra 'description' %}
+        <online-flag>true</online-flag>
+        <online-from>{{ now }}</online-from>
+        <available-flag>false</available-flag>
+        <searchable-flag>true</searchable-flag>
+
+        {% if prd.get_images %}
+        <images>{% with prd.get_images|filterImageGroups as groupImage %}{% for group, imgs in groupImage.items %}
+            <image-group view-type="{{ group }}">
+                {% for img in imgs %}<image path="images/{{ group }}/{{ img.product_image }}"/>
+                {% endfor %}
+            </image-group>{% endfor %}{% endwith %}
+        </images>
+        {% endif %}
+
+        <custom-attributes>
+            {% printProductAttr 'custom-attribute' prd.season_code 'attribute-id="season_code"' %}
+            {% printProductAttr 'custom-attribute' prd.season_display_name 'attribute-id="season_display_name"' %}
+            {% printProductAttr 'custom-attribute' prd.brand_code 'attribute-id="brand_code"' %}
+            {% printProductAttr 'custom-attribute' prd.brand_display_name 'attribute-id="brand_display_name"' %}
+            {% printProductAttr 'custom-attribute' prd_extra 'display_name' 'attribute-id="display_name"' %}
+            {% printProductAttr 'custom-attribute' prd_extra 'description' 'attribute-id="description"' %}
+            {% printProductAttr 'custom-attribute' prd_extra 'functions' 'attribute-id="functions"' %}
+            {% printProductAttr 'custom-attribute' prd.online_shop_url 'attribute-id="online_shop_url"' %}
+            {% printProductAttr 'custom-attribute' prd_extra 'product_all_size_info' 'attribute-id="product_all_size_info"' %}
+            {% printProductAttr 'custom-attribute' prd_extra 'product_commentary_image_title' 'attribute-id="product_commentary_image_title"' %}
+            {% printProductAttr 'custom-attribute' prd_extra 'main_image' 'attribute-id="main_image"' %}
+            {% printProductAttr 'custom-attribute' prd_extra 'country' 'attribute-id="country"' %}
+            {% printJSonAttr 'custom-attribute' prd_extra 'product_commentary' %}
+            {% printProductAttr 'custom-attribute' prd_extra 'product_all_color' 'attribute-id="product_all_color"' %}
+            {% if prd.get_images %}
+                {% with prd.get_images|imageStringifyJSON as all_image_info %}
+                {% printProductAttr 'custom-attribute' all_image_info 'attribute-id="images_descriptions"' %}
+                {% endwith %}
+            {% endif %}
+            {% printProductAttr 'custom-attribute' prd.No 'attribute-id="product_orderby"' %}
+        </custom-attributes>
+
+        {% if prd.get_variants %}
+        <variations>
+            {% if prd.get_variant_colors or prd.get_variant_sizes %}
+            <attributes>
+                {% if prd.get_variant_colors %}
+                <variation-attribute attribute-id="color_code" variation-attribute-id="color_code">
+                    {% printProductAttr 'display-name' 'Color' %}
+                    <variation-attribute-values>
+                        {% for row in prd.get_variant_colors %}
+                        <variation-attribute-value value="{{ row.color_code }}">
+                            {% printProductAttr 'display-value' row.color_display_name %}
+                        </variation-attribute-value>
+                        {% endfor %}
+                    </variation-attribute-values>
+                </variation-attribute>
+                {% endif %}
+                {% if prd.get_variant_sizes %}
+                <variation-attribute attribute-id="size_code" variation-attribute-id="size_code">
+                    {% printProductAttr 'display-name' 'Size' %}
+                    <variation-attribute-values>
+                        {% for row in prd.get_variant_sizes %}
+                        <variation-attribute-value value="{{ row.size_code }}">
+                            {% printProductAttr 'display-value' row.size_display_name %}
+                        </variation-attribute-value>
+                        {% endfor %}
+                    </variation-attribute-values>
+                </variation-attribute>
+                {% endif %}
+            </attributes>
+            {% endif %}
+            <variants>
+                {% for variant in prd.get_variants %}
+                <variant product-id="{{ variant.variation_jan }}"/>
+                {% endfor %}
+            </variants>
+        </variations>
+        {% endif %}
+        {% if prd.get_category %}
+        <classification-category>{{ prd.get_category }}</classification-category>
+        {% endif %}
+    </product>
+    {{ prd.product_id|zlogger }}
+    {{ "Done!"|zlogger }}
+{% endfor %}
+{% endautoescape %}
+{{ "Done! Write productMaster"|zlogger }}
+
+{{ "Start! Write productVariants"|zlogger }}
+{% for prd in productVariants %}
+    {{ prd.variation_jan|zlogger }}
+    <product product-id="{{ prd.variation_jan }}">
+        <ean/>
+        <upc>{{ prd.variation_jan }}</upc>
+        <unit/>
+        <min-order-quantity>1</min-order-quantity>
+        <step-quantity>1</step-quantity>
+        <online-flag>true</online-flag>
+        <online-from>{{ now }}</online-from>
+        <available-flag>true</available-flag>
+        <searchable-flag>true</searchable-flag>
+        <page-attributes/>
+        <custom-attributes>
+            <custom-attribute attribute-id="variation_jan">{{ prd.variation_jan }}</custom-attribute>
+            {% printProductAttr 'custom-attribute' prd.country 'attribute-id="country"' %}
+            <custom-attribute attribute-id="size_code">{{ prd.size_code }}</custom-attribute>
+            {% printProductAttr 'custom-attribute' prd.size_display_name 'attribute-id="size_display_name"' %}
+            <custom-attribute attribute-id="color_code">{{ prd.color_code }}</custom-attribute>
+            {% printProductAttr 'custom-attribute' prd.color_display_name 'attribute-id="color_display_name"' %}
+            {% printProductAttr 'custom-attribute' prd.price_amount 'attribute-id="price_amount"' %}
+            {% printProductAttr 'custom-attribute' prd.currency 'attribute-id="currency"' %}
+            {% printProductAttr 'custom-attribute' prd.stock_quantity 'attribute-id="stock_quantity"' %}
+        </custom-attributes>
+    </product>
+    {{ prd.variation_jan|zlogger }}
+    {{ "Done!"|zlogger }}
+{% endfor %}
+{{ "Done! Write productVariants"|zlogger }}
+

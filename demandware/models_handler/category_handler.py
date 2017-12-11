@@ -1,6 +1,7 @@
 from django.db import models
 from demandware.models import Category, ProductCategory, HeaderMgr
 from django.core.exceptions import ValidationError
+from django.conf import settings
 import logging
 
 # Get an instance of a logger
@@ -12,20 +13,43 @@ def insert_category(data=None, metadata=None):
 		obj=None
 	)
 	try:
-		print(data['category_id'])
-		obj = Category.objects.get(category_id=data['category_id'])
+		obj = Category.objects.get(category_id=str(data['category_id']))
 		obj = update_multiple_fields(obj, data)
 		obj.save()
 		result['obj'] = obj
-		return result
 	except Category.DoesNotExist:
 		obj = Category(**data)
 		obj.save()
 		result['obj'] = obj
-		return result
 	except ValidationError as e:
 		result['error'] = str(e)
-		return result
+
+	if result['error'] == None and settings.MULTIPLE_LANGUAGE:
+		insert_category_extra(result['obj'], data)
+	return result
+
+def insert_category_extra(obj, data=None):
+	if data == None: return;
+	try:
+		insert_default = dict(
+			category_id=obj,
+			language=data['language'],
+			category_name=data['category_name'],
+		)
+		insert_category_extra_language(data['language'].lower(), insert_default)
+	except Exception as e:
+		print('[ERROR] Import Category Extra!', obj, str(e))
+		return None
+
+def insert_category_extra_language(lang, data=None):
+	from demandware.models import Category_Extra
+	try:
+		obj = Category_Extra.objects.get(category_id=data['category_id'], language=lang)
+		obj = update_multiple_fields(obj, data)
+		obj.save(data)
+	except Category_Extra.DoesNotExist:
+		obj = Category_Extra(**data)
+		obj.save()
 
 def get_cagetory(params=None):
 	try:
@@ -56,19 +80,35 @@ def insert_bulk(data=None):
 
 def insert_product_category(data=None):
 	from demandware.models import ProductMaster
+	result = dict(
+		message=[],
+		count=0
+	)
 	try:
 		for item in data:
-			print(item['product_id'], item['category_id'])
-			values = dict(
-				product_id=ProductMaster.objects.get(product_id=item['product_id']),
-				category_id=Category.objects.get(category_id=item['category_id']),
-			)
-			ProductCategory.objects.update_or_create(**values)
-		return None
+			try:
+				print("[INSERT]", item['product_id'], item['category_id'])
+				values = dict(
+					product_id=ProductMaster.objects.get(product_id=item['product_id']),
+					category_id=Category.objects.get(category_id=item['category_id']),
+				)
+				ProductCategory.objects.update_or_create(**values)
+			except ProductMaster.DoesNotExist:
+				result['message'].append("[SKIP] ProductMaster DoesNotExist: " + item['product_id'] + "/" + item['category_id'])
+				print("[SKIP] ProductMaster DoesNotExist!", item['product_id'], item['category_id'])
+				continue
+			except Category.DoesNotExist:
+				result['message'].append("[SKIP] Category DoesNotExist: " + item['product_id'] + "/" + item['category_id'])
+				print("[SKIP] Category DoesNotExist!", item['product_id'], item['category_id'])
+				continue
+			result['count'] = result['count'] + 1;
+		print('Done!')
+		return result
 	except Exception as e:
-		print(str(e))
 		logger.info(str(e))
-		return str(e)
+		print(str(e))
+		result['message'].append(str(e))
+		return result
 
 def get_categories(_category_parent_=None):
 	categories = Category.objects.all().select_related("category_parent")

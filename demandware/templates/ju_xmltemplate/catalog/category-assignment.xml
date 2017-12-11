@@ -1,0 +1,8 @@
+{% load app_filters %}
+{% for pCat in productCategory %}
+{{ pCat.category_id|zlogger }}
+<category-assignment category-id="{{ pCat.category_id|ztrim }}" product-id="{{ pCat.product_id|ztrim }}">
+    <primary-flag>true</primary-flag>
+</category-assignment>
+{{ "Done!"|zlogger }}
+{% endfor %}

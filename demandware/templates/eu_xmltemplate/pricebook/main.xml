@@ -2,10 +2,9 @@
 <pricebooks xmlns="http://www.demandware.com/xml/impex/pricebook/2006-10-31">
 	{% for cur in currencies %}
 	<pricebook>
-        <header pricebook-id="jpy-list-prices">
+        <header pricebook-id="usd-list-prices">
             <currency>{{ cur.currency }}</currency>
             <display-name xml:lang="x-default">List Prices</display-name>
-            <display-name xml:lang="en_GB">List Prices</display-name>
             <online-flag>true</online-flag>
         </header>
 

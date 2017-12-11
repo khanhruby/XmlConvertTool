@@ -1,7 +1,24 @@
 from django import forms
 
 class UploadFileForm(forms.Form):
+	CHOICES = (
+		('productmaster', '1. Product Master',),
+		('category', '4. Category',),
+		('variant', '2. Variations',),
+		('productimage', '3. Image',),
+		('productcategory', '5. Linking Categories-Products',),
+		('relatedproduct', '6. Related Products',),
+	)
+
+	BRAND = (
+		(2, '全社テンプレート'),
+		(1, 'EU'),
+		(0, 'JP'),
+	)
+	brand_type = forms.ChoiceField(widget=forms.Select, choices=BRAND, label='Choise Brand')
 	w_character = forms.TextInput(attrs={'class':'form-control' , 'autocomplete': 'off','pattern':'[A-Za-z ]+', 'title':'Enter Characters Only '})
+	truncate = forms.BooleanField(label='Clear Current Data?', required=False, initial=1)
+	data_type = forms.ChoiceField(widget=forms.Select, choices=CHOICES, label='Choise Data Type')
 	myfile = forms.FileField(label='Attach Excel File')
 	sheet_name = forms.CharField(label='Sheet Name', initial='data')
 	header_row = forms.IntegerField(min_value=0, max_value=1048576, label='Header Row (Ex: 31)', initial=33)
@@ -20,4 +37,11 @@ class ExportForm(forms.Form):
 		(5, 'Product Export',), 
 		(6, 'Recommend Export',), 
 	)
+	BRAND = (
+		(2, '全社テンプレート'),
+		(1, 'EU'),
+		(0, 'JP'),
+	)
+	brand_type = forms.ChoiceField(widget=forms.Select, choices=BRAND, label='Choise Brand')
+	# lang_list = forms.CharField(label='List language', initial='es,ru,fr,it')
 	data_type = forms.ChoiceField(widget=forms.Select, choices=CHOICES, label='Choise Data Type')

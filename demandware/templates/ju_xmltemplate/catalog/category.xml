@@ -1,12 +1,13 @@
+{% load app_filters %}
 <category category-id="root">
     <online-flag>true</online-flag>
     <template/>
     <page-attributes/>
 </category>
 {% for category in dataset %}
-<category category-id="{{ category.category_id|default:now }}">
-    <display-name xml:lang="x-default">{{ category.category_name|default:now }}</display-name>
-    <display-name xml:lang="en_GB">{{ category.category_name|default:now }}</display-name>
+<category category-id="{{ category.category_id|ztrim }}">
+    <display-name xml:lang="x-default">{{ category.category_name|ztrim }}</display-name>
+    <display-name xml:lang="ja-JP">{{ category.category_name|ztrim }}</display-name>
     <online-flag>true</online-flag>
     {% comment %} 
     <online-from>{{ category.from|default:now }}</online-from>
@@ -22,8 +23,6 @@
     <page-attributes/>
     <custom-attributes>
         <custom-attribute attribute-id="category_custom_url" xml:lang="x-default">{{ category.category_custom_url }}</custom-attribute>
-        <custom-attribute attribute-id="category_custom_url" xml:lang="en_GB">{{ category.category_custom_url }}</custom-attribute>
-        <custom-attribute attribute-id="displayNameJP" xml:lang="x-default">{{ category.category_name_jp }}</custom-attribute>
     </custom-attributes>
 </category>
 {% endfor %}

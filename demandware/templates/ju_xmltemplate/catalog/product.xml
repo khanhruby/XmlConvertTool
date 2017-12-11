@@ -1,0 +1,178 @@
+{% load app_filters %}
+{{ "Start! Write productMaster"|zlogger }}
+{% for prd in productMaster %}
+    {{ prd.product_id|zlogger }}
+    <product product-id="{{ prd.product_id|ztrim }}">
+        <ean/>
+        <upc/>
+        <unit/>
+        <min-order-quantity>1</min-order-quantity>
+        <step-quantity>1</step-quantity>
+        <display-name xml:lang="x-default">{{ prd.display_name|ztrim }}</display-name>
+        <display-name xml:lang="ja-JP">{{ prd.display_name|ztrim }}</display-name>
+        <short-description xml:lang="x-default">{{ prd.description }}</short-description>
+        <short-description xml:lang="ja-JP">{{ prd.description }}</short-description>
+        <long-description xml:lang="x-default">{{ prd.description }}</long-description>
+        <long-description xml:lang="ja-JP">{{ prd.description }}</long-description>
+        <online-flag>true</online-flag>
+        <online-from>{{ now }}</online-from>
+        <available-flag>false</available-flag>
+        <searchable-flag>true</searchable-flag>
+
+        {% if prd.get_images %}
+        <images>{% with prd.get_images|filterImageGroups as groupImage %}{% for group, imgs in groupImage.items %}
+            {% if group == 'large' %}
+            <image-group view-type="{{ group }}">
+                {% for img in imgs %}<image path="images/{{ group }}/{{ img.product_image }}"/>
+                {% endfor %}
+            </image-group>
+            {% endif %}{% endfor %}{% endwith %}
+        </images>
+        {% endif %}
+
+        <custom-attributes>
+            <custom-attribute xml:lang="x-default" attribute-id="season_code">{{ prd.season_code|ztrim }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="season_code">{{ prd.season_code|ztrim }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="season_display_name">{{ prd.season_display_name|ztrim }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="season_display_name">{{ prd.season_display_name|ztrim }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="brand_code">{{ prd.brand_code|ztrim }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="brand_code">{{ prd.brand_code|ztrim }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="brand_display_name">{{ prd.brand_display_name }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="brand_display_name">{{ prd.brand_display_name }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="display_name">{{ prd.display_name|ztrim }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="display_name">{{ prd.display_name|ztrim }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="description">{{ prd.description }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="description">{{ prd.description }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="functions">{{ prd.functions }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="functions">{{ prd.functions }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="product_all_size_info">{{ prd.product_all_size_info }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="product_all_size_info">{{ prd.product_all_size_info }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="country">{{ prd.country }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="country">{{ prd.country }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="main_image">{{ prd.main_image }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="main_image">{{ prd.main_image }}</custom-attribute>
+
+            <custom-attribute xml:lang="x-default" attribute-id="details">{{ prd.details }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="details">{{ prd.details }}</custom-attribute>
+            
+            {% if prd.product_is_new == 'N' %}
+            <custom-attribute xml:lang="x-default" attribute-id="product_is_new">false</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="product_is_new">false</custom-attribute>
+            {% else %}
+            <custom-attribute xml:lang="x-default" attribute-id="product_is_new">true</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="product_is_new">true</custom-attribute>
+            {% endif %}
+
+            <custom-attribute xml:lang="x-default" attribute-id="product_store_category">{{ prd.product_store_category }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="product_store_category">{{ prd.product_store_category }}</custom-attribute>
+
+
+            {% with prd.get_images|filterImageDetailCut1 as ImageDetailCut1 %}
+            {% for key, value in ImageDetailCut1.items %}
+            <custom-attribute xml:lang="x-default" attribute-id="product_commentary_{{ key }}_description">{{ value }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="product_commentary_{{ key }}_description">{{ value }}</custom-attribute>
+            {% endfor %}
+            {% endwith %}
+            {% with prd.get_images|filterImageDetailCut2 as ImageDetailCut2 %}
+            {% for key, value in ImageDetailCut2.items %}
+            <custom-attribute xml:lang="x-default" attribute-id="detailCut2Image{{ key }}Description">{{ value }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="detailCut2Image{{ key }}Description">{{ value }}</custom-attribute>
+            {% endfor %}
+            {% endwith %}
+            {% autoescape off %}
+            <custom-attribute xml:lang="x-default" attribute-id="product_all_color">{{ prd.product_all_color }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="product_all_color">{{ prd.product_all_color }}</custom-attribute>
+            {% if prd.get_images %}
+            <custom-attribute xml:lang="x-default" attribute-id="images_descriptions">{{ prd.get_images|imageStringifyJSON }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="images_descriptions">{{ prd.get_images|imageStringifyJSON }}</custom-attribute>
+            {% endif %}
+            {% endautoescape %}
+            <custom-attribute xml:lang="x-default" attribute-id="product_orderby">{{ prd.No }}</custom-attribute>
+        </custom-attributes>
+
+        {% if prd.get_variants %}
+        <variations>
+            {% if prd.get_variant_colors or prd.get_variant_sizes %}
+            <attributes>
+                {% if prd.get_variant_colors %}
+                <variation-attribute attribute-id="color_code" variation-attribute-id="color_code">
+                    <display-name xml:lang="x-default">Color</display-name>
+                    <display-name xml:lang="ja-JP">Color</display-name>
+                    <variation-attribute-values>
+                        {% for row in prd.get_variant_colors %}
+                        <variation-attribute-value value="{{ row.color_code|ztrim }}">
+                            <display-value xml:lang="x-default">{{ row.color_display_name|ztrim }}</display-value>
+                            <display-value xml:lang="ja-JP">{{ row.color_display_name|ztrim }}</display-value>
+                        </variation-attribute-value>
+                        {% endfor %}
+                    </variation-attribute-values>
+                </variation-attribute>
+                {% endif %}
+                {% if prd.get_variant_sizes %}
+                <variation-attribute attribute-id="size_code" variation-attribute-id="size_code">
+                    <display-name xml:lang="x-default">Size</display-name>
+                    <display-name xml:lang="ja-JP">Size</display-name>
+                    <variation-attribute-values>
+                        {% for row in prd.get_variant_sizes %}
+                        <variation-attribute-value value="{{ row.size_code|ztrim }}">
+                            <display-value xml:lang="x-default">{{ row.size_display_name|ztrim }}</display-value>
+                            <display-value xml:lang="ja-JP">{{ row.size_display_name|ztrim }}</display-value>
+                        </variation-attribute-value>
+                        {% endfor %}
+                    </variation-attribute-values>
+                </variation-attribute>
+                {% endif %}
+            </attributes>
+            {% endif %}
+            <variants>
+                {% for variant in prd.get_variants %}
+                <variant product-id="{{ variant.variation_jan|ztrim }}"/>
+                {% endfor %}
+            </variants>
+        </variations>
+        {% endif %}
+        {% if prd.get_category %}
+        <classification-category>{{ prd.get_category }}</classification-category>
+        {% endif %}
+    </product>
+    {{ prd.product_id|zlogger }}
+    {{ "Done!"|zlogger }}
+{% endfor %}
+{{ "Done! Write productMaster"|zlogger }}
+{{ "Start! Write productVariants"|zlogger }}
+{% for prd in productVariants %}
+    {{ prd.variation_jan|zlogger }}
+    <product product-id="{{ prd.variation_jan|ztrim }}">
+        <ean/>
+        <upc>{{ prd.variation_jan|ztrim }}</upc>
+        <unit/>
+        <min-order-quantity>1</min-order-quantity>
+        <step-quantity>1</step-quantity>
+        <online-flag>true</online-flag>
+        <online-from>{{ now }}</online-from>
+        <available-flag>true</available-flag>
+        <searchable-flag>true</searchable-flag>
+        <page-attributes/>
+        <custom-attributes>
+            <custom-attribute attribute-id="variation_jan">{{ prd.variation_jan|ztrim }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="country">{{ prd.country|ztrim }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="country">{{ prd.country|ztrim }}</custom-attribute>
+            <custom-attribute attribute-id="size_code">{{ prd.size_code|ztrim }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="size_display_name">{{ prd.size_display_name|ztrim }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="size_display_name">{{ prd.size_display_name|ztrim }}</custom-attribute>
+            <custom-attribute attribute-id="color_code">{{ prd.color_code|ztrim }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="color_display_name">{{ prd.color_display_name|ztrim }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="color_display_name">{{ prd.color_display_name|ztrim }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="price_amount">{{ prd.price_amount }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="price_amount">{{ prd.price_amount }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="currency">{{ prd.currency }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="currency">{{ prd.currency }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="stock_quantity">{{ prd.stock_quantity }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="stock_quantity">{{ prd.stock_quantity }}</custom-attribute>
+        </custom-attributes>
+    </product>
+    {{ prd.variation_jan|zlogger }}
+    {{ "Done!"|zlogger }}
+{% endfor %}
+{{ "Done! Write productVariants"|zlogger }}
+
