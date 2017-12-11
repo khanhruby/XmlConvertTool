@@ -1,0 +1,4 @@
+{% load app_filters %}
+{% for prd in relatedProducts %}
+<recommendation source-id="{{ prd.product_id|ztrim }}" source-type="product" target-id="{{ prd.related_product_id|ztrim }}" type="1"/>
+{% endfor %}

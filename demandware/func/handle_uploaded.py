@@ -2,6 +2,7 @@ import json
 from django.conf import settings
 from openpyxl import load_workbook
 from openpyxl.utils import cell as pycell
+from django.apps import apps
 from demandware.models import ProductMaster, ProductMeta, RelatedProduct, Category, CategoryMeta, Variant, ProductImage, HeaderMgr
 # Imports the Google Cloud client library
 from google.cloud import translate
@@ -13,17 +14,20 @@ translate_client = translate.Client()
 # Get an instance of a logger
 logger = logging.getLogger('django')
 
-def handle_uploaded_file(form=None, f=None, model_name=None, model=None):
-	wb = load_workbook(f, data_only=True)
+def handle_uploaded_file(form=None, f=None, model_name=None):
+	wb = load_workbook(f)
 	print(wb.sheetnames)
 	# ws = wb.active
 	# ws=wb.get_sheet_by_name("data")
 	sheet_name = form.cleaned_data.get('sheet_name')
+	data_type = form.cleaned_data.get('data_type')
 	min_row = form.cleaned_data.get('from_row')
 	max_row = form.cleaned_data.get('to_row')
 	min_col = form.cleaned_data.get('from_col')
 	max_col = form.cleaned_data.get('to_col')
 	header_row = form.cleaned_data.get('header_row')
+	
+	model = apps.get_model(app_label='demandware', model_name=data_type)
 	if sheet_name == None or sheet_name == '':
 		sheet_name = 'data'
 	ws = wb[sheet_name]
@@ -58,7 +62,7 @@ def handle_uploaded_file(form=None, f=None, model_name=None, model=None):
 		insertDataSet.append(values)
 		extInsertDataSet.append(extValues)
 
-	message = detect_service(model_name=model_name, data=insertDataSet, extData=extInsertDataSet, header=header)
+	message = detect_service(model_name=data_type, data=insertDataSet, extData=extInsertDataSet, header=header)
 	result = dict(
 		message=message,
 		count=_count
@@ -110,7 +114,7 @@ def product_master_process(data=None, header=None, extData=None):
 	### 前処理
 	# product_commentaryを処理する | product_all_colorを処理する
 	for idx, items in zip(range(len(extData)), extData):
-		if data[idx]['product_id'] == None or data[idx]['product_id'].strip() == '':
+		if data[idx]['product_id'] == None or str(data[idx]['product_id']).strip() == '':
 			continue
 		print('ProductID: ', data[idx]['product_id'])
 		commentary = {}
@@ -199,8 +203,9 @@ def category_process(data=None, header=None, extData=None):
 
 		datalv1 = dict(
 			category_id=item['category_level_1_id'],
-			language=data[index]['language'],
+			# language=data[index]['language'],
 			category_name=item['category_level_1_name'],
+			category_name_jp=item['category_level_1_name_JP'],
 			category_level=1,
 			category_parent=None,
 			category_custom_url=item['category_level_1_id'],
@@ -214,8 +219,9 @@ def category_process(data=None, header=None, extData=None):
 
 		datalv2 = dict(
 			category_id="%s-%s" % (result1['obj'].category_id, item['category_level_2_id']),
-			language=data[index]['language'],
+			# language=data[index]['language'],
 			category_name=item['category_level_2_name'],
+			category_name_jp=item['category_level_2_name_JP'],
 			category_level=2,
 			category_parent=result1['obj'],
 			category_custom_url=item['category_level_2_id'],
@@ -229,8 +235,9 @@ def category_process(data=None, header=None, extData=None):
 
 		datalv3 = dict(
 			category_id="%s-%s" % (result2['obj'].category_id, item['category_level_3_id']),
-			language=data[index]['language'],
+			# language=data[index]['language'],
 			category_name=item['category_level_3_name'],
+			category_name_jp=item['category_level_3_name'],
 			category_level=3,
 			category_parent=result2['obj'],
 			category_custom_url=item['category_level_3_id'],

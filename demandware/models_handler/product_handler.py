@@ -96,6 +96,7 @@ def insert_product_master_extra_language(lang, data=None):
 def insert_related_product(data=None):
 	from demandware.models import RelatedProduct
 	try:
+		errorList = []
 		for item in data:
 			print("[INSERT] ", item['product_id'], item['related_product_id'])
 			listRelation = item['related_product_id'].split(",")
@@ -116,15 +117,19 @@ def insert_related_product(data=None):
 						obj = RelatedProduct(**values)
 						obj.save()
 				except ProductMaster.DoesNotExist:
+					errorList.append("[SKIP] ProductMaster DoesNotExist: " + item['product_id'])
 					print("[SKIP] ProductMaster DoesNotExist!", item['related_product_id'])
 					continue
-		return None
+		return dict(
+			message=errorList
+		)
 	except Exception as e:
 		print(str(e))
 		return str(e)
 
 def insert_variant(data=None):
 	try:
+		errorList = []
 		for item in data:
 			try:
 				print("[INSERT] ", item['product_id'], item['variation_jan'])
@@ -137,9 +142,12 @@ def insert_variant(data=None):
 					obj = Variant(**item)
 					obj.save()
 			except ProductMaster.DoesNotExist:
-				print("[SKIP] ProductMaster DoesNotExist!", item['product_id'])
+				errorList.append("[SKIP] ProductMaster DoesNotExist: " + item['product_id'] + "/" + item['variation_jan'])
+				print("[SKIP] ProductMaster DoesNotExist!", item['product_id'], item['variation_jan'])
 				continue
-		return None
+		return dict(
+			message=errorList
+		)
 	except Exception as e:
 		print(str(e))
 		return str(e)
@@ -147,13 +155,17 @@ def insert_variant(data=None):
 def insert_product_image(data=None):
 	from demandware.models import ProductImage
 	try:
+		errorList = []
 		instances = []
 		for item in data:
 			try:
 				productID = ProductMaster.objects.get(product_id=item['product_id'])
 				# instances.append(ProductImage(**item))
 				obj = ProductImage.objects.get(product_id=productID, color_code=item['color_code'], product_image=item['product_image'], image_size=item['image_size'])
+				print("[DUP] ", item['product_id'], item['product_image'])
+				errorList.append("[DUP] Image: " + item['product_id'] + '/' + item['product_image'])
 			except ProductMaster.DoesNotExist:
+				errorList.append("[SKIP] ProductMaster DoesNotExist: " + item['product_id'])
 				print("[SKIP] ProductMaster DoesNotExist!", item['product_id'])
 				continue
 			except ProductImage.DoesNotExist:
@@ -162,14 +174,16 @@ def insert_product_image(data=None):
 				obj = ProductImage(**item)
 				obj.save()
 		# ProductImage.objects.bulk_create(instances, batch_size=None)
-		return None
+		return dict(
+			message=errorList
+		)
 	except Exception as e:
 		print(str(e))
 		return str(e)
 
 def get_product_master():
 	products = ProductMaster.objects.all()
-	# products = ProductMaster.objects.filter(product_id='D8-9703')
+	# products = ProductMaster.objects.filter(product_id='QMCLJA13')
 	return products
 
 def get_product_variants():

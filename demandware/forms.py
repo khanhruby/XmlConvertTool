@@ -2,13 +2,20 @@ from django import forms
 
 class UploadFileForm(forms.Form):
 	CHOICES = (
-		('product_master', '1. Product Master',),
-		('variant', '2. Variations',),
-		('image', '3. Image',),
+		('productmaster', '1. Product Master',),
 		('category', '4. Category',),
-		('link', '5. Linking Categories-Products',),
-		('related', '6. Related Products',),
+		('variant', '2. Variations',),
+		('productimage', '3. Image',),
+		('productcategory', '5. Linking Categories-Products',),
+		('relatedproduct', '6. Related Products',),
 	)
+
+	BRAND = (
+		(2, 'JU'),
+		(1, 'EU'),
+		(0, 'JP'),
+	)
+	brand_type = forms.ChoiceField(widget=forms.Select, choices=BRAND, label='Choise Brand')
 	w_character = forms.TextInput(attrs={'class':'form-control' , 'autocomplete': 'off','pattern':'[A-Za-z ]+', 'title':'Enter Characters Only '})
 	data_type = forms.ChoiceField(widget=forms.Select, choices=CHOICES, label='Choise Data Type')
 	myfile = forms.FileField(label='Attach Excel File')
@@ -30,8 +37,9 @@ class ExportForm(forms.Form):
 		(6, 'Recommend Export',), 
 	)
 	BRAND = (
-		(2, 'EU'),
-		(1, 'JP'),
+		(2, 'JU'),
+		(1, 'EU'),
+		(0, 'JP'),
 	)
 	brand_type = forms.ChoiceField(widget=forms.Select, choices=BRAND, label='Choise Brand')
 	# lang_list = forms.CharField(label='List language', initial='es,ru,fr,it')

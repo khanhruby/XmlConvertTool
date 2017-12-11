@@ -82,6 +82,7 @@ def insert_bulk(data=None):
 def insert_product_category(data=None):
 	from demandware.models import ProductMaster
 	try:
+		errorList = []
 		for item in data:
 			try:
 				print("[INSERT]", item['product_id'], item['category_id'])
@@ -91,12 +92,16 @@ def insert_product_category(data=None):
 				)
 				ProductCategory.objects.update_or_create(**values)
 			except ProductMaster.DoesNotExist:
+				errorList.append("[SKIP] ProductMaster DoesNotExist: " + item['product_id'] + "/" + item['category_id'])
 				print("[SKIP] ProductMaster DoesNotExist!", item['product_id'], item['category_id'])
 				continue
 			except Category.DoesNotExist:
+				errorList.append("[SKIP] Category DoesNotExist: " + item['product_id'] + "/" + item['category_id'])
 				print("[SKIP] Category DoesNotExist!", item['product_id'], item['category_id'])
 				continue
-		return None
+		return dict(
+			message=errorList
+		)
 	except Exception as e:
 		print(str(e))
 		logger.info(str(e))

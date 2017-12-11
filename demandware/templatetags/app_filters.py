@@ -1,6 +1,9 @@
 from django import template
+import sys
 import datetime
 import cgi
+import re
+from collections import OrderedDict
 from django.conf import settings
 
 register = template.Library()
@@ -34,6 +37,42 @@ def filterImageGroups(imageGroup):
 		result[ig.image_size].append(ig)
 	return result
 
+@register.filter(name='filterImageDetailCut1')
+def filterImageDetailCut1(imageGroup):
+	detailcut1 = []
+	result = OrderedDict()
+	for ig in imageGroup:
+		if ig.image_size == 'detailcut1':
+			detailcut1.append(ig.product_image)
+	
+	for item in detailcut1:
+		_re_commentary = re.compile("(.*)_(.*)_detailcut1_(0[1-9]|1[0]).(.*)")
+		_search_commentary = _re_commentary.search(item)
+		if _search_commentary != None:
+			result[_search_commentary.group(3)] = _search_commentary.group(0)
+	for idx in range(1,11):
+		if str(idx).zfill(2) not in result:
+			result[str(idx).zfill(2)] = ''
+	return result
+
+@register.filter(name='filterImageDetailCut2')
+def filterImageDetailCut2(imageGroup):
+	detailcut2 = []
+	result = OrderedDict()
+	for ig in imageGroup:
+		if ig.image_size == 'detailcut2':
+			detailcut2.append(ig.product_image)
+	
+	for item in detailcut2:
+		_re_commentary = re.compile("(.*)_(.*)_detailcut2_(0[1-9]|1[0]).(.*)")
+		_search_commentary = _re_commentary.search(item)
+		if _search_commentary != None:
+			result[int(_search_commentary.group(3))] = _search_commentary.group(0)
+	for idx in range(1,4):
+		if idx not in result:
+			result[idx] = ''
+	return result
+
 @register.filter(name='parseJSON')
 def parseJSON(str):
 	import json
@@ -59,6 +98,10 @@ def imageStringifyJSON(imageGroup):
 def zlogger(xstr):
 	print(str(xstr) + ' ' + datetime.datetime.utcnow().isoformat() + "Z")
 	return ''
+
+@register.filter(name='ztrim')
+def ztrim(xstr):
+	return str(xstr).strip()
 
 @register.tag(name='set')
 def set_var(parser, token):
