@@ -133,7 +133,6 @@ def export_view(request):
 					response = TemplateResponse(request, BRAND_PATH[int(brand_type)] + "xmltemplate/catalog/main.xml", result, content_type='text/xml')
 					response['Content-Disposition'] = 'attachment; filename=%s_%s.xml' % (BRAND_PATH[int(brand_type)]+'catalog', str(_time))
 				if int(data_type) == 2:
-				if int(data_type) == 2:
 					response =  TemplateResponse(request, BRAND_PATH[int(brand_type)] + "xmltemplate/pricebook/main.xml", result, content_type='text/xml')
 					response['Content-Disposition'] = 'attachment; filename=%s_%s.xml' % (BRAND_PATH[int(brand_type)]+'pricebook', str(_time))
 				if int(data_type) == 3:
