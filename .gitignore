@@ -16,3 +16,4 @@ media/**
 !**/migrations/__init__.py
 ENV/**
 demandware-eu/**
+demandware/migrations/**
