@@ -53,11 +53,15 @@
             {% printProductAttr 'custom-attribute' prd_extra 'product_commentary_image_title' 'attribute-id="product_commentary_image_title"' %}
             {% printProductAttr 'custom-attribute' prd_extra 'main_image' 'attribute-id="main_image"' %}
             {% printProductAttr 'custom-attribute' prd_extra 'country' 'attribute-id="country"' %}
+<<<<<<< HEAD
+            {% printJSonAttr 'custom-attribute' prd_extra 'product_commentary' %}
+=======
             {% for row in prd.product_commentary|parseJSON %}{% for key, value in row.items %}
                 {% with 'attribute-id="'|add:key|add:'"' as attribute_id %}
                 {% printProductAttr 'custom-attribute' value attribute_id %}
                 {% endwith %}
             {% endfor %}{% endfor %}
+>>>>>>> dc59d80ac1f2f86a7733ff5b6407a1e8a225ee48
             {% printProductAttr 'custom-attribute' prd_extra 'product_all_color' 'attribute-id="product_all_color"' %}
             {% if prd.get_images %}
                 {% with prd.get_images|imageStringifyJSON as all_image_info %}

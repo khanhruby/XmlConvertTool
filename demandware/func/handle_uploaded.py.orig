@@ -126,11 +126,14 @@ def product_master_process(data=None, header=None, extData=None):
 	# product_commentaryを処理する | product_all_colorを処理する
 	
 	for idx, items in zip(range(len(extData)), extData):
+<<<<<<< HEAD
 		if data[idx]['product_id'] == None or str(data[idx]['product_id']).strip() == '':
 			continue
+=======
 		if data[idx]['product_id'] == None or data[idx]['product_id'].strip() == '':
 			continue
 		print('ProductID: ', data[idx]['product_id'])
+>>>>>>> dc59d80ac1f2f86a7733ff5b6407a1e8a225ee48
 		commentary = {}
 		all_color = {}
 		_items = list(items.items())
@@ -277,9 +280,12 @@ def category_process(data=None, header=None, extData=None):
 		result3 = insert_category(data=datalv3)
 		result['count'] = result['count'] + 1;
 		if result3['error']:
+<<<<<<< HEAD
 			result['message'].append(result3['error'])
 			return result
-		index=index+1
+=======
+			return result3['error']
+>>>>>>> dc59d80ac1f2f86a7733ff5b6407a1e8a225ee48
 		index=index+1
 
 	print('Done!')

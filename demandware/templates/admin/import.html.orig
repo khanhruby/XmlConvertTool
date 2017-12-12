@@ -50,6 +50,7 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script type="text/javascript">
 
+<<<<<<< HEAD
 var model_name = "{{opts.object_name}}";
 var sb_data_type = document.getElementById('id_data_type');
 sb_data_type.value = model_name.toLowerCase();
@@ -95,17 +96,7 @@ $("select[name=data_type]").on('change', function(){
 
 $("select[name=brand_type]").on('change', function(){
     updateField();
-});
-
-</script>
-
-{% endblock %}
-
-{% block footer %}
-{{ block.super }}
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-<script type="text/javascript">
-
+=======
 var data = {
     'product_master' : { 'header_row':3, 'from_row':4, 'from_col':'A', 'to_col':'BV', 'to_row':0, },
     'variant' : { 'header_row':3, 'from_row':4, 'from_col':'B', 'to_col':'K', 'to_row':0, },
@@ -128,6 +119,7 @@ updateField($('select[name=data_type] option:selected').val());
 $("select[name=data_type]").on('change', function(){
     var data_type = $(this).val();
     updateField(data_type);
+>>>>>>> dc59d80ac1f2f86a7733ff5b6407a1e8a225ee48
 });
 
 </script>

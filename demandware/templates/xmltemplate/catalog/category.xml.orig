@@ -1,4 +1,3 @@
-{% load app_filters %}
 <category category-id="root">
     <online-flag>true</online-flag>
     <template/>
@@ -6,10 +5,8 @@
 </category>
 {% for category in dataset %}
 <category category-id="{{ category.category_id|default:now }}">
-    {% set cat_extra = category.get_data_by_lang %}
-    {% autoescape off %}
-    {% printProductAttr 'display-name' cat_extra 'category_name' %}
-    {% endautoescape %}
+    <display-name xml:lang="x-default">{{ category.category_name|default:now }}</display-name>
+    <display-name xml:lang="en_GB">{{ category.category_name|default:now }}</display-name>
     <online-flag>true</online-flag>
     {% comment %} 
     <online-from>{{ category.from|default:now }}</online-from>
@@ -25,6 +22,11 @@
     <page-attributes/>
     <custom-attributes>
         <custom-attribute attribute-id="category_custom_url" xml:lang="x-default">{{ category.category_custom_url }}</custom-attribute>
+        <custom-attribute attribute-id="category_custom_url" xml:lang="en_GB">{{ category.category_custom_url }}</custom-attribute>
+<<<<<<< HEAD
+        <custom-attribute attribute-id="displayNameJP" xml:lang="x-default">{{ category.category_name_jp }}</custom-attribute>
+=======
+>>>>>>> dc59d80ac1f2f86a7733ff5b6407a1e8a225ee48
     </custom-attributes>
 </category>
 {% endfor %}

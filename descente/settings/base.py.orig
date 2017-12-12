@@ -36,12 +36,15 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
+<<<<<<< HEAD:descente/settings/base.py
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '1.2.3.4', 'demandware-tool.com', 'jp.app', 'eu.app', 'ju.app', 'ju.local', '172.16.20.4', '172.16.20.50', 'eu-local']
 CSRF_COOKIE_NAME = 'localhost_csrf_eu'
 CSRF_COOKIE_DOMAIN = None
+=======
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '1.2.3.4', 'demandware-tool.com', 'jp.app', 'eu.app', '172.16.20.4', '172.16.20.50', 'eu-local']
 CSRF_COOKIE_NAME = 'localhost_csrf_eu'
 CSRF_COOKIE_DOMAIN = 'eu.app'
+>>>>>>> dc59d80ac1f2f86a7733ff5b6407a1e8a225ee48:descente/settings/base.py
 
 
 # Application definition
