@@ -1,14 +1,14 @@
 from .base import *
 
-SECRET_KEY = 'eu447rvbg@obims+vb7bx-4xd_pmgmu0ck35!tare5!ufqprtnukdescente'
+SECRET_KEY = 'inov8447rvbg@obims+vb7bx-4xd_pmgmu0ck35!tare5!ufqprtnukdescente'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-CSRF_COOKIE_NAME = 'localhost_csrf_eu'
-CSRF_COOKIE_DOMAIN = 'eu.app'
+CSRF_COOKIE_NAME = 'localhost_csrf_inov8'
+CSRF_COOKIE_DOMAIN = 'inov8.app'
 
 # Database
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
@@ -16,7 +16,7 @@ CSRF_COOKIE_DOMAIN = 'eu.app'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dsnt_eu',
+        'NAME': 'dsnt_inov8',
         'USER': 'django',
         'PASSWORD': 'secret',
         'HOST': 'localhost',
@@ -31,13 +31,11 @@ DATABASES = {
 }
 
 
-MULTIPLE_LANGUAGE = True
+MULTIPLE_LANGUAGE = False
 LANGEUAGE_MAPPING = {
     'en':'en-GB',
     'fr':'fr-FR',
     'it':'it-IT',
     'ru':'ru-RU',
     'es':'es-ES',
-    'pl':'pl-PL',
-	'de':'de-DE',
 }

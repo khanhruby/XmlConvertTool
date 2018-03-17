@@ -55,10 +55,10 @@ var sb_data_type = document.getElementById('id_data_type');
 sb_data_type.value = model_name.toLowerCase();
 
 var data = [{
-    'productmaster' : { 'header_row':3, 'from_row':4, 'from_col':'A', 'to_col':'BV', 'to_row':0, },
+    'productmaster' : { 'header_row':3, 'from_row':5, 'from_col':'A', 'to_col':'BV', 'to_row':0, },
     'variant' : { 'header_row':3, 'from_row':4, 'from_col':'B', 'to_col':'K', 'to_row':0, },
     'productimage' : { 'header_row':4, 'from_row':5, 'from_col':'B', 'to_col':'F', 'to_row':0, },
-    'category':{ 'header_row':4, 'from_row':5, 'from_col':'B', 'to_col':'I', 'to_row':0, },
+    'category':{ 'header_row':4, 'from_row':5, 'from_col':'B', 'to_col':'G', 'to_row':0, },
     'productcategory':{ 'header_row':1, 'from_row':2, 'from_col':'B', 'to_col':'C', 'to_row':0, },
     'relatedproduct':{ 'header_row':3, 'from_row':5, 'from_col':'B', 'to_col':'C', 'to_row':0, },
 },{
@@ -92,44 +92,6 @@ updateField();
 $("select[name=data_type]").on('change', function(){
     updateField();
 });
-
-$("select[name=brand_type]").on('change', function(){
-    updateField();
-});
-
-</script>
-
-{% endblock %}
-
-{% block footer %}
-{{ block.super }}
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-<script type="text/javascript">
-
-var data = {
-    'product_master' : { 'header_row':3, 'from_row':4, 'from_col':'A', 'to_col':'BV', 'to_row':0, },
-    'variant' : { 'header_row':3, 'from_row':4, 'from_col':'B', 'to_col':'K', 'to_row':0, },
-    'image' : { 'header_row':4, 'from_row':5, 'from_col':'B', 'to_col':'F', 'to_row':0, },
-    'category':{ 'header_row':4, 'from_row':5, 'from_col':'B', 'to_col':'H', 'to_row':0, },
-    'link':{ 'header_row':1, 'from_row':2, 'from_col':'B', 'to_col':'C', 'to_row':0, },
-    'related':{ 'header_row':3, 'from_row':5, 'from_col':'B', 'to_col':'C', 'to_row':0, },
-}
-
-updateField = function(data_type){
-    $("input[name=header_row]").val(data[data_type]['header_row']);
-    $("input[name=from_row]").val(data[data_type]['from_row']);
-    $("input[name=from_col]").val(data[data_type]['from_col']);
-    $("input[name=to_col]").val(data[data_type]['to_col']);
-    $("input[name=to_row]").val(data[data_type]['to_row']);
-}
-
-updateField($('select[name=data_type] option:selected').val());
-
-$("select[name=data_type]").on('change', function(){
-    var data_type = $(this).val();
-    updateField(data_type);
-});
-
 </script>
 
 {% endblock %}

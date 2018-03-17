@@ -37,19 +37,9 @@ CSRF_COOKIE_DOMAIN = 'jp.app'
 WSGI_APPLICATION = 'descente.wsgi.application'
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'dsnt_tool',
-    #     'USER': 'django',
-    #     'PASSWORD': 'secret',
-    #     'HOST': 'localhost',
-    #     'PORT': '3306',
-    #     'CHARSET': 'utf8',
-    #     'COLLATION': 'utf8_general_ci',
-    # },
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dsnt_eu',
+        'NAME': 'dsnt_tool',
         'USER': 'django',
         'PASSWORD': 'secret',
         'HOST': 'localhost',
@@ -57,6 +47,16 @@ DATABASES = {
         'CHARSET': 'utf8',
         'COLLATION': 'utf8_general_ci',
     },
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'dsnt_eu',
+    #     'USER': 'django',
+    #     'PASSWORD': 'secret',
+    #     'HOST': 'localhost',
+    #     'PORT': '3306',
+    #     'CHARSET': 'utf8',
+    #     'COLLATION': 'utf8_general_ci',
+    # },
     'sqlite3': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),

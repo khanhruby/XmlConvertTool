@@ -11,22 +11,15 @@ class UploadFileForm(forms.Form):
 	)
 
 	BRAND = (
+		(4, 'skins'),
+		(3, 'inov8'),
 		(2, '全社テンプレート'),
 		(1, 'EU'),
 		(0, 'JP'),
 	)
 	brand_type = forms.ChoiceField(widget=forms.Select, choices=BRAND, label='Choise Brand')
-	CHOICES = (
-		('product_master', '1. Product Master',),
-		('variant', '2. Variations',),
-		('image', '3. Image',),
-		('category', '4. Category',),
-		('link', '5. Linking Categories-Products',),
-		('related', '6. Related Products',),
-	)
 	w_character = forms.TextInput(attrs={'class':'form-control' , 'autocomplete': 'off','pattern':'[A-Za-z ]+', 'title':'Enter Characters Only '})
 	truncate = forms.BooleanField(label='Clear Current Data?', required=False, initial=1)
-	data_type = forms.ChoiceField(widget=forms.Select, choices=CHOICES, label='Choise Data Type')
 	data_type = forms.ChoiceField(widget=forms.Select, choices=CHOICES, label='Choise Data Type')
 	myfile = forms.FileField(label='Attach Excel File')
 	sheet_name = forms.CharField(label='Sheet Name', initial='data')
@@ -47,15 +40,12 @@ class ExportForm(forms.Form):
 		(6, 'Recommend Export',), 
 	)
 	BRAND = (
+		(4, 'skins'),
+		(3, 'inov8'),
 		(2, '全社テンプレート'),
 		(1, 'EU'),
 		(0, 'JP'),
 	)
 	brand_type = forms.ChoiceField(widget=forms.Select, choices=BRAND, label='Choise Brand')
 	# lang_list = forms.CharField(label='List language', initial='es,ru,fr,it')
-	BRAND = (
-		(1, 'JP'),
-		(2, 'EU'),
-	)
-	brand_type = forms.ChoiceField(widget=forms.Select, choices=BRAND, label='Choise Brand')
 	data_type = forms.ChoiceField(widget=forms.Select, choices=CHOICES, label='Choise Data Type')

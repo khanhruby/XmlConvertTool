@@ -40,10 +40,6 @@ def insert_bulk_product_master(data=None):
 			result['count'] = result['count'] + 1;
 		print('Done!')
 		return result
-			#Insert data extra
-			if settings.MULTIPLE_LANGUAGE:
-				insert_product_master_extra(obj, item)
-		return None
 	except Exception as e:
 		print("Error: " + str(e))
 		result['message'].append(str(e))
@@ -116,50 +112,34 @@ def insert_related_product(data=None):
 		for item in data:
 			print("[INSERT] ", item['product_id'], item['related_product_id'])
 			listRelation = item['related_product_id'].split(",")
-			for productIDRelation in listRelation:
-				try:
-					if item['product_id']==productIDRelation.strip():
-						print("[SKIP] Source and target are the same!", item['product_id'], productIDRelation.strip())
-						continue
-					productID = ProductMaster.objects.get(product_id=item['product_id'])
-					relatedProductID = ProductMaster.objects.get(product_id=productIDRelation.strip())
-					values = dict(
-						product_id=productID,
-						related_product_id=relatedProductID,
-					)
+			try:
+				productID = ProductMaster.objects.get(product_id=item['product_id'])
+				for productIDRelation in listRelation:
 					try:
-						obj = RelatedProduct.objects.get(product_id=values['product_id'], related_product_id=values['related_product_id'])
-					except RelatedProduct.DoesNotExist:
-						obj = RelatedProduct(**values)
-						obj.save()
-					result['count'] = result['count'] + 1;
-				except ProductMaster.DoesNotExist:
-					result['message'].append("[SKIP] ProductMaster DoesNotExist: " + item['product_id'])
-					print("[SKIP] ProductMaster DoesNotExist!", item['related_product_id'])
-					continue
+						if item['product_id']==productIDRelation.strip():
+							print("[SKIP] Source and target are the same!", item['product_id'], productIDRelation.strip())
+							continue
+						relatedProductID = ProductMaster.objects.get(product_id=productIDRelation.strip())
+						values = dict(
+							product_id=productID,
+							related_product_id=relatedProductID,
+						)
+						try:
+							obj = RelatedProduct.objects.get(product_id=values['product_id'], related_product_id=values['related_product_id'])
+						except RelatedProduct.DoesNotExist:
+							obj = RelatedProduct(**values)
+							obj.save()
+						result['count'] = result['count'] + 1;
+					except ProductMaster.DoesNotExist:
+						result['message'].append("[SKIP] ProductMaster DoesNotExist: " + productIDRelation.strip())
+						print("[SKIP] ProductMaster DoesNotExist!", productIDRelation.strip())
+						continue
+			except ProductMaster.DoesNotExist:
+				result['message'].append("[SKIP] ProductMaster DoesNotExist: " + item['product_id'])
+				print("[SKIP] ProductMaster DoesNotExist!", item['product_id'])
+				continue
 		print('Done!')
 		return result
-			print("[INSERT] ", item['product_id'], item['related_product_id'])
-			listRelation = item['related_product_id'].split(",")
-			for productIDRelation in listRelation:
-				try:
-					if item['product_id']==productIDRelation.strip():
-						print("[SKIP] Source and target are the same!", item['product_id'], productIDRelation.strip())
-						continue
-					productID = ProductMaster.objects.get(product_id=item['product_id'])
-					relatedProductID = ProductMaster.objects.get(product_id=productIDRelation.strip())
-					values = dict(
-						product_id=productID,
-						related_product_id=relatedProductID,
-					)
-					try:
-						obj = RelatedProduct.objects.get(product_id=values['product_id'], related_product_id=values['related_product_id'])
-					except RelatedProduct.DoesNotExist:
-						obj = RelatedProduct(**values)
-						obj.save()
-				except ProductMaster.DoesNotExist:
-					print("[SKIP] ProductMaster DoesNotExist!", item['related_product_id'])
-					continue
 		return None
 	except Exception as e:
 		print(str(e))
@@ -227,20 +207,6 @@ def insert_product_image(data=None):
 		# ProductImage.objects.bulk_create(instances, batch_size=None)
 		print('Done!')
 		return result
-			try:
-				productID = ProductMaster.objects.get(product_id=item['product_id'])
-				# instances.append(ProductImage(**item))
-				obj = ProductImage.objects.get(product_id=productID, color_code=item['color_code'], product_image=item['product_image'], image_size=item['image_size'])
-			except ProductMaster.DoesNotExist:
-				print("[SKIP] ProductMaster DoesNotExist!", item['product_id'])
-				continue
-			except ProductImage.DoesNotExist:
-				print("[INSERT] Image: ", item['product_id'], item['product_image'])
-				item['product_id'] = ProductMaster.objects.get(product_id=item['product_id'])
-				obj = ProductImage(**item)
-				obj.save()
-		# ProductImage.objects.bulk_create(instances, batch_size=None)
-		return None
 	except Exception as e:
 		print(str(e))
 		# return str(e)
@@ -250,7 +216,7 @@ def insert_product_image(data=None):
 def get_product_master():
 	products = ProductMaster.objects.all()
 	# products = ProductMaster.objects.filter(product_id='QMCLJA13')
-	# products = ProductMaster.objects.filter(product_id='DBX-3602')
+	# products = ProductMaster.objects.filter(product_id='D8-8613')
 	return products
 
 def get_product_variants():

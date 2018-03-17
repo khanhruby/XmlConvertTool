@@ -1,14 +1,14 @@
 from .base import *
 
-SECRET_KEY = 'eu447rvbg@obims+vb7bx-4xd_pmgmu0ck35!tare5!ufqprtnukdescente'
+SECRET_KEY = 'skins447rvbg@obims+vb7bx-4xd_pmgmu0ck35!tare5!ufqprtnukdescente'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-CSRF_COOKIE_NAME = 'localhost_csrf_eu'
-CSRF_COOKIE_DOMAIN = 'eu.app'
+CSRF_COOKIE_NAME = 'localhost_csrf_skins'
+CSRF_COOKIE_DOMAIN = None
 
 # Database
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
@@ -16,7 +16,7 @@ CSRF_COOKIE_DOMAIN = 'eu.app'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dsnt_eu',
+        'NAME': 'dsnt_skins',
         'USER': 'django',
         'PASSWORD': 'secret',
         'HOST': 'localhost',
@@ -31,14 +31,11 @@ DATABASES = {
 }
 
 
-MULTIPLE_LANGUAGE = True
+MULTIPLE_LANGUAGE = False
 LANGEUAGE_MAPPING = {
     'en':'en-GB',
-<<<<<<< HEAD
     'fr':'fr-FR',
     'it':'it-IT',
     'ru':'ru-RU',
     'es':'es-ES',
-=======
->>>>>>> dc59d80ac1f2f86a7733ff5b6407a1e8a225ee48
 }

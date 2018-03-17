@@ -12,8 +12,8 @@
         <display-name xml:lang="ja-JP">{{ prd.display_name|ztrim }}</display-name>
         <short-description xml:lang="x-default">{{ prd.description }}</short-description>
         <short-description xml:lang="ja-JP">{{ prd.description }}</short-description>
-        <long-description xml:lang="x-default">{{ prd.details }}</long-description>
-        <long-description xml:lang="ja-JP">{{ prd.details }}</long-description>
+        <long-description xml:lang="x-default">{{ prd.description }}</long-description>
+        <long-description xml:lang="ja-JP">{{ prd.description }}</long-description>
         <online-flag>true</online-flag>
         <online-from>{{ now }}</online-from>
         <available-flag>false</available-flag>
@@ -23,49 +23,62 @@
         <images>{% with prd.get_images|filterImageGroups as groupImage %}{% for group, imgs in groupImage.items %}
             {% if group == 'large' %}
             <image-group view-type="{{ group }}">
-                {% for img in imgs %}<image path="images/{{ group }}/{{ img.product_image|ztrim }}"/>
+                {% for img in imgs %}<image path="images/{{ group }}/{{ img.product_image }}"/>
                 {% endfor %}
             </image-group>
-			{% if prd.get_variants and prd.get_variant_colors%}
-			{% for row in prd.get_variant_colors %}
-			<image-group view-type="{{ group }}">
-				<variation attribute-id="color_code" value="{{ row.color_display_name|ztrim }}"/>
-				{% for img in imgs %}
-				{%if row.color_display_name|ztrim in img.product_image %}
-				<image path="images/{{ group }}/{{ img.product_image|ztrim }}"/>
-				{% endif %}
-				{% endfor %}
-			</image-group>
-			{% endfor %}{% endif %}		
             {% endif %}{% endfor %}{% endwith %}
         </images>
         {% endif %}
-		
-		<custom-attributes>
-            <custom-attribute xml:lang="x-default" attribute-id="brand_code">{{ prd.brand_code }}</custom-attribute>
-            <custom-attribute xml:lang="ja-JP" attribute-id="brand_code">{{ prd.brand_code }}</custom-attribute>
+
+        <custom-attributes>
+            <custom-attribute xml:lang="x-default" attribute-id="season_code">{{ prd.season_code|ztrim }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="season_code">{{ prd.season_code|ztrim }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="season_display_name">{{ prd.season_display_name|ztrim }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="season_display_name">{{ prd.season_display_name|ztrim }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="brand_code">{{ prd.brand_code|ztrim }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="brand_code">{{ prd.brand_code|ztrim }}</custom-attribute>
             <custom-attribute xml:lang="x-default" attribute-id="brand_display_name">{{ prd.brand_display_name }}</custom-attribute>
             <custom-attribute xml:lang="ja-JP" attribute-id="brand_display_name">{{ prd.brand_display_name }}</custom-attribute>
-            <custom-attribute xml:lang="x-default" attribute-id="display_name">{{ prd.display_name }}</custom-attribute>
-            <custom-attribute xml:lang="ja-JP" attribute-id="display_name">{{ prd.display_name }}</custom-attribute>
+            <custom-attribute xml:lang="x-default" attribute-id="display_name">{{ prd.display_name|ztrim }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="display_name">{{ prd.display_name|ztrim }}</custom-attribute>
             <custom-attribute xml:lang="x-default" attribute-id="description">{{ prd.description }}</custom-attribute>
             <custom-attribute xml:lang="ja-JP" attribute-id="description">{{ prd.description }}</custom-attribute>
             <custom-attribute xml:lang="x-default" attribute-id="functions">{{ prd.functions }}</custom-attribute>
             <custom-attribute xml:lang="ja-JP" attribute-id="functions">{{ prd.functions }}</custom-attribute>
-            <custom-attribute xml:lang="x-default" attribute-id="online_shop_url">{{ prd.online_shop_url|urlencode }}</custom-attribute>
-            <custom-attribute xml:lang="ja-JP" attribute-id="online_shop_url">{{ prd.online_shop_url|urlencode }}</custom-attribute>
             <custom-attribute xml:lang="x-default" attribute-id="product_all_size_info">{{ prd.product_all_size_info }}</custom-attribute>
             <custom-attribute xml:lang="ja-JP" attribute-id="product_all_size_info">{{ prd.product_all_size_info }}</custom-attribute>
-            <custom-attribute xml:lang="x-default" attribute-id="product_commentary_image_title">{{ prd.product_commentary_image_title }}</custom-attribute>
-            <custom-attribute xml:lang="ja-JP" attribute-id="product_commentary_image_title">{{ prd.product_commentary_image_title }}</custom-attribute>
-            <custom-attribute xml:lang="x-default" attribute-id="main_image">{{ prd.main_image }}</custom-attribute>
-            <custom-attribute xml:lang="ja-JP" attribute-id="main_image">{{ prd.main_image }}</custom-attribute>
             <custom-attribute xml:lang="x-default" attribute-id="country">{{ prd.country }}</custom-attribute>
             <custom-attribute xml:lang="ja-JP" attribute-id="country">{{ prd.country }}</custom-attribute>
-            {% for row in prd.product_commentary|parseJSON %}{% for key, value in row.items %}
-            <custom-attribute xml:lang="x-default" attribute-id="{{ key }}">{{ value }}</custom-attribute>
-            <custom-attribute xml:lang="ja-JP" attribute-id="{{ key }}">{{ value }}</custom-attribute>
-            {% endfor %}{% endfor %}
+            <custom-attribute xml:lang="x-default" attribute-id="main_image">{{ prd.main_image }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="main_image">{{ prd.main_image }}</custom-attribute>
+
+            <custom-attribute xml:lang="x-default" attribute-id="details">{{ prd.details }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="details">{{ prd.details }}</custom-attribute>
+            
+            {% if prd.product_is_new == 'N' %}
+            <custom-attribute xml:lang="x-default" attribute-id="product_is_new">false</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="product_is_new">false</custom-attribute>
+            {% else %}
+            <custom-attribute xml:lang="x-default" attribute-id="product_is_new">true</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="product_is_new">true</custom-attribute>
+            {% endif %}
+
+            <custom-attribute xml:lang="x-default" attribute-id="product_store_category">{{ prd.product_store_category }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="product_store_category">{{ prd.product_store_category }}</custom-attribute>
+
+
+            {% with prd.get_images|filterImageDetailCut1 as ImageDetailCut1 %}
+            {% for key, value in ImageDetailCut1.items %}
+            <custom-attribute xml:lang="x-default" attribute-id="product_commentary_{{ key }}_description">{{ value }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="product_commentary_{{ key }}_description">{{ value }}</custom-attribute>
+            {% endfor %}
+            {% endwith %}
+            {% with prd.get_images|filterImageDetailCut2 as ImageDetailCut2 %}
+            {% for key, value in ImageDetailCut2.items %}
+            <custom-attribute xml:lang="x-default" attribute-id="detailCut2Image{{ key }}Description">{{ value }}</custom-attribute>
+            <custom-attribute xml:lang="ja-JP" attribute-id="detailCut2Image{{ key }}Description">{{ value }}</custom-attribute>
+            {% endfor %}
+            {% endwith %}
             {% autoescape off %}
             <custom-attribute xml:lang="x-default" attribute-id="product_all_color">{{ prd.product_all_color }}</custom-attribute>
             <custom-attribute xml:lang="ja-JP" attribute-id="product_all_color">{{ prd.product_all_color }}</custom-attribute>
@@ -75,18 +88,8 @@
             {% endif %}
             {% endautoescape %}
             <custom-attribute xml:lang="x-default" attribute-id="product_orderby">{{ prd.No }}</custom-attribute>
-            <custom-attribute xml:lang="ja-JP" attribute-id="product_orderby">{{ prd.No }}</custom-attribute>
-			<custom-attribute xml:lang="x-default" attribute-id="product_store_category">{{ prd.product_store_category }}</custom-attribute>
-			<custom-attribute xml:lang="ja-JP" attribute-id="product_store_category">{{ prd.product_store_category }}</custom-attribute>
-			{% if prd.product_is_new == 'Y' %}
-			<custom-attribute xml:lang="x-default" attribute-id="product_is_new">true</custom-attribute>
-			{% else %}
-			<custom-attribute xml:lang="x-default" attribute-id="product_is_new">false</custom-attribute>
-			{% endif %}
-		</custom-attributes>
-		
-		
-		
+        </custom-attributes>
+
         {% if prd.get_variants %}
         <variations>
             {% if prd.get_variant_colors or prd.get_variant_sizes %}
@@ -119,7 +122,6 @@
                     </variation-attribute-values>
                 </variation-attribute>
                 {% endif %}
-				
             </attributes>
             {% endif %}
             <variants>
@@ -167,8 +169,6 @@
             <custom-attribute xml:lang="ja-JP" attribute-id="currency">{{ prd.currency }}</custom-attribute>
             <custom-attribute xml:lang="x-default" attribute-id="stock_quantity">{{ prd.stock_quantity }}</custom-attribute>
             <custom-attribute xml:lang="ja-JP" attribute-id="stock_quantity">{{ prd.stock_quantity }}</custom-attribute>
-			<custom-attribute xml:lang="x-default" attribute-id="refinementColor">{{ prd.refinement_color|ztrim }}</custom-attribute>
-            <custom-attribute xml:lang="ja-JP" attribute-id="refinementColor">{{ prd.refinement_color|ztrim }}</custom-attribute>
         </custom-attributes>
     </product>
     {{ prd.variation_jan|zlogger }}

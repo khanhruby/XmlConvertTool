@@ -38,11 +38,6 @@ class CustomModelAdminMixin(object):
 		if request.method == 'POST' and 'myfile' in request.FILES:
 			form = UploadFileForm(request.POST, request.FILES)
 			if form.is_valid():
-				res = handle_uploaded_file(form=form, f=request.FILES['myfile'], model_name=opts.model_name, model=model)
-				if res['message'] != None:
-					messages.error(request, res['message'])
-				else:
-					messages.success(request, 'Import success all! Inserted %d items' % res['count'])
 				result = handle_uploaded_file(form=form, f=request.FILES['myfile'], model_name=opts.model_name)
 				# if result['message'] != None and len(result['message']) > 0:
 				# 	# messages.error(request, result['message'])
@@ -118,12 +113,13 @@ def export_view(request):
 			if result != None:
 				data_type = form.cleaned_data.get('data_type')
 				brand_type = form.cleaned_data.get('brand_type')
-				BRAND_PATH = {0:'', 1:'eu_', 2:'ju_'}
-				LANGEUAGE_MAPPING = dict(LANGEUAGE_MAPPING=settings.LANGEUAGE_MAPPING)
-				if settings.MULTIPLE_LANGUAGE:
-					result = dict(**result, **LANGEUAGE_MAPPING)
-				brand_type = form.cleaned_data.get('brand_type')
-				BRAND_PATH = {1:'', 2:'eu_'}
+				BRAND_PATH = {
+					0:'', 
+					1:'eu_', 
+					2:'ju_', 
+					3:'inov8_',
+					4:'skins_'
+				}
 				LANGEUAGE_MAPPING = dict(LANGEUAGE_MAPPING=settings.LANGEUAGE_MAPPING)
 				if settings.MULTIPLE_LANGUAGE:
 					result = dict(**result, **LANGEUAGE_MAPPING)

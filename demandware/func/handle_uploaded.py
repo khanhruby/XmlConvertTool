@@ -135,6 +135,7 @@ def product_master_process(data=None, header=None, extData=None):
 		all_color = {}
 		_items = list(items.items())
 		for key, value in _items:
+			value = str(value).strip()
 			_re_commentary = re.compile("product_commentary_(.*)_(.*)")
 			_search_commentary = _re_commentary.search(key)
 			if _search_commentary != None:
@@ -222,7 +223,6 @@ def category_process(data=None, header=None, extData=None):
 
 		datalv1 = dict(
 			category_id=item['category_level_1_id'],
-			language=data[index]['language'],
 			category_name=item['category_level_1_name'],
 			category_level=1,
 			category_parent=None,
@@ -243,7 +243,6 @@ def category_process(data=None, header=None, extData=None):
 
 		datalv2 = dict(
 			category_id="%s-%s" % (result1['obj'].category_id, item['category_level_2_id']),
-			language=data[index]['language'],
 			category_name=item['category_level_2_name'],
 			category_level=2,
 			category_parent=result1['obj'],
@@ -251,7 +250,7 @@ def category_process(data=None, header=None, extData=None):
 			category_position=countLevel2,
 		)
 		if 'category_level_2_name_JP' in item:
-			datalv1['category_name_jp']=item['category_level_2_name_JP']
+			datalv2['category_name_jp']=item['category_level_2_name_JP']
 
 		print("Insert category: " + str(datalv2['category_id']))
 		result2 = insert_category(data=datalv2)
@@ -264,7 +263,6 @@ def category_process(data=None, header=None, extData=None):
 
 		datalv3 = dict(
 			category_id="%s-%s" % (result2['obj'].category_id, item['category_level_3_id']),
-			language=data[index]['language'],
 			category_name=item['category_level_3_name'],
 			category_name_jp=item['category_level_3_name'],
 			category_level=3,

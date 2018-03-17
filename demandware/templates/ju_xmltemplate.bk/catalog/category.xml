@@ -16,14 +16,13 @@
     <parent>{{ category.category_parent|default:'root' }}</parent>
     <position>{{ category.category_position|default:0 }}</position>
     {% if category.category_level == 1 %}
-    <template>rendering/category/categoryproducthits.isml</template>
+    <template>rendering/categorytop/category-top.isml</template>
     {% else %}
     <template/>
     {% endif %}
     <page-attributes/>
     <custom-attributes>
         <custom-attribute attribute-id="category_custom_url" xml:lang="x-default">{{ category.category_custom_url }}</custom-attribute>
-		<custom-attribute attribute-id="showInMenu" xml:lang="x-default">true</custom-attribute>
     </custom-attributes>
 </category>
 {% endfor %}

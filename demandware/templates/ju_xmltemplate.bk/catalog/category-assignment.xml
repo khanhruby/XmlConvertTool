@@ -2,9 +2,7 @@
 {% for pCat in productCategory %}
 {{ pCat.category_id|zlogger }}
 <category-assignment category-id="{{ pCat.category_id|ztrim }}" product-id="{{ pCat.product_id|ztrim }}">
-	{% if 'women' in pCat.category_id|ztrim or 'men' in pCat.category_id|ztrim or 'junior' in pCat.category_id|ztrim %}
-	<primary-flag>true</primary-flag>
-	{% endif %}
+    <primary-flag>true</primary-flag>
 </category-assignment>
 {{ "Done!"|zlogger }}
 {% endfor %}

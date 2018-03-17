@@ -23,7 +23,9 @@
     <page-attributes/>
     <custom-attributes>
         <custom-attribute attribute-id="category_custom_url" xml:lang="x-default">{{ category.category_custom_url }}</custom-attribute>
+		{% if category.category_level != 1 or category.category_id|ztrim == 'ladies' or category.category_id|ztrim == 'men' or category.category_id|ztrim == 'junior' %}
 		<custom-attribute attribute-id="showInMenu" xml:lang="x-default">true</custom-attribute>
+		{% endif %}
     </custom-attributes>
 </category>
 {% endfor %}

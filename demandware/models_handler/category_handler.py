@@ -104,20 +104,6 @@ def insert_product_category(data=None):
 			result['count'] = result['count'] + 1;
 		print('Done!')
 		return result
-			try:
-				print("[INSERT]", item['product_id'], item['category_id'])
-				values = dict(
-					product_id=ProductMaster.objects.get(product_id=item['product_id']),
-					category_id=Category.objects.get(category_id=item['category_id']),
-				)
-				ProductCategory.objects.update_or_create(**values)
-			except ProductMaster.DoesNotExist:
-				print("[SKIP] ProductMaster DoesNotExist!", item['product_id'], item['category_id'])
-				continue
-			except Category.DoesNotExist:
-				print("[SKIP] Category DoesNotExist!", item['product_id'], item['category_id'])
-				continue
-		return None
 	except Exception as e:
 		logger.info(str(e))
 		print(str(e))

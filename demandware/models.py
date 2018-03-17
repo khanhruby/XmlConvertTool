@@ -206,6 +206,7 @@ class Variant(models.Model):
 	del_flg = models.BooleanField(default=False)
 	create_date = models.DateField(default=now, blank=True)
 	update_date = models.DateField(blank=True, auto_now=True)
+	refinement_color = models.CharField(max_length=100, default='')
 
 	def __str__(self):
 		return str(self.product_id)

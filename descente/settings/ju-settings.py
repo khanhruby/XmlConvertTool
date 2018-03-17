@@ -8,7 +8,7 @@ DEBUG = True
 TEMPLATE_DEBUG = True
 
 CSRF_COOKIE_NAME = 'localhost_csrf_ju'
-CSRF_COOKIE_DOMAIN = None
+CSRF_COOKIE_DOMAIN = 'ju.app'
 
 # Database
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases

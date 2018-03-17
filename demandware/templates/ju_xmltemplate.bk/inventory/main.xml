@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>{% load app_filters %}
+{% now "YmdHi" as inventory_time %}
+<inventory xmlns="http://www.demandware.com/xml/impex/inventory/2007-05-31">
+	<inventory-list>
+        <header list-id="lecoq-sportif-inventory-jp">
+            <default-instock>true</default-instock>
+            <description>Product Sku inventory</description>
+            <use-bundle-inventory-only>false</use-bundle-inventory-only>
+            <on-order>false</on-order>
+        </header>
+
+        <records>
+            {% for prd in variants %}
+            <record product-id="{{ prd.variation_jan|ztrim }}">
+                <allocation>{{ prd.stock_quantity }}</allocation>
+                <preorder-backorder-handling>none</preorder-backorder-handling>
+                <ats>{{ prd.stock_quantity }}</ats>
+                <on-order>0</on-order>
+                <turnover>0</turnover>
+            </record>
+            {% endfor %}
+        </records>
+    </inventory-list>
+</inventory>
