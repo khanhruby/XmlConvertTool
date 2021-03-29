@@ -35,7 +35,7 @@ pyexcel-ods==0.3.3
 pyexcel-webio==0.0.11
 pyexcel-xls==0.3.3
 pyexcel-xlsx==0.3.0
-Pygments==2.2.0
+Pygments==2.7.4
 PyMySQL==0.7.11
 pytz==2017.2
 requests==2.18.4
