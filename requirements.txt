@@ -4,7 +4,7 @@ cachetools==2.0.1
 certifi==2017.7.27.1
 chardet==3.0.4
 #-e git+https://github.com/khanhruby/XmlConvertTool.git@0a66aa158a47564fa11ff7aa99ffd3d7d73890ed#egg=Django
-django-debug-toolbar==1.8
+django-debug-toolbar==1.11.1
 django-excel==0.0.6
 docutils==0.13.1
 et-xmlfile==1.0.1
